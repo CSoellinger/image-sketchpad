@@ -1,0 +1,72 @@
+{
+    "$schema": "https://raw.githubusercontent.com/SchemaStore/schemastore/master/src/schemas/json/eslintrc.json",
+    "ignorePatterns": [
+        ".eslintrc.js",
+        "node_modules",
+        "dist",
+        "jest.config.js",
+        "rollup.config.js",
+        "fixtures",
+        "shared-fixtures",
+        "coverage",
+        "*.d.ts",
+        "__snapshots__"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+        "@typescript-eslint/eslint-plugin",
+        "eslint-plugin-tsdoc"
+    ],
+    "extends": [
+        "eslint:recommended",
+        "plugin:eslint-comments/recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:prettier/recommended"
+    ],
+    "rules": {
+        "eslint-comments/no-unused-disable": "error",
+        "tsdoc/syntax": "warn",
+        "prettier/prettier": "error",
+        "@typescript-eslint/indent": [
+            "error",
+            2
+        ],
+        "@typescript-eslint/no-unused-vars": "error",
+        "@typescript-eslint/no-explicit-any": "error"
+    }
+    // "rules": {
+    //     "unicorn/filename-case": [
+    //         "error",
+    //         {
+    //             "case": "pascalCase",
+    //             "ignore": [
+    //                 "\\.d\\.ts$",
+    //                 "^rollup\\.config\\.js$"
+    //             ]
+    //         }
+    //     ],
+    //     "import/extensions": [
+    //         "error",
+    //         {
+    //             "json": "always",
+    //             "d.ts": "never"
+    //         }
+    //     ],
+    //     "arrow-parens": [
+    //         "error",
+    //         "always"
+    //     ],
+    //     "comma-dangle": 0,
+    //     "@typescript-eslint/comma-dangle": [
+    //         "error",
+    //         "only-multiline"
+    //     ],
+    //     "object-curly-spacing": 0,
+    //     "@typescript-eslint/object-curly-spacing": [
+    //         "error",
+    //         "always"
+    //     ],
+    //     "@typescript-eslint/no-unnecessary-boolean-literal-compare": 0,
+    //     "tsdoc/syntax": "warn"
+    // }
+}
