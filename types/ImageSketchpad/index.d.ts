@@ -1,5 +1,5 @@
 import { Canvas } from '../Canvas';
-import { UserOptions } from './UserOptions';
+import { UserOptions } from './Options';
 /**
  * Image sketchpad main class. It handles creation of canvas element, drawing on
  * it, and merge it with the image and handle the data as json out- or input.
@@ -14,7 +14,7 @@ export declare class ImageSketchpad {
      */
     private readonly image;
     /**
-     * Sketchpad settings
+     * Sketchpad settings, initialized with default options
      */
     private options;
     /**
@@ -164,5 +164,4 @@ export declare class ImageSketchpad {
      */
     private throwError;
 }
-export { Options } from './Options';
-export { UserOptions } from './UserOptions';
+export { Options, UserOptions } from './Options';

@@ -891,114 +891,26 @@ var mergeImages = function (sources, options) {
 };
 
 /**
- * Point - Represents a point inside the canvas.
- */
-var Point =
-/**
- * X coordinate of point
- */
-
-/**
- * Y coordinate of point
- */
-
-/**
- * Creates an instance of point.
- *
- * @param x - X coordinate of point
- * @param y - Y coordinate of point
- */
-function Point(x, y) {
-  _classCallCheck(this, Point);
-
-  this.x = void 0;
-  this.y = void 0;
-  this.x = x;
-  this.y = y;
-};
-
-/* eslint max-params: ["error", 7] */
-
-/**
- * Stroke - Represents a stroke between two or more {@link Point | Points}.
- */
-var Stroke =
-/**
- * {@link Point | Points} of stroke
- */
-
-/**
- * Width of stroke
- */
-
-/**
- * Max width of stroke
- */
-
-/**
- * Color of stroke
- */
-
-/**
- * {@link CanvasLineCap | Canvas line cap} of stroke: "butt" | "round" | "square"
- */
-
-/**
- * {@link CanvasLineJoin | Canvas line join} of stroke: "bevel" | "miter" | "round"
- */
-
-/**
- * Miter limit of stroke
- */
-
-/**
- * Creates an instance of stroke.
- *
- * @param points      - {@link Point | Points} of stroke
- * @param width       - Width of stroke
- * @param maxWidth    - Max width of stroke
- * @param color       - Color of stroke
- * @param cap         - {@link CanvasLineCap | Canvas line cap} of stroke: "butt" | "round" | "square"
- * @param join        - {@link CanvasLineJoin | Canvas line join} of stroke: "bevel" | "miter" | "round"
- * @param miterLimit  - Miter limit of stroke
- */
-function Stroke(points, width, maxWidth, color, cap, join, miterLimit) {
-  _classCallCheck(this, Stroke);
-
-  this.points = void 0;
-  this.width = void 0;
-  this.maxWidth = void 0;
-  this.color = void 0;
-  this.cap = void 0;
-  this.join = void 0;
-  this.miterLimit = void 0;
-  this.points = points;
-  this.width = width;
-  this.maxWidth = maxWidth;
-  this.color = color;
-  this.cap = cap;
-  this.join = join;
-  this.miterLimit = miterLimit;
-};
-
-/**
- * Canvas helper class. Inserts {@link HTMLCanvasElement | HTMLCanvasElement}
- * and handles position and size adjustments.
+ * Canvas helper class. Inserts {@link HTMLCanvasElement} and handles position and size adjustments.
  */
 var Canvas = /*#__PURE__*/function () {
   /**
-   * Reference for the HTML canvas element.
+   * Reference to the HTML canvas element.
    */
 
   /**
-   * Canvas rendering context of {@link Canvas.element | Canvas.element}.
+   * Canvas rendering context of {@link Canvas.element}.
    */
-  function Canvas(element) {
+
+  /**
+   * Creates an instance of the canvas helper class.
+   */
+  function Canvas() {
     _classCallCheck(this, Canvas);
 
     this.element = void 0;
     this.context = void 0;
-    this.element = element !== null && element !== void 0 ? element : document.createElement('canvas');
+    this.element = document.createElement('canvas');
     this.context = this.element.getContext('2d');
   }
   /**
@@ -1122,7 +1034,7 @@ var Canvas = /*#__PURE__*/function () {
     /**
      * Draw stroke as a path on canvas area
      *
-     * @param stroke  - {@link Stroke | Stroke} object with meta data
+     * @param stroke  - {@link Stroke|Stroke} object with meta data
      * @param ratio   - Image/canvas ratio
      */
 
@@ -1212,30 +1124,35 @@ var Canvas = /*#__PURE__*/function () {
 }();
 
 /**
- * Image sketchpad (default) options
+ * Image sketchpad options
  */
-var Options = function Options() {
-  _classCallCheck(this, Options);
 
-  this.lineWidth = 5;
-  this.lineMaxWidth = -1;
-  this.lineColor = '#000';
-  this.lineCap = 'round';
-  this.lineJoin = 'round';
-  this.lineMiterLimit = 10;
+/**
+ * Image sketchpad default options
+ */
+var DefaultOptions = {
+  lineWidth: 5,
+  lineMaxWidth: -1,
+  lineColor: '#000',
+  lineCap: 'round',
+  lineJoin: 'round',
+  lineMiterLimit: 10
 };
+/**
+ * Image sketchpad user options with all properties as not required
+ */
 
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
 
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
 /**
  * Image sketchpad main class. It handles creation of canvas element, drawing on
  * it, and merge it with the image and handle the data as json out- or input.
  */
-var ImageSketchpad$1 = /*#__PURE__*/function () {
+
+var ImageSketchpad = /*#__PURE__*/function () {
   /**
    * Canvas helper class
    */
@@ -1245,7 +1162,7 @@ var ImageSketchpad$1 = /*#__PURE__*/function () {
    */
 
   /**
-   * Sketchpad settings
+   * Sketchpad settings, initialized with default options
    */
 
   /**
@@ -1288,9 +1205,9 @@ var ImageSketchpad$1 = /*#__PURE__*/function () {
 
     _classCallCheck(this, ImageSketchpad);
 
-    this.canvas = void 0;
+    this.canvas = new Canvas();
     this.image = void 0;
-    this.options = void 0;
+    this.options = DefaultOptions;
     this.strokes = [];
     this.enabled = true;
     this.undoneStrokes = [];
@@ -1307,11 +1224,9 @@ var ImageSketchpad$1 = /*#__PURE__*/function () {
       this.throwError('Double initialization');
     }
 
-    this.image = image;
-    this.options = new Options();
-    this.canvas = new Canvas(); // If some user options are given we will merge them with the default ones
+    this.image = image; // If some user options are given we will merge them with the default ones
 
-    if (options !== null && options !== undefined) {
+    if (options) {
       this.setOptions(options);
     } // Create a initialization id and set it as data attribute and css class to the image
 
@@ -1521,7 +1436,7 @@ var ImageSketchpad$1 = /*#__PURE__*/function () {
   }, {
     key: "version",
     value: function version() {
-      return '1.4.0';
+      return '1.0.0';
     }
     /**
      * Register event listener for responsive adjustments and drawings
@@ -1717,10 +1632,12 @@ var ImageSketchpad$1 = /*#__PURE__*/function () {
         var rect = this.canvas.element.getBoundingClientRect();
         coord.x = mouseEvent.clientX - rect.left;
         coord.y = mouseEvent.clientY - rect.top;
-      } // Return point with x * imageRatio and y * imageRatio
+      }
 
-
-      return new Point(coord.x * this.getImageRatio(), coord.y * this.getImageRatio());
+      return {
+        x: coord.x * this.getImageRatio(),
+        y: coord.y * this.getImageRatio()
+      };
     }
     /**
      * Create stroke from an array of {@link Point | Points}
@@ -1731,7 +1648,15 @@ var ImageSketchpad$1 = /*#__PURE__*/function () {
   }, {
     key: "createStroke",
     value: function createStroke(points) {
-      return new Stroke(points, this.options.lineWidth, this.options.lineMaxWidth, this.options.lineColor, this.options.lineCap, this.options.lineJoin, this.options.lineMiterLimit);
+      return {
+        points: points // this.options.lineWidth,
+        // this.options.lineMaxWidth,
+        // this.options.lineColor,
+        // this.options.lineCap,
+        // this.options.lineJoin,
+        // this.options.lineMiterLimit
+
+      };
     }
     /**
      * Push {@link Point | Point} to {@link Stroke | Stroke}
@@ -1806,14 +1731,10 @@ var ImageSketchpad$1 = /*#__PURE__*/function () {
   return ImageSketchpad;
 }();
 
-// import jQuery from 'jquery';
-/**
- * Type definition for instances object
- */
-
 /**
  * Save sketchpad instances to this object
  */
+
 var instances = {};
 /**
  * Initialize new sketchpad or return an already initialized.
@@ -1822,20 +1743,20 @@ var instances = {};
  * @param options - Image sketchpad options
  */
 
-var ImageSketchpad = function ImageSketchpad(element, options) {
+var init = function init(element, options) {
   var _element$dataset, _element$dataset2;
 
   if (element !== null && element !== void 0 && (_element$dataset = element.dataset) !== null && _element$dataset !== void 0 && _element$dataset.sketchpad && instances[element.dataset.sketchpad]) {
     return instances[element.dataset.sketchpad];
   }
 
-  var newInstance = new ImageSketchpad$1(element, options);
+  var newInstance = new ImageSketchpad(element, options);
 
   if (element !== null && element !== void 0 && (_element$dataset2 = element.dataset) !== null && _element$dataset2 !== void 0 && _element$dataset2.sketchpad) {
     instances[element.dataset.sketchpad] = newInstance;
   }
 
   return newInstance;
-}; // Maybe for future
+};
 
-exports.default = ImageSketchpad;
+exports.default = init;

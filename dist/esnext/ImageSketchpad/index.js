@@ -1,6 +1,6 @@
 import mergeImages from 'merge-images';
-import { Canvas, Point, Stroke } from '../Canvas';
-import { Options } from './Options';
+import { Canvas } from '../Canvas';
+import { DefaultOptions } from './Options';
 /**
  * Image sketchpad main class. It handles creation of canvas element, drawing on
  * it, and merge it with the image and handle the data as json out- or input.
@@ -22,6 +22,14 @@ export class ImageSketchpad {
      * ```
      */
     constructor(image, options) {
+        /**
+         * Canvas helper class
+         */
+        this.canvas = new Canvas();
+        /**
+         * Sketchpad settings, initialized with default options
+         */
+        this.options = DefaultOptions;
         /**
          * Array of strokes which represents your sketch
          */
@@ -47,10 +55,8 @@ export class ImageSketchpad {
             this.throwError('Double initialization');
         }
         this.image = image;
-        this.options = new Options();
-        this.canvas = new Canvas();
         // If some user options are given we will merge them with the default ones
-        if (options !== null && options !== undefined) {
+        if (options) {
             this.setOptions(options);
         }
         // Create a initialization id and set it as data attribute and css class to the image
@@ -110,7 +116,7 @@ export class ImageSketchpad {
         return JSON.stringify(Object.assign({}, {
             strokes: this.strokes,
             options: this.options,
-            imageRatio: this.getImageRatio()
+            imageRatio: this.getImageRatio(),
         }));
     }
     /**
@@ -218,22 +224,22 @@ export class ImageSketchpad {
                 events: ['mousedown', 'touchstart'],
                 caller: (event) => {
                     this.startStrokeHandler(event);
-                }
+                },
             },
             // Draw during mousemove, touchmove
             {
                 events: ['mousemove', 'touchmove'],
                 caller: (event) => {
                     this.drawStrokeHandler(event);
-                }
+                },
             },
             // And finish the stroke after mouseup, mouseleave, touchend
             {
                 events: ['mouseup', 'mouseleave', 'touchend'],
                 caller: (event) => {
                     this.endStrokeHandler(event);
-                }
-            }
+                },
+            },
         ];
         // Register the events
         for (const object of canvasEvents) {
@@ -329,8 +335,10 @@ export class ImageSketchpad {
             coord.x = mouseEvent.clientX - rect.left;
             coord.y = mouseEvent.clientY - rect.top;
         }
-        // Return point with x * imageRatio and y * imageRatio
-        return new Point(coord.x * this.getImageRatio(), coord.y * this.getImageRatio());
+        return {
+            x: coord.x * this.getImageRatio(),
+            y: coord.y * this.getImageRatio(),
+        };
     }
     /**
      * Create stroke from an array of {@link Point | Points}
@@ -338,7 +346,15 @@ export class ImageSketchpad {
      * @param points - Array of {@link Point | Points}
      */
     createStroke(points) {
-        return new Stroke(points, this.options.lineWidth, this.options.lineMaxWidth, this.options.lineColor, this.options.lineCap, this.options.lineJoin, this.options.lineMiterLimit);
+        return {
+            points,
+            // this.options.lineWidth,
+            // this.options.lineMaxWidth,
+            // this.options.lineColor,
+            // this.options.lineCap,
+            // this.options.lineJoin,
+            // this.options.lineMiterLimit
+        };
     }
     /**
      * Push {@link Point | Point} to {@link Stroke | Stroke}
@@ -360,9 +376,7 @@ export class ImageSketchpad {
     redraw() {
         this.canvas.clear();
         for (const stroke of this.strokes) {
-            this.canvas
-                .drawStroke(stroke, this.getImageRatio())
-                .catch(this.throwError);
+            this.canvas.drawStroke(stroke, this.getImageRatio()).catch(this.throwError);
         }
         return this;
     }
@@ -383,5 +397,3 @@ export class ImageSketchpad {
         throw new Error(String(error));
     }
 }
-export { Options } from './Options';
-export { UserOptions } from './UserOptions';

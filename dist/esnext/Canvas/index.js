@@ -1,10 +1,12 @@
 /**
- * Canvas helper class. Inserts {@link HTMLCanvasElement | HTMLCanvasElement}
- * and handles position and size adjustments.
+ * Canvas helper class. Inserts {@link HTMLCanvasElement} and handles position and size adjustments.
  */
 export class Canvas {
-    constructor(element) {
-        this.element = element ?? document.createElement('canvas');
+    /**
+     * Creates an instance of the canvas helper class.
+     */
+    constructor() {
+        this.element = document.createElement('canvas');
         this.context = this.element.getContext('2d');
     }
     /**
@@ -56,7 +58,7 @@ export class Canvas {
     /**
      * Draw stroke as a path on canvas area
      *
-     * @param stroke  - {@link Stroke | Stroke} object with meta data
+     * @param stroke  - {@link Stroke|Stroke} object with meta data
      * @param ratio   - Image/canvas ratio
      */
     async drawStroke(stroke, ratio) {
@@ -79,8 +81,7 @@ export class Canvas {
             this.context.lineWidth = stroke.width / ratio;
             // If stroke width is bigger as defined max-width (cause of image ratio),
             // we will set it as width.
-            if ((stroke.maxWidth || 0) > 0 &&
-                this.context.lineWidth > (stroke.maxWidth || 0)) {
+            if ((stroke.maxWidth || 0) > 0 && this.context.lineWidth > (stroke.maxWidth || 0)) {
                 this.context.lineWidth = stroke.maxWidth || 0;
             }
         }
@@ -104,5 +105,3 @@ export class Canvas {
         throw new Error(String(error));
     }
 }
-export { Point } from './Point';
-export { Stroke } from './Stroke';

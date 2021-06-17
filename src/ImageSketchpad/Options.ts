@@ -1,34 +1,51 @@
 /**
- * Image sketchpad (default) options
+ * Image sketchpad options
  */
-export class Options {
+export type Options = {
   /**
    * Line width
    */
-  lineWidth = 5;
+  lineWidth: number;
 
   /**
    * Line max width
    */
-  lineMaxWidth = -1;
+  lineMaxWidth: number;
 
   /**
    * Line color
    */
-  lineColor = '#000';
+  lineColor: string;
 
   /**
    * Line cap
    */
-  lineCap: CanvasLineCap = 'round';
+  lineCap: CanvasLineCap;
 
   /**
    * Line join
    */
-  lineJoin: CanvasLineJoin = 'round';
+  lineJoin: CanvasLineJoin;
 
   /**
    * Line miter limit
    */
-  lineMiterLimit = 10;
-}
+  lineMiterLimit: number;
+};
+
+/**
+ * Image sketchpad default options
+ */
+export const DefaultOptions: Readonly<Options> = {
+  lineWidth: 5,
+  lineMaxWidth: -1,
+  lineColor: '#000',
+  lineCap: 'round',
+  lineJoin: 'round',
+  lineMiterLimit: 10,
+};
+
+/**
+ * Image sketchpad user options with all properties as not required
+ */
+export type UserOptions = Partial<Options>;

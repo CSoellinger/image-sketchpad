@@ -1,8 +1,7 @@
 import mergeImages from 'merge-images';
 
 import { Canvas, Point, Stroke } from '../Canvas';
-import { Options } from './Options';
-import { UserOptions } from './UserOptions';
+import { DefaultOptions, Options, UserOptions } from './Options';
 
 /**
  * Image sketchpad main class. It handles creation of canvas element, drawing on
@@ -12,7 +11,7 @@ export class ImageSketchpad {
   /**
    * Canvas helper class
    */
-  readonly canvas: Canvas;
+  readonly canvas: Canvas = new Canvas();
 
   /**
    * Image element where we draw on it.
@@ -20,9 +19,9 @@ export class ImageSketchpad {
   private readonly image: HTMLImageElement;
 
   /**
-   * Sketchpad settings
+   * Sketchpad settings, initialized with default options
    */
-  private options: Options;
+  private options: Options = DefaultOptions;
 
   /**
    * Array of strokes which represents your sketch
@@ -76,11 +75,9 @@ export class ImageSketchpad {
     }
 
     this.image = image;
-    this.options = new Options();
-    this.canvas = new Canvas();
 
     // If some user options are given we will merge them with the default ones
-    if (options !== null && options !== undefined) {
+    if (options) {
       this.setOptions(options);
     }
 
@@ -448,8 +445,10 @@ export class ImageSketchpad {
       coord.y = mouseEvent.clientY - rect.top;
     }
 
-    // Return point with x * imageRatio and y * imageRatio
-    return new Point(coord.x * this.getImageRatio(), coord.y * this.getImageRatio());
+    return <Point>{
+      x: coord.x * this.getImageRatio(),
+      y: coord.y * this.getImageRatio(),
+    };
   }
 
   /**
@@ -458,15 +457,15 @@ export class ImageSketchpad {
    * @param points - Array of {@link Point | Points}
    */
   private createStroke(points: Point[]): Stroke {
-    return new Stroke(
+    return <Stroke>{
       points,
-      this.options.lineWidth,
-      this.options.lineMaxWidth,
-      this.options.lineColor,
-      this.options.lineCap,
-      this.options.lineJoin,
-      this.options.lineMiterLimit
-    );
+      // this.options.lineWidth,
+      // this.options.lineMaxWidth,
+      // this.options.lineColor,
+      // this.options.lineCap,
+      // this.options.lineJoin,
+      // this.options.lineMiterLimit
+    };
   }
 
   /**
@@ -518,5 +517,4 @@ export class ImageSketchpad {
   }
 }
 
-export { Options } from './Options';
-export { UserOptions } from './UserOptions';
+export { Options, UserOptions } from './Options';

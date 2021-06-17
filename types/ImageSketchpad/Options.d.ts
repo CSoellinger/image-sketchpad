@@ -1,7 +1,7 @@
 /**
- * Image sketchpad (default) options
+ * Image sketchpad options
  */
-export declare class Options {
+export declare type Options = {
     /**
      * Line width
      */
@@ -26,4 +26,12 @@ export declare class Options {
      * Line miter limit
      */
     lineMiterLimit: number;
-}
+};
+/**
+ * Image sketchpad default options
+ */
+export declare const DefaultOptions: Readonly<Options>;
+/**
+ * Image sketchpad user options with all properties as not required
+ */
+export declare type UserOptions = Partial<Options>;

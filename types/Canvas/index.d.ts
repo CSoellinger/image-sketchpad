@@ -1,18 +1,20 @@
-import { Stroke } from './Stroke';
+import { Stroke } from './Draw';
 /**
- * Canvas helper class. Inserts {@link HTMLCanvasElement | HTMLCanvasElement}
- * and handles position and size adjustments.
+ * Canvas helper class. Inserts {@link HTMLCanvasElement} and handles position and size adjustments.
  */
 export declare class Canvas {
     /**
-     * Reference for the HTML canvas element.
+     * Reference to the HTML canvas element.
      */
-    element: HTMLCanvasElement;
+    readonly element: HTMLCanvasElement;
     /**
-     * Canvas rendering context of {@link Canvas.element | Canvas.element}.
+     * Canvas rendering context of {@link Canvas.element}.
      */
     private readonly context;
-    constructor(element?: HTMLCanvasElement);
+    /**
+     * Creates an instance of the canvas helper class.
+     */
+    constructor();
     /**
      * Inserts canvas html element right after the reference element.
      *
@@ -41,7 +43,7 @@ export declare class Canvas {
     /**
      * Draw stroke as a path on canvas area
      *
-     * @param stroke  - {@link Stroke | Stroke} object with meta data
+     * @param stroke  - {@link Stroke|Stroke} object with meta data
      * @param ratio   - Image/canvas ratio
      */
     drawStroke(stroke: Stroke, ratio: number): Promise<void>;
@@ -52,5 +54,4 @@ export declare class Canvas {
      */
     private throwError;
 }
-export { Point } from './Point';
-export { Stroke } from './Stroke';
+export { Point, Stroke } from './Draw';
