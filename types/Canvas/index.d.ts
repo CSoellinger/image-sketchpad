@@ -1,14 +1,14 @@
 import { Stroke } from './Draw';
 /**
- * Canvas helper class. Inserts {@link HTMLCanvasElement} and handles position and size adjustments.
+ * Canvas helper class. Inserts {@link HTMLCanvasElement|element} and handles position and size adjustments.
  */
 export declare class Canvas {
     /**
-     * Reference to the HTML canvas element.
+     * Reference to the HTML canvas {@link HTMLCanvasElement|element}.
      */
     readonly element: HTMLCanvasElement;
     /**
-     * Canvas rendering context of {@link Canvas.element}.
+     * Canvas rendering context of {@link Canvas.element|the canvas element}.
      */
     private readonly context;
     /**
@@ -18,7 +18,7 @@ export declare class Canvas {
     /**
      * Inserts canvas html element right after the reference element.
      *
-     * @param refElement - Reference element where we want position the canvas.
+     * @param refElement - Reference {@link HTMLElement|element} where we want position the canvas.
      */
     insert(refElement: HTMLElement): Promise<void>;
     /**
@@ -33,7 +33,7 @@ export declare class Canvas {
     /**
      * Adjust canvas size and position from existing element
      *
-     * @param element - Existing element as reference
+     * @param element - Existing {@link HTMLElement|element} as reference
      */
     adjustFromElement(element: HTMLElement): Promise<void>;
     /**

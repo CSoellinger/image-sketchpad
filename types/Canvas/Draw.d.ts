@@ -12,7 +12,7 @@ export declare type Point = {
     readonly y: number;
 };
 /**
- * Stroke - A line between two or more [Points]{@link Point}.
+ * Stroke - A line between two or more {@link Point|Points}.
  */
 export declare type Stroke = {
     /**

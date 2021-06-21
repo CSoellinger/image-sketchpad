@@ -1,7 +1,15 @@
 /**
- * Canvas helper class. Inserts {@link HTMLCanvasElement} and handles position and size adjustments.
+ * Canvas helper class. Inserts {@link HTMLCanvasElement|element} and handles position and size adjustments.
  */
 export class Canvas {
+    /**
+     * Reference to the HTML canvas {@link HTMLCanvasElement|element}.
+     */
+    element;
+    /**
+     * Canvas rendering context of {@link Canvas.element|the canvas element}.
+     */
+    context;
     /**
      * Creates an instance of the canvas helper class.
      */
@@ -12,7 +20,7 @@ export class Canvas {
     /**
      * Inserts canvas html element right after the reference element.
      *
-     * @param refElement - Reference element where we want position the canvas.
+     * @param refElement - Reference {@link HTMLElement|element} where we want position the canvas.
      */
     async insert(refElement) {
         this.element.style.position = 'absolute';
@@ -40,7 +48,7 @@ export class Canvas {
     /**
      * Adjust canvas size and position from existing element
      *
-     * @param element - Existing element as reference
+     * @param element - Existing {@link HTMLElement|element} as reference
      */
     async adjustFromElement(element) {
         this.adjust(element.clientWidth, element.clientHeight, element.offsetTop, element.offsetLeft).catch(this.throwError);

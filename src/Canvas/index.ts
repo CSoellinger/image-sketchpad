@@ -1,16 +1,16 @@
 import { Stroke } from './Draw';
 
 /**
- * Canvas helper class. Inserts {@link HTMLCanvasElement} and handles position and size adjustments.
+ * Canvas helper class. Inserts {@link HTMLCanvasElement|element} and handles position and size adjustments.
  */
 export class Canvas {
   /**
-   * Reference to the HTML canvas element.
+   * Reference to the HTML canvas {@link HTMLCanvasElement|element}.
    */
   readonly element: HTMLCanvasElement;
 
   /**
-   * Canvas rendering context of {@link Canvas.element}.
+   * Canvas rendering context of {@link Canvas.element|the canvas element}.
    */
   private readonly context: CanvasRenderingContext2D;
 
@@ -25,16 +25,14 @@ export class Canvas {
   /**
    * Inserts canvas html element right after the reference element.
    *
-   * @param refElement - Reference element where we want position the canvas.
+   * @param refElement - Reference {@link HTMLElement|element} where we want position the canvas.
    */
   async insert(refElement: HTMLElement): Promise<void> {
     this.element.style.position = 'absolute';
 
-    this.adjustFromElement(refElement).catch(this.throwError);
+    await this.adjustFromElement(refElement);
 
-    if (refElement.parentNode) {
-      refElement.parentNode.insertBefore(this.element, refElement.nextSibling);
-    }
+    refElement.parentNode?.insertBefore(this.element, refElement.nextSibling);
   }
 
   /**
@@ -58,22 +56,16 @@ export class Canvas {
   /**
    * Adjust canvas size and position from existing element
    *
-   * @param element - Existing element as reference
+   * @param element - Existing {@link HTMLElement|element} as reference
    */
   async adjustFromElement(element: HTMLElement): Promise<void> {
-    this.adjust(element.clientWidth, element.clientHeight, element.offsetTop, element.offsetLeft).catch(
-      this.throwError
-    );
+    return this.adjust(element.clientWidth, element.clientHeight, element.offsetTop, element.offsetLeft);
   }
 
   /**
    * Clear the canvas area
    */
   clear(): Canvas {
-    if (this.context === null) {
-      return this;
-    }
-
     this.context.clearRect(0, 0, this.element.width, this.element.height);
 
     return this;
@@ -86,8 +78,8 @@ export class Canvas {
    * @param ratio   - Image/canvas ratio
    */
   async drawStroke(stroke: Stroke, ratio: number): Promise<void> {
-    if (this.context === null || stroke.points === null) {
-      return;
+    if (Array.isArray(stroke.points) === false || stroke.points.length < 2) {
+      throw new Error('Property "points" from object "stroke" has to be an array and at least with two items.');
     }
 
     this.context.beginPath();
@@ -103,42 +95,20 @@ export class Canvas {
 
     this.context.closePath();
 
-    if (stroke.color) {
-      this.context.strokeStyle = stroke.color;
+    this.context.strokeStyle = stroke.color;
+    this.context.lineWidth = stroke.width / ratio;
+
+    // If stroke width is bigger as defined max-width (cause of image ratio),
+    // we will set it as width.
+    if (stroke.maxWidth > 0 && this.context.lineWidth > stroke.maxWidth) {
+      this.context.lineWidth = stroke.maxWidth;
     }
 
-    if (stroke.width) {
-      this.context.lineWidth = stroke.width / ratio;
-
-      // If stroke width is bigger as defined max-width (cause of image ratio),
-      // we will set it as width.
-      if ((stroke.maxWidth || 0) > 0 && this.context.lineWidth > (stroke.maxWidth || 0)) {
-        this.context.lineWidth = stroke.maxWidth || 0;
-      }
-    }
-
-    if (stroke.join) {
-      this.context.lineJoin = stroke.join;
-    }
-
-    if (stroke.cap) {
-      this.context.lineCap = stroke.cap;
-    }
-
-    if (stroke.miterLimit) {
-      this.context.miterLimit = stroke.miterLimit;
-    }
+    this.context.lineJoin = stroke.join;
+    this.context.lineCap = stroke.cap;
+    this.context.miterLimit = stroke.miterLimit;
 
     this.context.stroke();
-  }
-
-  /**
-   * Throws an error
-   *
-   * @param error - Error object/message
-   */
-  private throwError(error: unknown): void {
-    throw new Error(String(error));
   }
 }
 

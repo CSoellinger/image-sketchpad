@@ -126,7 +126,8 @@ module.exports = {
   // ],
 
   // Allows you to use a custom runner instead of Jest's default test runner
-  // runner: "jest-runner",
+  runner: "jest-runner",
+  // "runner": "jest-electron/runner",
 
   // The paths to modules that run some code to configure or set up the testing environment before each test
   // setupFiles: [],
@@ -142,9 +143,12 @@ module.exports = {
 
   // The test environment that will be used for testing
   testEnvironment: "jsdom",
+  // "testEnvironment": "jest-electron/environment",
 
   // Options that will be passed to the testEnvironment
-  // testEnvironmentOptions: {},
+  testEnvironmentOptions: {
+    resources: "usable",
+  },
 
   // Adds a location field to test results
   // testLocationInResults: false,
@@ -171,6 +175,7 @@ module.exports = {
   // testResultsProcessor: undefined,
 
   // This option allows use of a custom test runner
+  // testRunner: "jest-circus/runner",
   // testRunner: "jest-circus/runner",
 
   // This option sets the URL for the jsdom environment. It is reflected in properties such as location.href

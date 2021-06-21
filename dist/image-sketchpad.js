@@ -890,15 +890,15 @@ var ImageSketchpad = (function () {
   };
 
   /**
-   * Canvas helper class. Inserts {@link HTMLCanvasElement} and handles position and size adjustments.
+   * Canvas helper class. Inserts {@link HTMLCanvasElement|element} and handles position and size adjustments.
    */
   var Canvas = /*#__PURE__*/function () {
     /**
-     * Reference to the HTML canvas element.
+     * Reference to the HTML canvas {@link HTMLCanvasElement|element}.
      */
 
     /**
-     * Canvas rendering context of {@link Canvas.element}.
+     * Canvas rendering context of {@link Canvas.element|the canvas element}.
      */
 
     /**
@@ -915,7 +915,7 @@ var ImageSketchpad = (function () {
     /**
      * Inserts canvas html element right after the reference element.
      *
-     * @param refElement - Reference element where we want position the canvas.
+     * @param refElement - Reference {@link HTMLElement|element} where we want position the canvas.
      */
 
 
@@ -989,7 +989,7 @@ var ImageSketchpad = (function () {
       /**
        * Adjust canvas size and position from existing element
        *
-       * @param element - Existing element as reference
+       * @param element - Existing {@link HTMLElement|element} as reference
        */
 
     }, {

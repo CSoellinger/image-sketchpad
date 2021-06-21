@@ -7,6 +7,38 @@ import { DefaultOptions } from './Options';
  */
 export class ImageSketchpad {
     /**
+     * Canvas helper class
+     */
+    canvas = new Canvas();
+    /**
+     * Image element where we draw on it.
+     */
+    image;
+    /**
+     * Sketchpad settings, initialized with default options
+     */
+    options = DefaultOptions;
+    /**
+     * Array of strokes which represents your sketch
+     */
+    strokes = [];
+    /**
+     * Enable/disable sketchpad
+     */
+    enabled = true;
+    /**
+     * Helper variable for "redo" method
+     */
+    undoneStrokes = [];
+    /**
+     * Helper variable if user started drawing a line
+     */
+    sketching = false;
+    /**
+     * Helper variable to get the save the active stroke during sketching is true
+     */
+    activeStroke;
+    /**
      * Creates an instance of image sketchpad.
      *
      * @param image   - Image html element
@@ -22,30 +54,6 @@ export class ImageSketchpad {
      * ```
      */
     constructor(image, options) {
-        /**
-         * Canvas helper class
-         */
-        this.canvas = new Canvas();
-        /**
-         * Sketchpad settings, initialized with default options
-         */
-        this.options = DefaultOptions;
-        /**
-         * Array of strokes which represents your sketch
-         */
-        this.strokes = [];
-        /**
-         * Enable/disable sketchpad
-         */
-        this.enabled = true;
-        /**
-         * Helper variable for "redo" method
-         */
-        this.undoneStrokes = [];
-        /**
-         * Helper variable if user started drawing a line
-         */
-        this.sketching = false;
         // Check if element is defined and has a "src" attribute (simple check for image element)
         if (image === null || image === undefined || image.src === undefined) {
             this.throwError('Must pass in a html image element');
