@@ -29,7 +29,7 @@ describe('Testing Canvas Class', () => {
   it('Should create a canvas element next to the the given reference element', async () => {
     const refElement = document.getElementById('Image');
 
-    await canvasClass.insert(<HTMLElement>refElement);
+    canvasClass.insert(<HTMLElement>refElement);
 
     expect.assertions(1);
 
@@ -41,8 +41,14 @@ describe('Testing Canvas Class', () => {
 
     const refElement = document.getElementById('Image');
 
-    await canvasClass.insert(<HTMLElement>refElement);
+    canvasClass.insert(<HTMLElement>refElement);
     await expect(canvasClass.drawStroke(stroke, 1)).resolves.toBeUndefined();
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const ctx = <any>canvasClass.element.getContext('2d');
+    const path = ctx.__getPath();
+
+    expect(path).toMatchSnapshot();
   });
 
   it("Should set line width to maxWidth if it's bigger", async () => {
@@ -51,7 +57,7 @@ describe('Testing Canvas Class', () => {
 
     const refElement = document.getElementById('Image');
 
-    await canvasClass.insert(<HTMLElement>refElement);
+    canvasClass.insert(<HTMLElement>refElement);
     await expect(canvasClass.drawStroke(stroke, 1)).resolves.toBeUndefined();
   });
 

@@ -66,7 +66,7 @@ export class ImageSketchpad {
   constructor(image: HTMLImageElement, options?: UserOptions) {
     // Check if element is defined and has a "src" attribute (simple check for image element)
     if (image === null || image === undefined || image.src === undefined) {
-      this.throwError('Must pass in a html image element');
+      this.throwError('Must pass in a html image element with "src" attribute');
     }
 
     // Throw error on double initialization (in theory: this should never happen)
@@ -82,28 +82,25 @@ export class ImageSketchpad {
     }
 
     // Create a initialization id and set it as data attribute and css class to the image
-    if (this.image.classList.contains('sketchpad-loaded') === false) {
-      const instanceId = Math.random().toString(36).slice(2, 11);
+    const instanceId = Math.random().toString(36).slice(2, 11);
 
-      this.image.classList.add('sketchpad-loaded');
-      this.image.classList.add(`sketchpad-${instanceId}`);
-      this.image.dataset.sketchpad = instanceId;
+    this.image.classList.add('sketchpad-loaded');
+    this.image.classList.add(`sketchpad-${instanceId}`);
+    this.image.dataset.sketchpad = instanceId;
 
-      this.canvas.insert(this.image).catch(this.throwError);
-    }
+    // this.canvas.insert(this.image).catch(this.throwError);
+    this.canvas.insert(this.image);
 
     // If the image is not completely loaded we will add an event listener to
     // re-adjust the canvas
     if (this.image.complete === false) {
       const imgEventLoad = () => {
         if (this.image.width !== this.canvas.element.width) {
-          this.canvas.adjustFromElement(this.image).catch(this.throwError);
+          this.canvas.adjustFromElement(this.image);
           this.redraw();
         }
-
         this.image.removeEventListener('load', imgEventLoad);
       };
-
       this.image.addEventListener('load', imgEventLoad);
     }
 
@@ -155,7 +152,6 @@ export class ImageSketchpad {
         {
           strokes: this.strokes,
           options: this.options,
-          imageRatio: this.getImageRatio(),
         }
       )
     );
@@ -170,14 +166,12 @@ export class ImageSketchpad {
     let object: {
       strokes: Stroke[];
       options: Options;
-      imageRatio: number;
     };
 
     try {
       object = JSON.parse(json) as {
         strokes: Stroke[];
         options: Options;
-        imageRatio: number;
       };
     } catch (error: unknown) {
       throw new Error(String(error));
@@ -186,9 +180,7 @@ export class ImageSketchpad {
     this.image.dataset.sketchpadJson = json;
 
     this.strokes = object.strokes || [];
-    this.options = Object.assign(this.options, object.options || {});
-
-    this.redraw();
+    this.setOptions(object.options).redraw();
 
     return this;
   }
@@ -274,25 +266,41 @@ export class ImageSketchpad {
     return this;
   }
 
-  /**
-   * Returns package version
-   */
-  version(): string {
-    return '__buildVersion__';
+  destroy(): void {
+    // const me = this;
+
+    window.removeEventListener('resize', this.windowResizeHandler, true);
+    // window.removeEventListener('resize', function () {
+    //   me.windowResizeHandler();
+    // });
+    // window.onresize = null;
+    this.canvas.element.remove();
+  }
+
+  private windowResizeHandler() {
+    if (this.image.width !== this.canvas.element.width) {
+      this.canvas.adjustFromElement(this.image);
+      this.redraw();
+    }
   }
 
   /**
    * Register event listener for responsive adjustments and drawings
    */
   private async listen(): Promise<ImageSketchpad> {
-    // Adjust the canvas on window resize
-    window.addEventListener('resize', () => {
-      if (this.image.width !== this.canvas.element.width) {
-        this.canvas.adjustFromElement(this.image).catch(this.throwError);
+    // const me = this;
 
-        this.redraw();
-      }
-    });
+    window.addEventListener('resize', this.windowResizeHandler.bind(this), { capture: true });
+    // Adjust the canvas on window resize
+    // window.addEventListener('resize', function () {
+    //   me.windowResizeHandler();
+    // });
+    // window.onresize = () => {
+    //   if (this.image.width !== this.canvas.element.width) {
+    //     this.canvas.adjustFromElement(this.image);
+    //     this.redraw();
+    //   }
+    // };
 
     // For drawings we need to start, draw and end a stroke
     const canvasEvents = [
@@ -459,12 +467,12 @@ export class ImageSketchpad {
   private createStroke(points: Point[]): Stroke {
     return <Stroke>{
       points,
-      // this.options.lineWidth,
-      // this.options.lineMaxWidth,
-      // this.options.lineColor,
-      // this.options.lineCap,
-      // this.options.lineJoin,
-      // this.options.lineMiterLimit
+      width: this.options.lineWidth,
+      maxWidth: this.options.lineMaxWidth,
+      color: this.options.lineColor,
+      cap: this.options.lineCap,
+      join: this.options.lineJoin,
+      miterLimit: this.options.lineMiterLimit,
     };
   }
 
@@ -517,4 +525,4 @@ export class ImageSketchpad {
   }
 }
 
-export { Options, UserOptions } from './Options';
+export { DefaultOptions, Options, UserOptions } from './Options';

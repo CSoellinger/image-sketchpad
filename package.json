@@ -86,6 +86,7 @@
     "eslint-plugin-prettier": "3.4.0",
     "eslint-plugin-tsdoc": "^0.2.14",
     "jest": "^27.0.4",
+    "jest-canvas-mock": "^2.3.1",
     "jest-electron": "^0.1.11",
     "jest-puppeteer": "^5.0.4",
     "prettier": "^2.3.1",

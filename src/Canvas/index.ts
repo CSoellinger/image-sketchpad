@@ -27,10 +27,10 @@ export class Canvas {
    *
    * @param refElement - Reference {@link HTMLElement|element} where we want position the canvas.
    */
-  async insert(refElement: HTMLElement): Promise<void> {
+  insert(refElement: HTMLElement): void {
     this.element.style.position = 'absolute';
 
-    await this.adjustFromElement(refElement);
+    this.adjustFromElement(refElement);
 
     refElement.parentNode?.insertBefore(this.element, refElement.nextSibling);
   }
@@ -43,7 +43,7 @@ export class Canvas {
    * @param top     - New top position for canvas
    * @param left    - New left position for canvas
    */
-  async adjust(width: number, height: number, top: number, left: number): Promise<void> {
+  adjust(width: number, height: number, top: number, left: number): void {
     this.element.setAttribute('width', width.toString());
     this.element.setAttribute('height', height.toString());
 
@@ -58,8 +58,8 @@ export class Canvas {
    *
    * @param element - Existing {@link HTMLElement|element} as reference
    */
-  async adjustFromElement(element: HTMLElement): Promise<void> {
-    return this.adjust(element.clientWidth, element.clientHeight, element.offsetTop, element.offsetLeft);
+  adjustFromElement(element: HTMLElement): void {
+    this.adjust(element.clientWidth, element.clientHeight, element.offsetTop, element.offsetLeft);
   }
 
   /**
