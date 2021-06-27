@@ -48,6 +48,8 @@ export class ImageSketchpad {
    */
   private activeStroke: Stroke | undefined;
 
+  private resizeHandler: () => void;
+
   /**
    * Creates an instance of image sketchpad.
    *
@@ -88,28 +90,21 @@ export class ImageSketchpad {
     this.image.classList.add(`sketchpad-${instanceId}`);
     this.image.dataset.sketchpad = instanceId;
 
-    // this.canvas.insert(this.image).catch(this.throwError);
-    this.canvas.insert(this.image);
+    this.resizeHandler = () => {
+      if (this.image.width !== this.canvas.element.width) {
+        this.canvas.adjustFromElement(this.image);
+        this.redrawAsync().catch(this.throwError);
+      }
+    };
 
-    // If the image is not completely loaded we will add an event listener to
-    // re-adjust the canvas
-    if (this.image.complete === false) {
-      const imgEventLoad = () => {
-        if (this.image.width !== this.canvas.element.width) {
-          this.canvas.adjustFromElement(this.image);
-          this.redraw();
-        }
-        this.image.removeEventListener('load', imgEventLoad);
-      };
-      this.image.addEventListener('load', imgEventLoad);
-    }
+    this.canvas.insert(this.image);
 
     // Register event listeners
     this.listen().catch(this.throwError);
 
     // If we have a "data-sketchpad-json" attribute we will try to load the sketch
     if (this.image.dataset.sketchpadJson) {
-      this.loadJson(this.image.dataset.sketchpadJson);
+      this.loadJson(this.image.dataset.sketchpadJson).catch(this.throwError);
     }
   }
 
@@ -157,12 +152,16 @@ export class ImageSketchpad {
     );
   }
 
+  async toJsonAsync(): Promise<string> {
+    return this.toJson();
+  }
+
   /**
    * Load a sketch from a json string
    *
    * @param json - JSON string to parse
    */
-  loadJson(json: string): ImageSketchpad {
+  async loadJson(json: string): Promise<ImageSketchpad> {
     let object: {
       strokes: Stroke[];
       options: Options;
@@ -180,7 +179,7 @@ export class ImageSketchpad {
     this.image.dataset.sketchpadJson = json;
 
     this.strokes = object.strokes || [];
-    this.setOptions(object.options).redraw();
+    this.setOptions(object.options).redrawAsync();
 
     return this;
   }
@@ -189,9 +188,8 @@ export class ImageSketchpad {
    * Clears the image sketchpad
    */
   clear(): ImageSketchpad {
-    this.undoneStrokes = [];
     this.strokes = [];
-    this.redraw();
+    this.redrawAsync().catch(this.throwError);
 
     return this;
   }
@@ -205,12 +203,9 @@ export class ImageSketchpad {
     }
 
     const stroke = this.strokes.pop();
+    this.undoneStrokes.push(<Stroke>stroke);
 
-    if (stroke) {
-      this.undoneStrokes.push(stroke);
-    }
-
-    this.redraw();
+    this.redrawAsync().catch(this.throwError);
 
     return this;
   }
@@ -224,12 +219,9 @@ export class ImageSketchpad {
     }
 
     const stroke = this.undoneStrokes.pop();
+    this.strokes.push(<Stroke>stroke);
 
-    if (stroke) {
-      this.strokes.push(stroke);
-    }
-
-    this.redraw();
+    this.redrawAsync().catch(this.throwError);
 
     return this;
   }
@@ -244,7 +236,7 @@ export class ImageSketchpad {
   /**
    * Download merged image with sketch as png file
    */
-  download(): ImageSketchpad {
+  async download(): Promise<string> {
     let fileName = this.image.src;
 
     fileName = fileName.toLowerCase().startsWith('data:')
@@ -253,75 +245,61 @@ export class ImageSketchpad {
 
     fileName += '.sketch.png';
 
-    this.mergeImageWithSketch()
-      .then((b64: string) => {
-        const downloadLink = document.createElement('a');
+    return this.mergeImageWithSketch().then((b64: string) => {
+      const downloadLink = document.createElement('a');
 
-        downloadLink.href = b64;
-        downloadLink.download = fileName;
-        downloadLink.click();
-      })
-      .catch(this.throwError);
+      downloadLink.href = b64;
+      downloadLink.download = fileName;
+      downloadLink.click();
 
-    return this;
+      return b64;
+    });
   }
 
   destroy(): void {
-    // const me = this;
-
-    window.removeEventListener('resize', this.windowResizeHandler, true);
-    // window.removeEventListener('resize', function () {
-    //   me.windowResizeHandler();
-    // });
-    // window.onresize = null;
+    window.removeEventListener('resize', this.resizeHandler, false);
+    this.undoneStrokes = [];
+    this.strokes = [];
+    this.options = DefaultOptions;
     this.canvas.element.remove();
-  }
-
-  private windowResizeHandler() {
-    if (this.image.width !== this.canvas.element.width) {
-      this.canvas.adjustFromElement(this.image);
-      this.redraw();
-    }
   }
 
   /**
    * Register event listener for responsive adjustments and drawings
    */
   private async listen(): Promise<ImageSketchpad> {
-    // const me = this;
+    // If the image is not completely loaded we will add an event listener to
+    // re-adjust the canvas
+    if (this.image.complete === false) {
+      const imgEventLoad = () => {
+        this.resizeHandler();
+        this.image.removeEventListener('load', imgEventLoad);
+      };
+      this.image.addEventListener('load', imgEventLoad);
+    }
 
-    window.addEventListener('resize', this.windowResizeHandler.bind(this), { capture: true });
-    // Adjust the canvas on window resize
-    // window.addEventListener('resize', function () {
-    //   me.windowResizeHandler();
-    // });
-    // window.onresize = () => {
-    //   if (this.image.width !== this.canvas.element.width) {
-    //     this.canvas.adjustFromElement(this.image);
-    //     this.redraw();
-    //   }
-    // };
+    window.addEventListener('resize', this.resizeHandler, { passive: true });
 
     // For drawings we need to start, draw and end a stroke
     const canvasEvents = [
       // On mousedown, touchstart we start drawing
       {
         events: ['mousedown', 'touchstart'],
-        caller: (event: Event) => {
+        caller: (event: MouseEvent | TouchEvent) => {
           this.startStrokeHandler(event);
         },
       },
       // Draw during mousemove, touchmove
       {
         events: ['mousemove', 'touchmove'],
-        caller: (event: Event) => {
+        caller: (event: MouseEvent | TouchEvent) => {
           this.drawStrokeHandler(event);
         },
       },
       // And finish the stroke after mouseup, mouseleave, touchend
       {
         events: ['mouseup', 'mouseleave', 'touchend'],
-        caller: (event: Event) => {
+        caller: (event: MouseEvent | TouchEvent) => {
           this.endStrokeHandler(event);
         },
       },
@@ -343,7 +321,7 @@ export class ImageSketchpad {
               return;
             }
 
-            object.caller(event);
+            object.caller(<MouseEvent | TouchEvent>event);
           },
           options
         );
@@ -358,7 +336,7 @@ export class ImageSketchpad {
    *
    * @param event - mousedown, touchstart event
    */
-  private startStrokeHandler(event: Event): ImageSketchpad {
+  private startStrokeHandler(event: MouseEvent | TouchEvent): ImageSketchpad {
     event.preventDefault();
 
     this.sketching = true;
@@ -378,7 +356,7 @@ export class ImageSketchpad {
    *
    * @param event - mousemove, touchmove event
    */
-  private drawStrokeHandler(event: Event): ImageSketchpad {
+  private drawStrokeHandler(event: MouseEvent | TouchEvent): ImageSketchpad {
     event.preventDefault();
 
     // Drawing was not started by startStrokeHandler
@@ -388,7 +366,7 @@ export class ImageSketchpad {
 
     const point = this.getPointFromCursor(event);
 
-    this.pushPoint(point, this.activeStroke).redraw();
+    this.pushPoint(point, this.activeStroke).redrawAsync().catch(this.throwError);
 
     return this;
   }
@@ -398,7 +376,7 @@ export class ImageSketchpad {
    *
    * @param event - mouseup, mouseleave, touchend event
    */
-  private endStrokeHandler(event: Event): ImageSketchpad {
+  private endStrokeHandler(event: MouseEvent | TouchEvent): ImageSketchpad {
     event.preventDefault();
 
     // Drawing was not started by startStrokeHandler
@@ -418,7 +396,7 @@ export class ImageSketchpad {
 
     const point = this.getPointFromCursor(event);
 
-    this.pushPoint(point, this.activeStroke).redraw();
+    this.pushPoint(point, this.activeStroke).redrawAsync().catch(this.throwError);
 
     this.activeStroke = undefined;
 
@@ -437,7 +415,7 @@ export class ImageSketchpad {
    *
    * @param event - mousedown, touchstart, mousemove, touchmove, mouseup, mouseleave, touchend event
    */
-  private getPointFromCursor(event: Event): Point {
+  private getPointFromCursor(event: MouseEvent | TouchEvent): Point {
     const coord = { x: 0, y: 0 };
 
     if (this.isTouchEvent(event)) {
@@ -484,10 +462,7 @@ export class ImageSketchpad {
    */
   private pushPoint(point: Point, stroke?: Stroke): ImageSketchpad {
     stroke = stroke ?? this.strokes[this.strokes.length - 1];
-
-    if (stroke.points) {
-      stroke.points.push(point);
-    }
+    stroke.points?.push(point);
 
     return this;
   }
@@ -504,6 +479,10 @@ export class ImageSketchpad {
     }
 
     return this;
+  }
+
+  private async redrawAsync(): Promise<ImageSketchpad> {
+    return this.redraw();
   }
 
   /**

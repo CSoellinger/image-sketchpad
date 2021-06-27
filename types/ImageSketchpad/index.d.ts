@@ -37,6 +37,7 @@ export declare class ImageSketchpad {
      * Helper variable to get the save the active stroke during sketching is true
      */
     private activeStroke;
+    private resizeHandler;
     /**
      * Creates an instance of image sketchpad.
      *
@@ -71,12 +72,13 @@ export declare class ImageSketchpad {
      * Get a json string which can be used to load a sketch again
      */
     toJson(): string;
+    toJsonAsync(): Promise<string>;
     /**
      * Load a sketch from a json string
      *
      * @param json - JSON string to parse
      */
-    loadJson(json: string): ImageSketchpad;
+    loadJson(json: string): Promise<ImageSketchpad>;
     /**
      * Clears the image sketchpad
      */
@@ -96,11 +98,8 @@ export declare class ImageSketchpad {
     /**
      * Download merged image with sketch as png file
      */
-    download(): ImageSketchpad;
-    /**
-     * Returns package version
-     */
-    version(): string;
+    download(): Promise<string>;
+    destroy(): void;
     /**
      * Register event listener for responsive adjustments and drawings
      */
@@ -151,6 +150,7 @@ export declare class ImageSketchpad {
      * strokes again
      */
     private redraw;
+    private redrawAsync;
     /**
      * Check if given event is a touch event
      *
@@ -164,4 +164,4 @@ export declare class ImageSketchpad {
      */
     private throwError;
 }
-export { Options, UserOptions } from './Options';
+export { DefaultOptions, Options, UserOptions } from './Options';

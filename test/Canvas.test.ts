@@ -66,11 +66,11 @@ describe('Testing Canvas Class', () => {
     expect(canvasClass.clear()).toBeInstanceOf(Canvas);
   });
 
-  it('Should throw an error if we try drawing a stroke with only one point', async () => {
+  it('Should do nothing if we try drawing a stroke with only one point', async () => {
     stroke.points.push(<Point>{ x: 10, y: 10 });
 
     expect.assertions(1);
 
-    await expect(canvasClass.drawStroke(stroke, 1)).rejects.toBeInstanceOf(Error);
+    await expect(canvasClass.drawStroke(stroke, 1)).resolves.toBeUndefined();
   });
 });

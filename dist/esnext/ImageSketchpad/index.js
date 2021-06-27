@@ -38,6 +38,7 @@ export class ImageSketchpad {
      * Helper variable to get the save the active stroke during sketching is true
      */
     activeStroke;
+    resizeHandler;
     /**
      * Creates an instance of image sketchpad.
      *
@@ -56,7 +57,7 @@ export class ImageSketchpad {
     constructor(image, options) {
         // Check if element is defined and has a "src" attribute (simple check for image element)
         if (image === null || image === undefined || image.src === undefined) {
-            this.throwError('Must pass in a html image element');
+            this.throwError('Must pass in a html image element with "src" attribute');
         }
         // Throw error on double initialization (in theory: this should never happen)
         if (image.classList.contains('sketchpad-loaded') === true) {
@@ -68,30 +69,22 @@ export class ImageSketchpad {
             this.setOptions(options);
         }
         // Create a initialization id and set it as data attribute and css class to the image
-        if (this.image.classList.contains('sketchpad-loaded') === false) {
-            const instanceId = Math.random().toString(36).slice(2, 11);
-            this.image.classList.add('sketchpad-loaded');
-            this.image.classList.add(`sketchpad-${instanceId}`);
-            this.image.dataset.sketchpad = instanceId;
-            this.canvas.insert(this.image).catch(this.throwError);
-        }
-        // If the image is not completely loaded we will add an event listener to
-        // re-adjust the canvas
-        if (this.image.complete === false) {
-            const imgEventLoad = () => {
-                if (this.image.width !== this.canvas.element.width) {
-                    this.canvas.adjustFromElement(this.image).catch(this.throwError);
-                    this.redraw();
-                }
-                this.image.removeEventListener('load', imgEventLoad);
-            };
-            this.image.addEventListener('load', imgEventLoad);
-        }
+        const instanceId = Math.random().toString(36).slice(2, 11);
+        this.image.classList.add('sketchpad-loaded');
+        this.image.classList.add(`sketchpad-${instanceId}`);
+        this.image.dataset.sketchpad = instanceId;
+        this.resizeHandler = () => {
+            if (this.image.width !== this.canvas.element.width) {
+                this.canvas.adjustFromElement(this.image);
+                this.redrawAsync().catch(this.throwError);
+            }
+        };
+        this.canvas.insert(this.image);
         // Register event listeners
         this.listen().catch(this.throwError);
         // If we have a "data-sketchpad-json" attribute we will try to load the sketch
         if (this.image.dataset.sketchpadJson) {
-            this.loadJson(this.image.dataset.sketchpadJson);
+            this.loadJson(this.image.dataset.sketchpadJson).catch(this.throwError);
         }
     }
     /**
@@ -124,15 +117,17 @@ export class ImageSketchpad {
         return JSON.stringify(Object.assign({}, {
             strokes: this.strokes,
             options: this.options,
-            imageRatio: this.getImageRatio(),
         }));
+    }
+    async toJsonAsync() {
+        return this.toJson();
     }
     /**
      * Load a sketch from a json string
      *
      * @param json - JSON string to parse
      */
-    loadJson(json) {
+    async loadJson(json) {
         let object;
         try {
             object = JSON.parse(json);
@@ -142,17 +137,15 @@ export class ImageSketchpad {
         }
         this.image.dataset.sketchpadJson = json;
         this.strokes = object.strokes || [];
-        this.options = Object.assign(this.options, object.options || {});
-        this.redraw();
+        this.setOptions(object.options).redrawAsync();
         return this;
     }
     /**
      * Clears the image sketchpad
      */
     clear() {
-        this.undoneStrokes = [];
         this.strokes = [];
-        this.redraw();
+        this.redrawAsync().catch(this.throwError);
         return this;
     }
     /**
@@ -163,10 +156,8 @@ export class ImageSketchpad {
             return this;
         }
         const stroke = this.strokes.pop();
-        if (stroke) {
-            this.undoneStrokes.push(stroke);
-        }
-        this.redraw();
+        this.undoneStrokes.push(stroke);
+        this.redrawAsync().catch(this.throwError);
         return this;
     }
     /**
@@ -177,10 +168,8 @@ export class ImageSketchpad {
             return this;
         }
         const stroke = this.undoneStrokes.pop();
-        if (stroke) {
-            this.strokes.push(stroke);
-        }
-        this.redraw();
+        this.strokes.push(stroke);
+        this.redrawAsync().catch(this.throwError);
         return this;
     }
     /**
@@ -192,39 +181,41 @@ export class ImageSketchpad {
     /**
      * Download merged image with sketch as png file
      */
-    download() {
+    async download() {
         let fileName = this.image.src;
         fileName = fileName.toLowerCase().startsWith('data:')
             ? String(Date.now())
             : String(String(fileName.split('\\').pop()).split('/').pop());
         fileName += '.sketch.png';
-        this.mergeImageWithSketch()
-            .then((b64) => {
+        return this.mergeImageWithSketch().then((b64) => {
             const downloadLink = document.createElement('a');
             downloadLink.href = b64;
             downloadLink.download = fileName;
             downloadLink.click();
-        })
-            .catch(this.throwError);
-        return this;
+            return b64;
+        });
     }
-    /**
-     * Returns package version
-     */
-    version() {
-        return '__buildVersion__';
+    destroy() {
+        window.removeEventListener('resize', this.resizeHandler, false);
+        this.undoneStrokes = [];
+        this.strokes = [];
+        this.options = DefaultOptions;
+        this.canvas.element.remove();
     }
     /**
      * Register event listener for responsive adjustments and drawings
      */
     async listen() {
-        // Adjust the canvas on window resize
-        window.addEventListener('resize', () => {
-            if (this.image.width !== this.canvas.element.width) {
-                this.canvas.adjustFromElement(this.image).catch(this.throwError);
-                this.redraw();
-            }
-        });
+        // If the image is not completely loaded we will add an event listener to
+        // re-adjust the canvas
+        if (this.image.complete === false) {
+            const imgEventLoad = () => {
+                this.resizeHandler();
+                this.image.removeEventListener('load', imgEventLoad);
+            };
+            this.image.addEventListener('load', imgEventLoad);
+        }
+        window.addEventListener('resize', this.resizeHandler, { passive: true });
         // For drawings we need to start, draw and end a stroke
         const canvasEvents = [
             // On mousedown, touchstart we start drawing
@@ -293,7 +284,7 @@ export class ImageSketchpad {
             return this;
         }
         const point = this.getPointFromCursor(event);
-        this.pushPoint(point, this.activeStroke).redraw();
+        this.pushPoint(point, this.activeStroke).redrawAsync().catch(this.throwError);
         return this;
     }
     /**
@@ -315,7 +306,7 @@ export class ImageSketchpad {
             return this;
         }
         const point = this.getPointFromCursor(event);
-        this.pushPoint(point, this.activeStroke).redraw();
+        this.pushPoint(point, this.activeStroke).redrawAsync().catch(this.throwError);
         this.activeStroke = undefined;
         return this;
     }
@@ -356,12 +347,12 @@ export class ImageSketchpad {
     createStroke(points) {
         return {
             points,
-            // this.options.lineWidth,
-            // this.options.lineMaxWidth,
-            // this.options.lineColor,
-            // this.options.lineCap,
-            // this.options.lineJoin,
-            // this.options.lineMiterLimit
+            width: this.options.lineWidth,
+            maxWidth: this.options.lineMaxWidth,
+            color: this.options.lineColor,
+            cap: this.options.lineCap,
+            join: this.options.lineJoin,
+            miterLimit: this.options.lineMiterLimit,
         };
     }
     /**
@@ -372,9 +363,7 @@ export class ImageSketchpad {
      */
     pushPoint(point, stroke) {
         stroke = stroke ?? this.strokes[this.strokes.length - 1];
-        if (stroke.points) {
-            stroke.points.push(point);
-        }
+        stroke.points?.push(point);
         return this;
     }
     /**
@@ -387,6 +376,9 @@ export class ImageSketchpad {
             this.canvas.drawStroke(stroke, this.getImageRatio()).catch(this.throwError);
         }
         return this;
+    }
+    async redrawAsync() {
+        return this.redraw();
     }
     /**
      * Check if given event is a touch event
@@ -405,3 +397,4 @@ export class ImageSketchpad {
         throw new Error(String(error));
     }
 }
+export { DefaultOptions } from './Options';

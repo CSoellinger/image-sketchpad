@@ -79,7 +79,7 @@ export class Canvas {
    */
   async drawStroke(stroke: Stroke, ratio: number): Promise<void> {
     if (Array.isArray(stroke.points) === false || stroke.points.length < 2) {
-      throw new Error('Property "points" from object "stroke" has to be an array and at least with two items.');
+      return;
     }
 
     this.context.beginPath();

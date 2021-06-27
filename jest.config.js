@@ -14,7 +14,7 @@ module.exports = {
   // cacheDirectory: "/private/var/folders/nt/gpdf5wx17673r5y886b9n5pm0000gp/T/jest_dy",
 
   // Automatically clear mock calls and instances between every test
-  // clearMocks: true,
+  clearMocks: true,
 
   // Indicates whether the coverage information should be collected while executing the test
   collectCoverage: true,
@@ -106,10 +106,10 @@ module.exports = {
   // reporters: undefined,
 
   // Automatically reset mock state between every test
-  // resetMocks: false,
+  // resetMocks: true,
 
   // Reset the module registry before running each individual test
-  // resetModules: false,
+  // resetModules: true,
 
   // A path to a custom resolver
   // resolver: undefined,
@@ -153,7 +153,7 @@ module.exports = {
   },
 
   // Adds a location field to test results
-  // testLocationInResults: false,
+  testLocationInResults: true,
 
   // The glob patterns Jest uses to detect test files
   testMatch: [

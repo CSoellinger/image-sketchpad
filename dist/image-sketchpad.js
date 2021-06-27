@@ -921,33 +921,13 @@ var ImageSketchpad = (function () {
 
     _createClass(Canvas, [{
       key: "insert",
-      value: function () {
-        var _insert = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee(refElement) {
-          return regenerator.wrap(function _callee$(_context) {
-            while (1) {
-              switch (_context.prev = _context.next) {
-                case 0:
-                  this.element.style.position = 'absolute';
-                  this.adjustFromElement(refElement).catch(this.throwError);
+      value: function insert(refElement) {
+        var _refElement$parentNod;
 
-                  if (refElement.parentNode) {
-                    refElement.parentNode.insertBefore(this.element, refElement.nextSibling);
-                  }
-
-                case 3:
-                case "end":
-                  return _context.stop();
-              }
-            }
-          }, _callee, this);
-        }));
-
-        function insert(_x) {
-          return _insert.apply(this, arguments);
-        }
-
-        return insert;
-      }()
+        this.element.style.position = 'absolute';
+        this.adjustFromElement(refElement);
+        (_refElement$parentNod = refElement.parentNode) === null || _refElement$parentNod === void 0 ? void 0 : _refElement$parentNod.insertBefore(this.element, refElement.nextSibling);
+      }
       /**
        * Adjusts canvas size and position
        *
@@ -959,33 +939,14 @@ var ImageSketchpad = (function () {
 
     }, {
       key: "adjust",
-      value: function () {
-        var _adjust = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee2(width, height, top, left) {
-          return regenerator.wrap(function _callee2$(_context2) {
-            while (1) {
-              switch (_context2.prev = _context2.next) {
-                case 0:
-                  this.element.setAttribute('width', width.toString());
-                  this.element.setAttribute('height', height.toString());
-                  this.element.style.width = "".concat(width, "px");
-                  this.element.style.height = "".concat(height, "px");
-                  this.element.style.top = "".concat(top, "px");
-                  this.element.style.left = "".concat(left, "px");
-
-                case 6:
-                case "end":
-                  return _context2.stop();
-              }
-            }
-          }, _callee2, this);
-        }));
-
-        function adjust(_x2, _x3, _x4, _x5) {
-          return _adjust.apply(this, arguments);
-        }
-
-        return adjust;
-      }()
+      value: function adjust(width, height, top, left) {
+        this.element.setAttribute('width', width.toString());
+        this.element.setAttribute('height', height.toString());
+        this.element.style.width = "".concat(width, "px");
+        this.element.style.height = "".concat(height, "px");
+        this.element.style.top = "".concat(top, "px");
+        this.element.style.left = "".concat(left, "px");
+      }
       /**
        * Adjust canvas size and position from existing element
        *
@@ -994,28 +955,9 @@ var ImageSketchpad = (function () {
 
     }, {
       key: "adjustFromElement",
-      value: function () {
-        var _adjustFromElement = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee3(element) {
-          return regenerator.wrap(function _callee3$(_context3) {
-            while (1) {
-              switch (_context3.prev = _context3.next) {
-                case 0:
-                  this.adjust(element.clientWidth, element.clientHeight, element.offsetTop, element.offsetLeft).catch(this.throwError);
-
-                case 1:
-                case "end":
-                  return _context3.stop();
-              }
-            }
-          }, _callee3, this);
-        }));
-
-        function adjustFromElement(_x6) {
-          return _adjustFromElement.apply(this, arguments);
-        }
-
-        return adjustFromElement;
-      }()
+      value: function adjustFromElement(element) {
+        this.adjust(element.clientWidth, element.clientHeight, element.offsetTop, element.offsetLeft);
+      }
       /**
        * Clear the canvas area
        */
@@ -1023,10 +965,6 @@ var ImageSketchpad = (function () {
     }, {
       key: "clear",
       value: function clear() {
-        if (this.context === null) {
-          return this;
-        }
-
         this.context.clearRect(0, 0, this.element.width, this.element.height);
         return this;
       }
@@ -1040,18 +978,18 @@ var ImageSketchpad = (function () {
     }, {
       key: "drawStroke",
       value: function () {
-        var _drawStroke = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee4(stroke, ratio) {
+        var _drawStroke = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee(stroke, ratio) {
           var i, start, end;
-          return regenerator.wrap(function _callee4$(_context4) {
+          return regenerator.wrap(function _callee$(_context) {
             while (1) {
-              switch (_context4.prev = _context4.next) {
+              switch (_context.prev = _context.next) {
                 case 0:
-                  if (!(this.context === null || stroke.points === null)) {
-                    _context4.next = 2;
+                  if (!(Array.isArray(stroke.points) === false || stroke.points.length < 2)) {
+                    _context.next = 2;
                     break;
                   }
 
-                  return _context4.abrupt("return");
+                  return _context.abrupt("return");
 
                 case 2:
                   this.context.beginPath(); // Connect each points to get finally a stroke
@@ -1064,59 +1002,33 @@ var ImageSketchpad = (function () {
                   }
 
                   this.context.closePath();
+                  this.context.strokeStyle = stroke.color;
+                  this.context.lineWidth = stroke.width / ratio; // If stroke width is bigger as defined max-width (cause of image ratio),
+                  // we will set it as width.
 
-                  if (stroke.color) {
-                    this.context.strokeStyle = stroke.color;
+                  if (stroke.maxWidth > 0 && this.context.lineWidth > stroke.maxWidth) {
+                    this.context.lineWidth = stroke.maxWidth;
                   }
 
-                  if (stroke.width) {
-                    this.context.lineWidth = stroke.width / ratio; // If stroke width is bigger as defined max-width (cause of image ratio),
-                    // we will set it as width.
-
-                    if ((stroke.maxWidth || 0) > 0 && this.context.lineWidth > (stroke.maxWidth || 0)) {
-                      this.context.lineWidth = stroke.maxWidth || 0;
-                    }
-                  }
-
-                  if (stroke.join) {
-                    this.context.lineJoin = stroke.join;
-                  }
-
-                  if (stroke.cap) {
-                    this.context.lineCap = stroke.cap;
-                  }
-
-                  if (stroke.miterLimit) {
-                    this.context.miterLimit = stroke.miterLimit;
-                  }
-
+                  this.context.lineJoin = stroke.join;
+                  this.context.lineCap = stroke.cap;
+                  this.context.miterLimit = stroke.miterLimit;
                   this.context.stroke();
 
-                case 11:
+                case 12:
                 case "end":
-                  return _context4.stop();
+                  return _context.stop();
               }
             }
-          }, _callee4, this);
+          }, _callee, this);
         }));
 
-        function drawStroke(_x7, _x8) {
+        function drawStroke(_x, _x2) {
           return _drawStroke.apply(this, arguments);
         }
 
         return drawStroke;
       }()
-      /**
-       * Throws an error
-       *
-       * @param error - Error object/message
-       */
-
-    }, {
-      key: "throwError",
-      value: function throwError(error) {
-        throw new Error(String(error));
-      }
     }]);
 
     return Canvas;
@@ -1212,10 +1124,11 @@ var ImageSketchpad = (function () {
       this.undoneStrokes = [];
       this.sketching = false;
       this.activeStroke = void 0;
+      this.resizeHandler = void 0;
 
       // Check if element is defined and has a "src" attribute (simple check for image element)
       if (image === null || image === undefined || image.src === undefined) {
-        this.throwError('Must pass in a html image element');
+        this.throwError('Must pass in a html image element with "src" attribute');
       } // Throw error on double initialization (in theory: this should never happen)
 
 
@@ -1230,35 +1143,25 @@ var ImageSketchpad = (function () {
       } // Create a initialization id and set it as data attribute and css class to the image
 
 
-      if (this.image.classList.contains('sketchpad-loaded') === false) {
-        var instanceId = Math.random().toString(36).slice(2, 11);
-        this.image.classList.add('sketchpad-loaded');
-        this.image.classList.add("sketchpad-".concat(instanceId));
-        this.image.dataset.sketchpad = instanceId;
-        this.canvas.insert(this.image).catch(this.throwError);
-      } // If the image is not completely loaded we will add an event listener to
-      // re-adjust the canvas
+      var instanceId = Math.random().toString(36).slice(2, 11);
+      this.image.classList.add('sketchpad-loaded');
+      this.image.classList.add("sketchpad-".concat(instanceId));
+      this.image.dataset.sketchpad = instanceId;
 
+      this.resizeHandler = function () {
+        if (_this.image.width !== _this.canvas.element.width) {
+          _this.canvas.adjustFromElement(_this.image);
 
-      if (this.image.complete === false) {
-        var imgEventLoad = function imgEventLoad() {
-          if (_this.image.width !== _this.canvas.element.width) {
-            _this.canvas.adjustFromElement(_this.image).catch(_this.throwError);
+          _this.redrawAsync().catch(_this.throwError);
+        }
+      };
 
-            _this.redraw();
-          }
-
-          _this.image.removeEventListener('load', imgEventLoad);
-        };
-
-        this.image.addEventListener('load', imgEventLoad);
-      } // Register event listeners
-
+      this.canvas.insert(this.image); // Register event listeners
 
       this.listen().catch(this.throwError); // If we have a "data-sketchpad-json" attribute we will try to load the sketch
 
       if (this.image.dataset.sketchpadJson) {
-        this.loadJson(this.image.dataset.sketchpadJson);
+        this.loadJson(this.image.dataset.sketchpadJson).catch(this.throwError);
       }
     }
     /**
@@ -1303,10 +1206,33 @@ var ImageSketchpad = (function () {
       value: function toJson() {
         return JSON.stringify(Object.assign({}, {
           strokes: this.strokes,
-          options: this.options,
-          imageRatio: this.getImageRatio()
+          options: this.options
         }));
       }
+    }, {
+      key: "toJsonAsync",
+      value: function () {
+        var _toJsonAsync = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee() {
+          return regenerator.wrap(function _callee$(_context) {
+            while (1) {
+              switch (_context.prev = _context.next) {
+                case 0:
+                  return _context.abrupt("return", this.toJson());
+
+                case 1:
+                case "end":
+                  return _context.stop();
+              }
+            }
+          }, _callee, this);
+        }));
+
+        function toJsonAsync() {
+          return _toJsonAsync.apply(this, arguments);
+        }
+
+        return toJsonAsync;
+      }()
       /**
        * Load a sketch from a json string
        *
@@ -1315,21 +1241,43 @@ var ImageSketchpad = (function () {
 
     }, {
       key: "loadJson",
-      value: function loadJson(json) {
-        var object;
+      value: function () {
+        var _loadJson = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee2(json) {
+          var object;
+          return regenerator.wrap(function _callee2$(_context2) {
+            while (1) {
+              switch (_context2.prev = _context2.next) {
+                case 0:
+                  _context2.prev = 0;
+                  object = JSON.parse(json);
+                  _context2.next = 7;
+                  break;
 
-        try {
-          object = JSON.parse(json);
-        } catch (error) {
-          throw new Error(String(error));
+                case 4:
+                  _context2.prev = 4;
+                  _context2.t0 = _context2["catch"](0);
+                  throw new Error(String(_context2.t0));
+
+                case 7:
+                  this.image.dataset.sketchpadJson = json;
+                  this.strokes = object.strokes || [];
+                  this.setOptions(object.options).redrawAsync();
+                  return _context2.abrupt("return", this);
+
+                case 11:
+                case "end":
+                  return _context2.stop();
+              }
+            }
+          }, _callee2, this, [[0, 4]]);
+        }));
+
+        function loadJson(_x) {
+          return _loadJson.apply(this, arguments);
         }
 
-        this.image.dataset.sketchpadJson = json;
-        this.strokes = object.strokes || [];
-        this.options = Object.assign(this.options, object.options || {});
-        this.redraw();
-        return this;
-      }
+        return loadJson;
+      }()
       /**
        * Clears the image sketchpad
        */
@@ -1337,9 +1285,8 @@ var ImageSketchpad = (function () {
     }, {
       key: "clear",
       value: function clear() {
-        this.undoneStrokes = [];
         this.strokes = [];
-        this.redraw();
+        this.redrawAsync().catch(this.throwError);
         return this;
       }
       /**
@@ -1354,12 +1301,8 @@ var ImageSketchpad = (function () {
         }
 
         var stroke = this.strokes.pop();
-
-        if (stroke) {
-          this.undoneStrokes.push(stroke);
-        }
-
-        this.redraw();
+        this.undoneStrokes.push(stroke);
+        this.redrawAsync().catch(this.throwError);
         return this;
       }
       /**
@@ -1374,12 +1317,8 @@ var ImageSketchpad = (function () {
         }
 
         var stroke = this.undoneStrokes.pop();
-
-        if (stroke) {
-          this.strokes.push(stroke);
-        }
-
-        this.redraw();
+        this.strokes.push(stroke);
+        this.redrawAsync().catch(this.throwError);
         return this;
       }
       /**
@@ -1389,19 +1328,19 @@ var ImageSketchpad = (function () {
     }, {
       key: "mergeImageWithSketch",
       value: function () {
-        var _mergeImageWithSketch = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee() {
-          return regenerator.wrap(function _callee$(_context) {
+        var _mergeImageWithSketch = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee3() {
+          return regenerator.wrap(function _callee3$(_context3) {
             while (1) {
-              switch (_context.prev = _context.next) {
+              switch (_context3.prev = _context3.next) {
                 case 0:
-                  return _context.abrupt("return", mergeImages([this.image.src, this.canvas.element.toDataURL()]));
+                  return _context3.abrupt("return", mergeImages([this.image.src, this.canvas.element.toDataURL()]));
 
                 case 1:
                 case "end":
-                  return _context.stop();
+                  return _context3.stop();
               }
             }
-          }, _callee, this);
+          }, _callee3, this);
         }));
 
         function mergeImageWithSketch() {
@@ -1416,26 +1355,46 @@ var ImageSketchpad = (function () {
 
     }, {
       key: "download",
-      value: function download() {
-        var fileName = this.image.src;
-        fileName = fileName.toLowerCase().startsWith('data:') ? String(Date.now()) : String(String(fileName.split('\\').pop()).split('/').pop());
-        fileName += '.sketch.png';
-        this.mergeImageWithSketch().then(function (b64) {
-          var downloadLink = document.createElement('a');
-          downloadLink.href = b64;
-          downloadLink.download = fileName;
-          downloadLink.click();
-        }).catch(this.throwError);
-        return this;
-      }
-      /**
-       * Returns package version
-       */
+      value: function () {
+        var _download = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee4() {
+          var fileName;
+          return regenerator.wrap(function _callee4$(_context4) {
+            while (1) {
+              switch (_context4.prev = _context4.next) {
+                case 0:
+                  fileName = this.image.src;
+                  fileName = fileName.toLowerCase().startsWith('data:') ? String(Date.now()) : String(String(fileName.split('\\').pop()).split('/').pop());
+                  fileName += '.sketch.png';
+                  return _context4.abrupt("return", this.mergeImageWithSketch().then(function (b64) {
+                    var downloadLink = document.createElement('a');
+                    downloadLink.href = b64;
+                    downloadLink.download = fileName;
+                    downloadLink.click();
+                    return b64;
+                  }));
 
+                case 4:
+                case "end":
+                  return _context4.stop();
+              }
+            }
+          }, _callee4, this);
+        }));
+
+        function download() {
+          return _download.apply(this, arguments);
+        }
+
+        return download;
+      }()
     }, {
-      key: "version",
-      value: function version() {
-        return '1.0.0';
+      key: "destroy",
+      value: function destroy() {
+        window.removeEventListener('resize', this.resizeHandler, false);
+        this.undoneStrokes = [];
+        this.strokes = [];
+        this.options = DefaultOptions;
+        this.canvas.element.remove();
       }
       /**
        * Register event listener for responsive adjustments and drawings
@@ -1444,22 +1403,29 @@ var ImageSketchpad = (function () {
     }, {
       key: "listen",
       value: function () {
-        var _listen = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee2() {
+        var _listen = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee5() {
           var _this2 = this;
 
-          var canvasEvents, _loop, _i, _canvasEvents;
+          var imgEventLoad, canvasEvents, _loop, _i, _canvasEvents;
 
-          return regenerator.wrap(function _callee2$(_context2) {
+          return regenerator.wrap(function _callee5$(_context5) {
             while (1) {
-              switch (_context2.prev = _context2.next) {
+              switch (_context5.prev = _context5.next) {
                 case 0:
-                  // Adjust the canvas on window resize
-                  window.addEventListener('resize', function () {
-                    if (_this2.image.width !== _this2.canvas.element.width) {
-                      _this2.canvas.adjustFromElement(_this2.image).catch(_this2.throwError);
+                  // If the image is not completely loaded we will add an event listener to
+                  // re-adjust the canvas
+                  if (this.image.complete === false) {
+                    imgEventLoad = function imgEventLoad() {
+                      _this2.resizeHandler();
 
-                      _this2.redraw();
-                    }
+                      _this2.image.removeEventListener('load', imgEventLoad);
+                    };
+
+                    this.image.addEventListener('load', imgEventLoad);
+                  }
+
+                  window.addEventListener('resize', this.resizeHandler, {
+                    passive: true
                   }); // For drawings we need to start, draw and end a stroke
 
                   canvasEvents = [// On mousedown, touchstart we start drawing
@@ -1518,14 +1484,14 @@ var ImageSketchpad = (function () {
                     _loop();
                   }
 
-                  return _context2.abrupt("return", this);
+                  return _context5.abrupt("return", this);
 
-                case 5:
+                case 6:
                 case "end":
-                  return _context2.stop();
+                  return _context5.stop();
               }
             }
-          }, _callee2, this);
+          }, _callee5, this);
         }));
 
         function listen() {
@@ -1568,7 +1534,7 @@ var ImageSketchpad = (function () {
         }
 
         var point = this.getPointFromCursor(event);
-        this.pushPoint(point, this.activeStroke).redraw();
+        this.pushPoint(point, this.activeStroke).redrawAsync().catch(this.throwError);
         return this;
       }
       /**
@@ -1595,7 +1561,7 @@ var ImageSketchpad = (function () {
         }
 
         var point = this.getPointFromCursor(event);
-        this.pushPoint(point, this.activeStroke).redraw();
+        this.pushPoint(point, this.activeStroke).redrawAsync().catch(this.throwError);
         this.activeStroke = undefined;
         return this;
       }
@@ -1648,13 +1614,13 @@ var ImageSketchpad = (function () {
       key: "createStroke",
       value: function createStroke(points) {
         return {
-          points: points // this.options.lineWidth,
-          // this.options.lineMaxWidth,
-          // this.options.lineColor,
-          // this.options.lineCap,
-          // this.options.lineJoin,
-          // this.options.lineMiterLimit
-
+          points: points,
+          width: this.options.lineWidth,
+          maxWidth: this.options.lineMaxWidth,
+          color: this.options.lineColor,
+          cap: this.options.lineCap,
+          join: this.options.lineJoin,
+          miterLimit: this.options.lineMiterLimit
         };
       }
       /**
@@ -1667,14 +1633,10 @@ var ImageSketchpad = (function () {
     }, {
       key: "pushPoint",
       value: function pushPoint(point, stroke) {
-        var _stroke;
+        var _stroke, _stroke$points;
 
         stroke = (_stroke = stroke) !== null && _stroke !== void 0 ? _stroke : this.strokes[this.strokes.length - 1];
-
-        if (stroke.points) {
-          stroke.points.push(point);
-        }
-
+        (_stroke$points = stroke.points) === null || _stroke$points === void 0 ? void 0 : _stroke$points.push(point);
         return this;
       }
       /**
@@ -1703,6 +1665,30 @@ var ImageSketchpad = (function () {
 
         return this;
       }
+    }, {
+      key: "redrawAsync",
+      value: function () {
+        var _redrawAsync = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee6() {
+          return regenerator.wrap(function _callee6$(_context6) {
+            while (1) {
+              switch (_context6.prev = _context6.next) {
+                case 0:
+                  return _context6.abrupt("return", this.redraw());
+
+                case 1:
+                case "end":
+                  return _context6.stop();
+              }
+            }
+          }, _callee6, this);
+        }));
+
+        function redrawAsync() {
+          return _redrawAsync.apply(this, arguments);
+        }
+
+        return redrawAsync;
+      }()
       /**
        * Check if given event is a touch event
        *

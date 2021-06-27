@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Testing ImageSketchpad Class Gets a point from event 1`] = `
+Object {
+  "x": 0,
+  "y": 0,
+}
+`;
+
+exports[`Testing ImageSketchpad Class Gets a point from event 2`] = `
+Object {
+  "x": 0,
+  "y": 0,
+}
+`;
+
+exports[`Testing ImageSketchpad Class Should load data sketchpad json attribute 1`] = `"{\\"strokes\\":[],\\"options\\":{\\"lineWidth\\":7,\\"lineMaxWidth\\":-1,\\"lineColor\\":\\"#000\\",\\"lineCap\\":\\"round\\",\\"lineJoin\\":\\"round\\",\\"lineMiterLimit\\":10}}"`;
+
+exports[`Testing ImageSketchpad Class Should load data sketchpad options json attribute 1`] = `"{\\"strokes\\":[],\\"options\\":{\\"lineWidth\\":7,\\"lineMaxWidth\\":-1,\\"lineColor\\":\\"#000\\",\\"lineCap\\":\\"round\\",\\"lineJoin\\":\\"round\\",\\"lineMiterLimit\\":10}}"`;
+
+exports[`Testing ImageSketchpad Class Start, draw, stop stroke by mouse event 1`] = `"{\\"strokes\\":[{\\"points\\":[{\\"x\\":0,\\"y\\":0},{\\"x\\":0,\\"y\\":0}],\\"width\\":5,\\"maxWidth\\":-1,\\"color\\":\\"#000\\",\\"cap\\":\\"round\\",\\"join\\":\\"round\\",\\"miterLimit\\":10}],\\"options\\":{\\"lineWidth\\":5,\\"lineMaxWidth\\":-1,\\"lineColor\\":\\"#000\\",\\"lineCap\\":\\"round\\",\\"lineJoin\\":\\"round\\",\\"lineMiterLimit\\":10}}"`;
+
+exports[`Testing ImageSketchpad Class Start, draw, stop stroke by touch event 1`] = `"{\\"strokes\\":[{\\"points\\":[{\\"x\\":0,\\"y\\":0},{\\"x\\":0,\\"y\\":0}],\\"width\\":5,\\"maxWidth\\":-1,\\"color\\":\\"#000\\",\\"cap\\":\\"round\\",\\"join\\":\\"round\\",\\"miterLimit\\":10}],\\"options\\":{\\"lineWidth\\":5,\\"lineMaxWidth\\":-1,\\"lineColor\\":\\"#000\\",\\"lineCap\\":\\"round\\",\\"lineJoin\\":\\"round\\",\\"lineMiterLimit\\":10}}"`;

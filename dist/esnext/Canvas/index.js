@@ -22,12 +22,10 @@ export class Canvas {
      *
      * @param refElement - Reference {@link HTMLElement|element} where we want position the canvas.
      */
-    async insert(refElement) {
+    insert(refElement) {
         this.element.style.position = 'absolute';
-        this.adjustFromElement(refElement).catch(this.throwError);
-        if (refElement.parentNode) {
-            refElement.parentNode.insertBefore(this.element, refElement.nextSibling);
-        }
+        this.adjustFromElement(refElement);
+        refElement.parentNode?.insertBefore(this.element, refElement.nextSibling);
     }
     /**
      * Adjusts canvas size and position
@@ -37,7 +35,7 @@ export class Canvas {
      * @param top     - New top position for canvas
      * @param left    - New left position for canvas
      */
-    async adjust(width, height, top, left) {
+    adjust(width, height, top, left) {
         this.element.setAttribute('width', width.toString());
         this.element.setAttribute('height', height.toString());
         this.element.style.width = `${width}px`;
@@ -50,16 +48,13 @@ export class Canvas {
      *
      * @param element - Existing {@link HTMLElement|element} as reference
      */
-    async adjustFromElement(element) {
-        this.adjust(element.clientWidth, element.clientHeight, element.offsetTop, element.offsetLeft).catch(this.throwError);
+    adjustFromElement(element) {
+        this.adjust(element.clientWidth, element.clientHeight, element.offsetTop, element.offsetLeft);
     }
     /**
      * Clear the canvas area
      */
     clear() {
-        if (this.context === null) {
-            return this;
-        }
         this.context.clearRect(0, 0, this.element.width, this.element.height);
         return this;
     }
@@ -70,7 +65,7 @@ export class Canvas {
      * @param ratio   - Image/canvas ratio
      */
     async drawStroke(stroke, ratio) {
-        if (this.context === null || stroke.points === null) {
+        if (Array.isArray(stroke.points) === false || stroke.points.length < 2) {
             return;
         }
         this.context.beginPath();
@@ -82,34 +77,16 @@ export class Canvas {
             this.context.lineTo(end.x / ratio, end.y / ratio);
         }
         this.context.closePath();
-        if (stroke.color) {
-            this.context.strokeStyle = stroke.color;
+        this.context.strokeStyle = stroke.color;
+        this.context.lineWidth = stroke.width / ratio;
+        // If stroke width is bigger as defined max-width (cause of image ratio),
+        // we will set it as width.
+        if (stroke.maxWidth > 0 && this.context.lineWidth > stroke.maxWidth) {
+            this.context.lineWidth = stroke.maxWidth;
         }
-        if (stroke.width) {
-            this.context.lineWidth = stroke.width / ratio;
-            // If stroke width is bigger as defined max-width (cause of image ratio),
-            // we will set it as width.
-            if ((stroke.maxWidth || 0) > 0 && this.context.lineWidth > (stroke.maxWidth || 0)) {
-                this.context.lineWidth = stroke.maxWidth || 0;
-            }
-        }
-        if (stroke.join) {
-            this.context.lineJoin = stroke.join;
-        }
-        if (stroke.cap) {
-            this.context.lineCap = stroke.cap;
-        }
-        if (stroke.miterLimit) {
-            this.context.miterLimit = stroke.miterLimit;
-        }
+        this.context.lineJoin = stroke.join;
+        this.context.lineCap = stroke.cap;
+        this.context.miterLimit = stroke.miterLimit;
         this.context.stroke();
-    }
-    /**
-     * Throws an error
-     *
-     * @param error - Error object/message
-     */
-    throwError(error) {
-        throw new Error(String(error));
     }
 }

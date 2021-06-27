@@ -20,7 +20,7 @@ export declare class Canvas {
      *
      * @param refElement - Reference {@link HTMLElement|element} where we want position the canvas.
      */
-    insert(refElement: HTMLElement): Promise<void>;
+    insert(refElement: HTMLElement): void;
     /**
      * Adjusts canvas size and position
      *
@@ -29,13 +29,13 @@ export declare class Canvas {
      * @param top     - New top position for canvas
      * @param left    - New left position for canvas
      */
-    adjust(width: number, height: number, top: number, left: number): Promise<void>;
+    adjust(width: number, height: number, top: number, left: number): void;
     /**
      * Adjust canvas size and position from existing element
      *
      * @param element - Existing {@link HTMLElement|element} as reference
      */
-    adjustFromElement(element: HTMLElement): Promise<void>;
+    adjustFromElement(element: HTMLElement): void;
     /**
      * Clear the canvas area
      */
@@ -47,11 +47,5 @@ export declare class Canvas {
      * @param ratio   - Image/canvas ratio
      */
     drawStroke(stroke: Stroke, ratio: number): Promise<void>;
-    /**
-     * Throws an error
-     *
-     * @param error - Error object/message
-     */
-    private throwError;
 }
 export { Point, Stroke } from './Draw';
