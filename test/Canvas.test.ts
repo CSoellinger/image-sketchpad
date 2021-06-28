@@ -42,6 +42,7 @@ describe('Testing Canvas Class', () => {
     const refElement = document.getElementById('Image');
 
     canvasClass.insert(<HTMLElement>refElement);
+
     await expect(canvasClass.drawStroke(stroke, 1)).resolves.toBeUndefined();
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -58,6 +59,7 @@ describe('Testing Canvas Class', () => {
     const refElement = document.getElementById('Image');
 
     canvasClass.insert(<HTMLElement>refElement);
+
     await expect(canvasClass.drawStroke(stroke, 1)).resolves.toBeUndefined();
   });
 

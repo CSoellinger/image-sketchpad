@@ -1,5 +1,5 @@
-import mergeImages from 'merge-images';
 import { Canvas } from '../Canvas';
+import mergeImages from 'merge-images';
 import { DefaultOptions } from './Options';
 /**
  * Image sketchpad main class. It handles creation of canvas element, drawing on

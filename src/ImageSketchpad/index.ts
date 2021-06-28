@@ -1,6 +1,5 @@
-import mergeImages from 'merge-images';
-
 import { Canvas, Point, Stroke } from '../Canvas';
+import mergeImages from 'merge-images';
 import { DefaultOptions, Options, UserOptions } from './Options';
 
 /**
@@ -88,7 +87,7 @@ export class ImageSketchpad {
 
     this.image.classList.add('sketchpad-loaded');
     this.image.classList.add(`sketchpad-${instanceId}`);
-    this.image.dataset.sketchpad = instanceId;
+    this.image.dataset['sketchpad'] = instanceId;
 
     this.resizeHandler = () => {
       if (this.image.width !== this.canvas.element.width) {
@@ -103,8 +102,8 @@ export class ImageSketchpad {
     this.listen().catch(this.throwError);
 
     // If we have a "data-sketchpad-json" attribute we will try to load the sketch
-    if (this.image.dataset.sketchpadJson) {
-      this.loadJson(this.image.dataset.sketchpadJson).catch(this.throwError);
+    if (this.image.dataset['sketchpadJson']) {
+      this.loadJson(this.image.dataset['sketchpadJson']).catch(this.throwError);
     }
   }
 
@@ -176,7 +175,7 @@ export class ImageSketchpad {
       throw new Error(String(error));
     }
 
-    this.image.dataset.sketchpadJson = json;
+    this.image.dataset['sketchpadJson'] = json;
 
     this.strokes = object.strokes || [];
     this.setOptions(object.options).redrawAsync();
@@ -384,7 +383,7 @@ export class ImageSketchpad {
       return this;
     }
 
-    this.image.dataset.sketchpadJson = this.toJson();
+    this.image.dataset['sketchpadJson'] = this.toJson();
     this.sketching = false;
 
     // Touchend events do not have a position
@@ -420,9 +419,10 @@ export class ImageSketchpad {
 
     if (this.isTouchEvent(event)) {
       const touchEvent = event as TouchEvent;
+      const touch = <Touch>touchEvent.touches.item(0);
 
-      coord.x = touchEvent.touches[0].pageX - this.canvas.element.offsetLeft;
-      coord.y = touchEvent.touches[0].pageY - this.canvas.element.offsetTop;
+      coord.x = touch.pageX - this.canvas.element.offsetLeft;
+      coord.y = touch.pageY - this.canvas.element.offsetTop;
     } else {
       const mouseEvent = event as MouseEvent;
       const rect = this.canvas.element.getBoundingClientRect();
@@ -462,7 +462,7 @@ export class ImageSketchpad {
    */
   private pushPoint(point: Point, stroke?: Stroke): ImageSketchpad {
     stroke = stroke ?? this.strokes[this.strokes.length - 1];
-    stroke.points?.push(point);
+    stroke?.points?.push(point);
 
     return this;
   }

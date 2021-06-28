@@ -18,6 +18,8 @@ exports[`Testing ImageSketchpad Class Should load data sketchpad json attribute 
 
 exports[`Testing ImageSketchpad Class Should load data sketchpad options json attribute 1`] = `"{\\"strokes\\":[],\\"options\\":{\\"lineWidth\\":7,\\"lineMaxWidth\\":-1,\\"lineColor\\":\\"#000\\",\\"lineCap\\":\\"round\\",\\"lineJoin\\":\\"round\\",\\"lineMiterLimit\\":10}}"`;
 
+exports[`Testing ImageSketchpad Class Should return sketchpad default data as json 1`] = `"{\\"strokes\\":[],\\"options\\":{\\"lineWidth\\":5,\\"lineMaxWidth\\":-1,\\"lineColor\\":\\"#000\\",\\"lineCap\\":\\"round\\",\\"lineJoin\\":\\"round\\",\\"lineMiterLimit\\":10}}"`;
+
 exports[`Testing ImageSketchpad Class Start, draw, stop stroke by mouse event 1`] = `"{\\"strokes\\":[{\\"points\\":[{\\"x\\":0,\\"y\\":0},{\\"x\\":0,\\"y\\":0}],\\"width\\":5,\\"maxWidth\\":-1,\\"color\\":\\"#000\\",\\"cap\\":\\"round\\",\\"join\\":\\"round\\",\\"miterLimit\\":10}],\\"options\\":{\\"lineWidth\\":5,\\"lineMaxWidth\\":-1,\\"lineColor\\":\\"#000\\",\\"lineCap\\":\\"round\\",\\"lineJoin\\":\\"round\\",\\"lineMiterLimit\\":10}}"`;
 
 exports[`Testing ImageSketchpad Class Start, draw, stop stroke by touch event 1`] = `"{\\"strokes\\":[{\\"points\\":[{\\"x\\":0,\\"y\\":0},{\\"x\\":0,\\"y\\":0}],\\"width\\":5,\\"maxWidth\\":-1,\\"color\\":\\"#000\\",\\"cap\\":\\"round\\",\\"join\\":\\"round\\",\\"miterLimit\\":10}],\\"options\\":{\\"lineWidth\\":5,\\"lineMaxWidth\\":-1,\\"lineColor\\":\\"#000\\",\\"lineCap\\":\\"round\\",\\"lineJoin\\":\\"round\\",\\"lineMiterLimit\\":10}}"`;

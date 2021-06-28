@@ -1,5 +1,8 @@
 {
     "$schema": "https://raw.githubusercontent.com/SchemaStore/schemastore/master/src/schemas/json/eslintrc.json",
+    "env": {
+        "jest/globals": true
+    },
     "ignorePatterns": [
         ".eslintrc.js",
         "node_modules",
@@ -15,13 +18,18 @@
     "parser": "@typescript-eslint/parser",
     "plugins": [
         "@typescript-eslint/eslint-plugin",
-        "eslint-plugin-tsdoc"
+        "eslint-plugin-tsdoc",
+        "jest",
+        "jest-formatting"
     ],
     "extends": [
         "eslint:recommended",
         "plugin:eslint-comments/recommended",
         "plugin:@typescript-eslint/recommended",
-        "plugin:prettier/recommended"
+        "plugin:prettier/recommended",
+        "plugin:jest/recommended",
+        "plugin:jest/style",
+        "plugin:jest-formatting/strict"
     ],
     "rules": {
         "eslint-comments/no-unused-disable": "error",

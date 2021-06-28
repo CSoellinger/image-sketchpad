@@ -51,7 +51,7 @@ describe('Testing ImageSketchpad Class', () => {
   afterEach(() => {
     defaultObj.options.lineWidth = 5;
     defaultObj.strokes = [];
-    image.dataset.sketchpadJson = '';
+    image.dataset['sketchpadJson'] = '';
     document.body.innerHTML = '';
     imageSketchpad?.destroy();
   });
@@ -67,7 +67,9 @@ describe('Testing ImageSketchpad Class', () => {
   it('Should return sketchpad default data as json', () => {
     imageSketchpad = new ImageSketchpad(image);
 
-    expect(imageSketchpad.toJsonAsync()).resolves.toBe(JSON.stringify(defaultObj));
+    return imageSketchpad.toJsonAsync().then((jsonString) => {
+      expect(jsonString).toMatchSnapshot();
+    });
   });
 
   it('Should run image load listener with canvas width equals image width', () => {
@@ -98,9 +100,13 @@ describe('Testing ImageSketchpad Class', () => {
     imageSketchpad = new ImageSketchpad(image);
 
     expect(imageSketchpad['enabled']).toBeTruthy();
+
     imageSketchpad.disable();
+
     expect(imageSketchpad['enabled']).toBeFalsy();
+
     imageSketchpad.enable();
+
     expect(imageSketchpad['enabled']).toBeTruthy();
   });
 
@@ -171,7 +177,9 @@ describe('Testing ImageSketchpad Class', () => {
   it('Gets a point from event', () => {
     imageSketchpad = new ImageSketchpad(image);
     const mouseDown = new MouseEvent('mousedown', { clientX: 0, clientY: 0 });
-    const touchDown = new TouchEvent('touchstart', { touches: [<Touch>{identifier: 1, target: new EventTarget(), pageX: 0, pageY: 0 }] });
+    const touchDown = new TouchEvent('touchstart', {
+      touches: [<Touch>{ identifier: 1, target: new EventTarget(), pageX: 0, pageY: 0 }],
+    });
 
     expect(imageSketchpad['getPointFromCursor'](mouseDown)).toMatchSnapshot();
     expect(imageSketchpad['getPointFromCursor'](touchDown)).toMatchSnapshot();
@@ -182,7 +190,7 @@ describe('Testing ImageSketchpad Class', () => {
     const mouseMove = new MouseEvent('mousemove', { clientX: 0, clientY: 0 });
     const mouseUp = new MouseEvent('mouseup', { clientX: 0, clientY: 0 });
 
-    const touch = <Touch>{identifier: 1, target: new EventTarget(), pageX: 0, pageY: 0 };
+    const touch = <Touch>{ identifier: 1, target: new EventTarget(), pageX: 0, pageY: 0 };
     const touchDown = new TouchEvent('touchstart', { touches: [touch] });
     const touchMove = new TouchEvent('touchmove', { touches: [touch] });
     const touchEnd = new TouchEvent('touchend', { touches: [touch] });
@@ -213,7 +221,10 @@ describe('Testing ImageSketchpad Class', () => {
     imageSketchpad = new ImageSketchpad(image);
 
     defaultObj.strokes = [];
-    expect(imageSketchpad.toJsonAsync()).resolves.toMatchSnapshot();
+
+    return imageSketchpad.toJsonAsync().then((jsonString) => {
+      expect(jsonString).toMatchSnapshot();
+    });
   });
 
   it('Should load data sketchpad options json attribute', () => {
@@ -222,35 +233,46 @@ describe('Testing ImageSketchpad Class', () => {
     image.dataset['sketchpadJson'] = JSON.stringify(defaultObj);
     imageSketchpad = new ImageSketchpad(image);
 
-    expect(imageSketchpad.toJsonAsync()).resolves.toMatchSnapshot();
+    return imageSketchpad.toJsonAsync().then((jsonString) => {
+      expect(jsonString).toMatchSnapshot();
+    });
   });
 
   it('Should merge the sketch with the image', async () => {
-    const base64String = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==';
-    (<any>mergeImages).mockResolvedValue(base64String);
+    const base64String =
+      'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==';
+    (<jest.Mock>mergeImages).mockResolvedValue(base64String);
 
     imageSketchpad = new ImageSketchpad(image);
 
-    expect(imageSketchpad.mergeImageWithSketch()).resolves.toBe(base64String);
+    return imageSketchpad.mergeImageWithSketch().then((imageB64) => {
+      expect(imageB64).toBe(base64String);
+    });
   });
 
   it('Should download the sketch with the image', () => {
-    const base64String = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==';
-    (<any>mergeImages).mockResolvedValue(base64String);
+    const base64String =
+      'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==';
+    (<jest.Mock>mergeImages).mockResolvedValue(base64String);
 
     imageSketchpad = new ImageSketchpad(image);
 
-    expect(imageSketchpad.download()).resolves.toBe(base64String);
+    return imageSketchpad.download().then((imageB64) => {
+      expect(imageB64).toBe(base64String);
+    });
   });
 
   it('Should download the sketch with the base64 image', () => {
-    const base64String = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==';
-    (<any>mergeImages).mockResolvedValue(base64String);
+    const base64String =
+      'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==';
+    (<jest.Mock>mergeImages).mockResolvedValue(base64String);
     image.src = 'data:image/png;base64,' + base64String;
 
     imageSketchpad = new ImageSketchpad(image);
 
-    expect(imageSketchpad.download()).resolves.toBe(base64String);
+    return imageSketchpad.download().then((imageB64) => {
+      expect(imageB64).toBe(base64String);
+    });
   });
 
   it('Start, draw, stop stroke by mouse event', () => {
@@ -258,7 +280,7 @@ describe('Testing ImageSketchpad Class', () => {
 
     imageSketchpad['startStrokeHandler'](new MouseEvent('mousedown', { clientX: 0, clientY: 0 }));
 
-    expect(imageSketchpad['sketching']).toBeTruthy()
+    expect(imageSketchpad['sketching']).toBeTruthy();
     expect(imageSketchpad['activeStroke']).toBe(imageSketchpad['strokes'][0]);
     expect(imageSketchpad['strokes']).toHaveLength(1);
     expect(imageSketchpad['strokes'][0]['points']).toHaveLength(1);
@@ -270,7 +292,7 @@ describe('Testing ImageSketchpad Class', () => {
     imageSketchpad['endStrokeHandler'](new MouseEvent('mouseup', { clientX: 0, clientY: 0 }));
 
     expect(imageSketchpad['strokes'][0]['points']).toHaveLength(3);
-    expect(image.dataset.sketchpadJson).toMatchSnapshot();
+    expect(image.dataset['sketchpadJson']).toMatchSnapshot();
 
     imageSketchpad['drawStrokeHandler'](new MouseEvent('mousemove', { clientX: 0, clientY: 0 }));
     imageSketchpad['endStrokeHandler'](new MouseEvent('mouseup', { clientX: 0, clientY: 0 }));
@@ -281,7 +303,7 @@ describe('Testing ImageSketchpad Class', () => {
   it('Start, draw, stop stroke by touch event', () => {
     imageSketchpad = new ImageSketchpad(image);
 
-    const touch = <Touch>{identifier: 1, target: new EventTarget(), pageX: 0, pageY: 0 };
+    const touch = <Touch>{ identifier: 1, target: new EventTarget(), pageX: 0, pageY: 0 };
     const touchDown = new TouchEvent('touchstart', { touches: [touch] });
     const touchMove = new TouchEvent('touchmove', { touches: [touch] });
     const touchEnd = new TouchEvent('touchend', { touches: [touch] });
@@ -291,22 +313,22 @@ describe('Testing ImageSketchpad Class', () => {
     imageSketchpad['endStrokeHandler'](touchEnd);
 
     expect(imageSketchpad['strokes'][0]['points']).toHaveLength(2);
-    expect(image.dataset.sketchpadJson).toMatchSnapshot();
+    expect(image.dataset['sketchpadJson']).toMatchSnapshot();
   });
 
   it('Should throw an error if we try loading a bad JSON string', () => {
     imageSketchpad = new ImageSketchpad(image, {});
 
-    expect(imageSketchpad.loadJson('BAD_JSON')).rejects.toBeInstanceOf(Error);
+    return imageSketchpad.loadJson('BAD_JSON').catch((err) => {
+      // eslint-disable-next-line jest/no-conditional-expect
+      expect(err).toBeInstanceOf(Error);
+    });
   });
 
   it('Should throw an error we load it on non image html elements', () => {
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      imageSketchpad = new ImageSketchpad(<any>document.createElement('div'));
-    } catch (error) {
-      expect(error).toBeInstanceOf(Error);
-    }
+    expect(() => {
+      imageSketchpad = new ImageSketchpad(<HTMLImageElement>document.createElement('div'));
+    }).toThrow();
 
     expect(imageSketchpad).toBeNull();
   });
@@ -315,11 +337,9 @@ describe('Testing ImageSketchpad Class', () => {
     imageSketchpad = new ImageSketchpad(image);
     imageSketchpad = null;
 
-    try {
+    expect(() => {
       imageSketchpad = new ImageSketchpad(image);
-    } catch (error) {
-      expect(error).toBeInstanceOf(Error);
-    }
+    }).toThrow();
 
     expect(imageSketchpad).toBeNull();
   });

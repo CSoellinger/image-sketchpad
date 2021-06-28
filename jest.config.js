@@ -98,6 +98,7 @@ module.exports = {
 
   // A preset that is used as a base for Jest's configuration
   // preset: undefined,
+  preset: 'ts-jest',
 
   // Run tests from one or more projects
   // projects: undefined,
@@ -126,7 +127,7 @@ module.exports = {
   // ],
 
   // Allows you to use a custom runner instead of Jest's default test runner
-  runner: "jest-runner",
+  // runner: "jest-runner",
   // "runner": "jest-electron/runner",
 
   // The paths to modules that run some code to configure or set up the testing environment before each test

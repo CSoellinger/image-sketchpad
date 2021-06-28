@@ -12,14 +12,14 @@ const instances: Record<string, ImageSketchpad> = {};
  * @param options - Image sketchpad options
  */
 const init = (element: HTMLImageElement, options?: UserOptions): ImageSketchpad => {
-  if (element?.dataset?.sketchpad && instances[element.dataset.sketchpad]) {
-    return instances[element.dataset.sketchpad];
+  if (element?.dataset['sketchpad'] && instances[element?.dataset['sketchpad']]) {
+    return <ImageSketchpad>instances[element?.dataset['sketchpad']];
   }
 
   const newInstance = new ImageSketchpad(element, options);
 
-  if (element?.dataset?.sketchpad) {
-    instances[element.dataset.sketchpad] = newInstance;
+  if (element?.dataset['sketchpad']) {
+    instances[element.dataset['sketchpad']] = newInstance;
   }
 
   return newInstance;

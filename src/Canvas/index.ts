@@ -1,4 +1,4 @@
-import { Stroke } from './Draw';
+import type { Point, Stroke } from './Draw';
 
 /**
  * Canvas helper class. Inserts {@link HTMLCanvasElement|element} and handles position and size adjustments.
@@ -86,8 +86,8 @@ export class Canvas {
 
     // Connect each points to get finally a stroke
     for (let i = 0; i < stroke.points.length - 1; i++) {
-      const start = stroke.points[i];
-      const end = stroke.points[i + 1];
+      const start = <Point>stroke.points[i];
+      const end = <Point>stroke.points[i + 1];
 
       this.context.moveTo(start.x / ratio, start.y / ratio);
       this.context.lineTo(end.x / ratio, end.y / ratio);
