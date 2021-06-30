@@ -4,15 +4,22 @@
     "bracketSpacing": true,
     "overrides": [
         {
+            "files": [
+                "*.js",
+                "*.ts"
+            ],
+            "options": {
+                "plugins": [
+                    "@homer0/prettier-plugin-jsdoc"
+                ]
+            }
+        },
+        {
             "files": "*.ts",
             "options": {
                 "parser": "babel-ts",
                 "experimentalBabelParserPluginsList": [
                     "typescript"
-                ],
-                "plugins": [
-                    "prettier-plugin-organize-imports",
-                    "@homer0/prettier-plugin-jsdoc"
                 ]
             }
         },
@@ -35,8 +42,6 @@
         {
             "files": "*.md",
             "options": {
-                "tabWidth": 2,
-                "useTabs": false,
                 "plugins": [
                     "remark-prettier"
                 ]

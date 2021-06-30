@@ -1,80 +1,106 @@
 {
     "$schema": "https://raw.githubusercontent.com/SchemaStore/schemastore/master/src/schemas/json/eslintrc.json",
-    "env": {
-        "jest/globals": true
-    },
+    "root": true,
     "ignorePatterns": [
         ".eslintrc.js",
         "node_modules",
         "dist",
-        "jest.config.js",
-        "rollup.config.js",
+        "example",
+        "media",
         "fixtures",
         "shared-fixtures",
         "coverage",
         "*.d.ts",
         "__snapshots__"
     ],
-    "parser": "@typescript-eslint/parser",
     "plugins": [
-        "@typescript-eslint/eslint-plugin",
-        "eslint-plugin-tsdoc",
-        "jest",
-        "jest-formatting"
+        "editorconfig",
+        "array-func",
+        "promise",
+        "regexp",
+        "radar",
+        "jsdoc"
     ],
     "extends": [
         "eslint:recommended",
         "plugin:eslint-comments/recommended",
-        "plugin:@typescript-eslint/recommended",
         "plugin:prettier/recommended",
-        "plugin:jest/recommended",
-        "plugin:jest/style",
-        "plugin:jest-formatting/strict"
+        "plugin:editorconfig/all",
+        "plugin:array-func/all",
+        "plugin:promise/recommended",
+        "plugin:regexp/recommended",
+        "plugin:radar/recommended",
+        "plugin:jsdoc/recommended"
     ],
     "rules": {
-        "eslint-comments/no-unused-disable": "error",
-        "tsdoc/syntax": "warn",
-        "prettier/prettier": "error",
-        "@typescript-eslint/indent": [
-            "error",
-            2
-        ],
-        "@typescript-eslint/no-unused-vars": "error",
-        "@typescript-eslint/no-explicit-any": "error"
-    }
-    // "rules": {
-    //     "unicorn/filename-case": [
-    //         "error",
-    //         {
-    //             "case": "pascalCase",
-    //             "ignore": [
-    //                 "\\.d\\.ts$",
-    //                 "^rollup\\.config\\.js$"
-    //             ]
-    //         }
-    //     ],
-    //     "import/extensions": [
-    //         "error",
-    //         {
-    //             "json": "always",
-    //             "d.ts": "never"
-    //         }
-    //     ],
-    //     "arrow-parens": [
-    //         "error",
-    //         "always"
-    //     ],
-    //     "comma-dangle": 0,
-    //     "@typescript-eslint/comma-dangle": [
-    //         "error",
-    //         "only-multiline"
-    //     ],
-    //     "object-curly-spacing": 0,
-    //     "@typescript-eslint/object-curly-spacing": [
-    //         "error",
-    //         "always"
-    //     ],
-    //     "@typescript-eslint/no-unnecessary-boolean-literal-compare": 0,
-    //     "tsdoc/syntax": "warn"
-    // }
+        "jsdoc/tag-lines": "off"
+    },
+    "overrides": [
+        // Jest Config
+        {
+            "files": "jest.config.js",
+            "env": {
+                "node": true
+            }
+        },
+        // Rollup Config
+        {
+            "files": "rollup.config.js",
+            "env": {
+                "es6": true
+            },
+            "parserOptions": {
+                "sourceType": "module"
+            }
+        },
+        // All extras for our TypeScript Files
+        {
+            "env": {
+                "browser": true
+            },
+            "files": [
+                "**/*.ts"
+            ],
+            "parser": "@typescript-eslint/parser",
+            "parserOptions": {
+                "tsconfigRootDir": "./",
+                "project": [
+                    "./tsconfig.json"
+                ]
+            },
+            "plugins": [
+                "@typescript-eslint/eslint-plugin",
+                "eslint-plugin-tsdoc"
+            ],
+            "extends": [
+                "plugin:@typescript-eslint/recommended",
+                "plugin:@typescript-eslint/recommended-requiring-type-checking"
+            ],
+            "rules": {
+                "tsdoc/syntax": "warn",
+                "@typescript-eslint/require-await": "off",
+                "jsdoc/require-param-type": "off",
+                "jsdoc/require-returns": "off"
+            }
+        },
+        // Even more for our tests
+        {
+            "env": {
+                "browser": false,
+                "jest": true
+            },
+            "files": [
+                "test/**/*.ts"
+            ],
+            "plugins": [
+                "jest",
+                "jest-formatting"
+            ],
+            "extends": [
+                "plugin:jest/recommended",
+                "plugin:jest/style",
+                "plugin:jest-formatting/strict"
+            ]
+        }
+    ]
 }

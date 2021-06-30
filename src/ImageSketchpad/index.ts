@@ -52,10 +52,11 @@ export class ImageSketchpad {
   /**
    * Creates an instance of image sketchpad.
    *
-   * @param image   - Image html element
-   * @param options - Sketchpad options as javascript object.
+   * @param image    - Image html element.
+   * @param options  - Sketchpad options as javascript object.
+   * @example
    *
-   * @example Run image sketchpad
+   * Run image sketchpad
    *
    * # VanillaJS
    *
@@ -63,6 +64,7 @@ export class ImageSketchpad {
    * const imageEl = document.getElementById('Image');
    * const sketchPad = new ImageSketchpad(imageEl, { lineWidth: 5, lineMaxWidth: 10, lineColor: '#ff0000' });
    * ```
+   *
    */
   constructor(image: HTMLImageElement, options?: UserOptions) {
     // Check if element is defined and has a "src" attribute (simple check for image element)
@@ -108,9 +110,9 @@ export class ImageSketchpad {
   }
 
   /**
-   * Set sketchpad options
+   * Set sketchpad options.
    *
-   * @param options - Sketchpad options
+   * @param options  - Sketchpad options.
    */
   setOptions(options: UserOptions): ImageSketchpad {
     this.options = Object.assign(this.options, options);
@@ -156,9 +158,9 @@ export class ImageSketchpad {
   }
 
   /**
-   * Load a sketch from a json string
+   * Load a sketch from a json string.
    *
-   * @param json - JSON string to parse
+   * @param json  - JSON string to parse.
    */
   async loadJson(json: string): Promise<ImageSketchpad> {
     let object: {
@@ -178,7 +180,7 @@ export class ImageSketchpad {
     this.image.dataset['sketchpadJson'] = json;
 
     this.strokes = object.strokes || [];
-    this.setOptions(object.options).redrawAsync();
+    this.setOptions(object.options).redrawAsync().catch(this.throwError);
 
     return this;
   }
@@ -331,9 +333,9 @@ export class ImageSketchpad {
   }
 
   /**
-   * Starts stroke handler
+   * Starts stroke handler.
    *
-   * @param event - mousedown, touchstart event
+   * @param event  - mousedown, touchstart event.
    */
   private startStrokeHandler(event: MouseEvent | TouchEvent): ImageSketchpad {
     event.preventDefault();
@@ -351,9 +353,9 @@ export class ImageSketchpad {
   }
 
   /**
-   * Draws stroke handler
+   * Draws stroke handler.
    *
-   * @param event - mousemove, touchmove event
+   * @param event  - mousemove, touchmove event.
    */
   private drawStrokeHandler(event: MouseEvent | TouchEvent): ImageSketchpad {
     event.preventDefault();
@@ -371,9 +373,9 @@ export class ImageSketchpad {
   }
 
   /**
-   * Ends stroke handler
+   * Ends stroke handler.
    *
-   * @param event - mouseup, mouseleave, touchend event
+   * @param event  - mouseup, mouseleave, touchend event.
    */
   private endStrokeHandler(event: MouseEvent | TouchEvent): ImageSketchpad {
     event.preventDefault();
@@ -412,7 +414,7 @@ export class ImageSketchpad {
   /**
    * Get a {@link Point | Point} from the cursor(mouse) or finger(touch)
    *
-   * @param event - mousedown, touchstart, mousemove, touchmove, mouseup, mouseleave, touchend event
+   * @param event  - mousedown, touchstart, mousemove, touchmove, mouseup, mouseleave, touchend event.
    */
   private getPointFromCursor(event: MouseEvent | TouchEvent): Point {
     const coord = { x: 0, y: 0 };
@@ -440,7 +442,7 @@ export class ImageSketchpad {
   /**
    * Create stroke from an array of {@link Point | Points}
    *
-   * @param points - Array of {@link Point | Points}
+   * @param points  - Array of {@link Point | Points}
    */
   private createStroke(points: Point[]): Stroke {
     return <Stroke>{
@@ -457,8 +459,8 @@ export class ImageSketchpad {
   /**
    * Push {@link Point | Point} to {@link Stroke | Stroke}
    *
-   * @param point   - {@link Point | Point} to push
-   * @param stroke  - {@link Stroke | Stroke} to push into
+   * @param point   - {@link Point | Point} to push.
+   * @param stroke  - {@link Stroke | Stroke} to push into.
    */
   private pushPoint(point: Point, stroke?: Stroke): ImageSketchpad {
     stroke = stroke ?? this.strokes[this.strokes.length - 1];
@@ -486,20 +488,21 @@ export class ImageSketchpad {
   }
 
   /**
-   * Check if given event is a touch event
+   * Check if given event is a touch event.
    *
-   * @param event - Event to check
+   * @param event  - Event to check.
    */
   private isTouchEvent(event: Event): boolean {
     return event.type.startsWith('touch');
   }
 
   /**
-   * Throws an error
+   * Throws an error.
    *
-   * @param error - Error message
+   * @param this   - Self.
+   * @param error  - Error message.
    */
-  private throwError(error: unknown): void {
+  private throwError(this: void, error: unknown): void {
     throw new Error(String(error));
   }
 }

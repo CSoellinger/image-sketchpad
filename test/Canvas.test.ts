@@ -1,5 +1,13 @@
 import { Canvas, Point, Stroke } from '../src/Canvas';
 
+// interface CanvasRenderingContext2DEvent {
+//   type: string;
+//   transform: [number, number, number, number, number, number];
+//   props: {
+//     [key: string]: any;
+//   };
+// }
+
 describe('Testing Canvas Class', () => {
   let canvasClass: Canvas;
   let stroke: Stroke;
@@ -45,9 +53,9 @@ describe('Testing Canvas Class', () => {
 
     await expect(canvasClass.drawStroke(stroke, 1)).resolves.toBeUndefined();
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const ctx = <any>canvasClass.element.getContext('2d');
-    const path = ctx.__getPath();
+    const ctx = canvasClass.element.getContext('2d') as CanvasRenderingContext2D;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    const path: [] = ctx.__getPath() as [];
 
     expect(path).toMatchSnapshot();
   });

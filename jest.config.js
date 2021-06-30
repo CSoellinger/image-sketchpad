@@ -23,16 +23,10 @@ module.exports = {
   // collectCoverageFrom: undefined,
 
   // The directory where Jest should output its coverage files
-  coverageDirectory: "coverage",
+  coverageDirectory: 'coverage',
 
   // An array of regexp pattern strings used to skip coverage collection
-  coveragePathIgnorePatterns: [
-    "/dist/",
-    "/docs/",
-    "/example/",
-    "/node_modules/",
-    "/test/",
-  ],
+  coveragePathIgnorePatterns: ['/dist/', '/docs/', '/example/', '/node_modules/', '/test/'],
 
   // Indicates which provider should be used to instrument code for coverage
   // coverageProvider: "babel",
@@ -131,9 +125,7 @@ module.exports = {
   // "runner": "jest-electron/runner",
 
   // The paths to modules that run some code to configure or set up the testing environment before each test
-  setupFiles: [
-    "jest-canvas-mock",
-  ],
+  setupFiles: ['jest-canvas-mock'],
 
   // A list of paths to modules that run some code to configure or set up the testing framework before each test
   // setupFilesAfterEnv: [],
@@ -145,12 +137,12 @@ module.exports = {
   // snapshotSerializers: [],
 
   // The test environment that will be used for testing
-  testEnvironment: "jsdom",
+  testEnvironment: 'jsdom',
   // "testEnvironment": "jest-electron/environment",
 
   // Options that will be passed to the testEnvironment
   testEnvironmentOptions: {
-    resources: "usable",
+    resources: 'usable',
   },
 
   // Adds a location field to test results
@@ -159,17 +151,13 @@ module.exports = {
   // The glob patterns Jest uses to detect test files
   testMatch: [
     //"**/tests__/**/*.[jt]s?(x)",
-  //   "**/__tests__/**/*.[jt]s?(x)",
-  //   "**/?(*.)+(spec|test).[tj]s?(x)"
-    "**/test/**/?(*.)+(spec|test).[tj]s?(x)",
+    //   "**/__tests__/**/*.[jt]s?(x)",
+    //   "**/?(*.)+(spec|test).[tj]s?(x)"
+    '**/test/**/?(*.)+(spec|test).[tj]s?(x)',
   ],
 
   // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
-  testPathIgnorePatterns: [
-    "/dist/",
-    "/example/",
-    "/node_modules/",
-  ],
+  testPathIgnorePatterns: ['/dist/', '/example/', '/node_modules/'],
 
   // The regexp pattern or array of patterns that Jest uses to detect test files
   // testRegex: [],

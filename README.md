@@ -10,7 +10,7 @@ Draw on any image inside your desktop or mobile browser.
   - With it you can (re)load sketches, without saving a second image
   - No matter at which image size the data was generated
   - For example you can load the same sketches on a bigger version of the image, only ratio has to be the same
-  - Load by method or by ```data-sketchpad-json``` attribute
+  - Load by method or by `data-sketchpad-json` attribute
 - Set stroke options like line width or color
 
 ---
@@ -82,20 +82,20 @@ That's it!
 
 ## Options
 
-| Name | Type | Default | Description |
-| --- | :---: | --- | --- |
-| **lineWidth** | _int_ | 5 | Set the sketch line width |
-| **lineMaxWidth** | _int_ | -1 | Set the maximum line width, no matter which image ratio we have. -1 = no max width. _Mostly needed if you draw on zoomed images |
-| **lineColor** | _string_ | #000 | Line color as hex value |
-| **lineCap** | _enum(butt\|round\|square)_ | round | Canvas line cap |
-| **lineJoin** | _enum(round\|bevel\|miter)_ | round | Canvas line join |
-| **lineMiterLimit** | _int_ | 10 | Line miter limit |
+| Name               |            Type             | Default | Description                                                                                                                      |
+| ------------------ | :-------------------------: | ------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| **lineWidth**      |            _int_            | 5       | Set the sketch line width                                                                                                        |
+| **lineMaxWidth**   |            _int_            | -1      | Set the maximum line width, no matter which image ratio we have. -1 = no max width. \_Mostly needed if you draw on zoomed images |
+| **lineColor**      |          _string_           | #000    | Line color as hex value                                                                                                          |
+| **lineCap**        | _enum(butt\|round\|square)_ | round   | Canvas line cap                                                                                                                  |
+| **lineJoin**       | _enum(round\|bevel\|miter)_ | round   | Canvas line join                                                                                                                 |
+| **lineMiterLimit** |            _int_            | 10      | Line miter limit                                                                                                                 |
 
 You can set sketchpad options on init or with the [ImageSketchpad.setOptions(options)](#setoptions-options-) method.
 
 ## Methods
 
-After initialization you can always get the same instance by calling ```ImageSketchpad(el, opts)``` again on the same element. With this instance the following methods are available:
+After initialization you can always get the same instance by calling `ImageSketchpad(el, opts)` again on the same element. With this instance the following methods are available:
 
 ---
 
@@ -103,9 +103,9 @@ After initialization you can always get the same instance by calling ```ImageSke
 
 Set sketchpad options after initialization.
 
-| Param | Type | Default | Description |
-| --- | :---: | --- | --- |
-| **options** | _UserOptions_ | | Sketchpad options |
+| Param       |     Type      | Default | Description       |
+| ----------- | :-----------: | ------- | ----------------- |
+| **options** | _UserOptions_ |         | Sketchpad options |
 
 **Return:** _ImageSketchpad_
 
@@ -139,9 +139,9 @@ Get sketch as JSON string.
 
 Load sketch from JSON string.
 
-| Param | Type | Default | Description |
-| --- | :---: | --- | --- |
-| **json** | _string_ | | Sketch data as json string |
+| Param    |   Type   | Default | Description                |
+| -------- | :------: | ------- | -------------------------- |
+| **json** | _string_ |         | Sketch data as json string |
 
 **Return:** _ImageSketchpad_
 
@@ -175,7 +175,7 @@ Redo undone sketch.
 
 Merge the sketchpad canvas with the image and return a promise with a base64 string.
 
-**Return:** _Promise\<string\>__
+**Return:** \_Promise\<string\>\_\_
 
 ---
 

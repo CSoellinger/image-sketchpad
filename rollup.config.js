@@ -1,20 +1,17 @@
+import pkg from './package.json';
+import babel from '@rollup/plugin-babel';
+import commonjs from '@rollup/plugin-commonjs';
+import html from '@rollup/plugin-html';
+import resolve from '@rollup/plugin-node-resolve';
+import replace from '@rollup/plugin-replace';
 import fs from 'fs';
 import path from 'path';
-import commonjs from '@rollup/plugin-commonjs';
-import resolve from '@rollup/plugin-node-resolve';
-import babel from '@rollup/plugin-babel';
-import replace from '@rollup/plugin-replace';
-import html from '@rollup/plugin-html';
 import { terser } from 'rollup-plugin-terser';
-
-import pkg from './package.json';
 
 /**
  * Extensions for node_modules resolution
  */
-const extensions = [
-  '.js', '.jsx', '.ts', '.tsx'
-];
+const extensions = ['.js', '.jsx', '.ts', '.tsx'];
 
 /**
  * Name for browser JS file
@@ -26,12 +23,6 @@ const name = 'ImageSketchpad';
  */
 const config = {
   input: './src/index.ts',
-
-  // Specify here external modules which you don't want to include in your bundle (for instance: 'lodash', 'moment' etc.)
-  // https://rollupjs.org/guide/en/#external
-  // external: [
-  //   'jquery'
-  // ],
 
   plugins: [
     // Replace strings in files
@@ -50,7 +41,7 @@ const config = {
     babel({
       extensions,
       babelHelpers: 'runtime',
-      include: ['src/**/*']
+      include: ['src/**/*'],
     }),
   ],
 
@@ -64,22 +55,12 @@ const config = {
       file: pkg.browser,
       format: 'iife',
       name,
-      // globals: {
-      //   $: 'jQuery',
-      //   jQuery: 'jQuery',
-      //   jquery: 'jQuery',
-      // },
       exports: 'default',
     },
     {
       file: pkg.browser.replace('.js', '.min.js'),
       format: 'iife',
       name,
-      // globals: {
-      //   $: 'jQuery',
-      //   jQuery: 'jQuery',
-      //   jquery: 'jQuery',
-      // },
       exports: 'default',
       plugins: [
         html({
@@ -87,7 +68,7 @@ const config = {
           template: ({ files }) => {
             let html = fs.readFileSync(path.resolve('example', 'index.html')).toString();
 
-            for(let jsFile of files.js) {
+            for (let jsFile of files.js) {
               if (!jsFile.isEntry) {
                 continue;
               }
@@ -99,9 +80,9 @@ const config = {
           },
         }),
         terser(),
-      ]
+      ],
     },
-  ]
+  ],
 };
 
 export default config;
