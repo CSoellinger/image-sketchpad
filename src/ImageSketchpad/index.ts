@@ -421,6 +421,7 @@ export class ImageSketchpad {
 
     if (this.isTouchEvent(event)) {
       const touchEvent = event as TouchEvent;
+      // console.log('touchEvent.touches', touchEvent.touches, typeof touchEvent.touches);
       const touch = <Touch>touchEvent.touches.item(0);
 
       coord.x = touch.pageX - this.canvas.element.offsetLeft;

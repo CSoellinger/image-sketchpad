@@ -193,18 +193,62 @@ describe('Testing ImageSketchpad Class', () => {
     const mouseMove = new MouseEvent('mousemove', { clientX: 0, clientY: 0 });
     const mouseUp = new MouseEvent('mouseup', { clientX: 0, clientY: 0 });
 
-    const touch = <Touch>{ identifier: 1, target: new EventTarget(), pageX: 0, pageY: 0 };
-    const touchDown = new TouchEvent('touchstart', { touches: [touch] });
-    const touchMove = new TouchEvent('touchmove', { touches: [touch] });
-    const touchEnd = new TouchEvent('touchend', { touches: [touch] });
+    // const touch = <Touch>{ pageX: 0, pageY: 0 };
+
+    // const e = document.createEvent('TouchEvent');
+    // e.touches = [{pageX: pageX, pageY: pageY}];
+
+    // const touchList = new TouchList();
+    // touchList[0] = touch;
+    // touchList['length = 1;
+    // const touchDown = new TouchEvent('touchstart', { touches: [touch] });
+    // const touchMove = new TouchEvent('touchmove', { touches: [touch] });
+    // const touchEnd = new TouchEvent('touchend', { touches: [touch] });
+
+    // touchDown.touches = [];
+
+    const touch = new Touch({
+      identifier: 1,
+      target: new EventTarget(),
+      pageX: 0,
+      pageY: 0,
+    });
+
+    // const touchDown = new TouchEvent('touchstart', {
+    //   touches: [
+    //     {
+    //       identifier: 1,
+    //       target: new EventTarget(),
+    //       pageX: 0,
+    //       pageY: 0,
+    //       altitudeAngle: 0,
+    //       azimuthAngle: 0,
+    //       clientX: 0,
+    //       clientY: 0,
+    //       screenX: 0,
+    //       screenY: 0,
+    //       force: 0,
+    //       radiusX: 0,
+    //       radiusY: 0,
+    //       rotationAngle: 0,
+    //       touchType: 'direct',
+    //     },
+    //   ],
+    //   view: window,
+    //   cancelable: true,
+    //   bubbles: true,
+    // });
+
+    console.log(touch);
+    // console.log(touchDown.touches.item(0));
 
     imageSketchpad = new ImageSketchpad(image);
     imageSketchpad.canvas.element.dispatchEvent(mouseDown);
     imageSketchpad.canvas.element.dispatchEvent(mouseMove);
     imageSketchpad.canvas.element.dispatchEvent(mouseUp);
-    imageSketchpad.canvas.element.dispatchEvent(touchDown);
-    imageSketchpad.canvas.element.dispatchEvent(touchMove);
-    imageSketchpad.canvas.element.dispatchEvent(touchEnd);
+    // imageSketchpad.canvas.element.dispatchEvent(touchDown);
+    // imageSketchpad.canvas.element.dispatchEvent(touchMove);
+    // imageSketchpad.canvas.element.dispatchEvent(touchEnd);
 
     expect(imageSketchpad['strokes']).toHaveLength(2);
 

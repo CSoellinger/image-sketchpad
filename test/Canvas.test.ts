@@ -53,9 +53,9 @@ describe('Testing Canvas Class', () => {
 
     await expect(canvasClass.drawStroke(stroke, 1)).resolves.toBeUndefined();
 
-    const ctx = canvasClass.element.getContext('2d') as CanvasRenderingContext2D;
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    const path: [] = ctx.__getPath() as [];
+    const ctx = canvasClass.element.getContext('2d');
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call
+    const path = ctx?.__getPath();
 
     expect(path).toMatchSnapshot();
   });
