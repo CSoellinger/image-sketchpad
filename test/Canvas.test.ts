@@ -1,12 +1,10 @@
-import { Canvas, Point, Stroke } from '../src/Canvas';
+// No idea for now how to solve the type reference problem to the jest canvas
+// mock in other than the triple slash method...
 
-// interface CanvasRenderingContext2DEvent {
-//   type: string;
-//   transform: [number, number, number, number, number, number];
-//   props: {
-//     [key: string]: any;
-//   };
-// }
+// eslint-disable-next-line @typescript-eslint/triple-slash-reference
+/// <reference path="./../node_modules/jest-canvas-mock/types/index.d.ts" />
+
+import { Canvas, Point, Stroke } from '../src/Canvas';
 
 describe('Testing Canvas Class', () => {
   let canvasClass: Canvas;
@@ -27,7 +25,7 @@ describe('Testing Canvas Class', () => {
     document.body.innerHTML = '';
   });
 
-  it('Should initialize without problems', () => {
+  it('Should initialize without problems', async () => {
     expect.assertions(2);
 
     expect(canvasClass).toBeInstanceOf(Canvas);
@@ -54,7 +52,6 @@ describe('Testing Canvas Class', () => {
     await expect(canvasClass.drawStroke(stroke, 1)).resolves.toBeUndefined();
 
     const ctx = canvasClass.element.getContext('2d');
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call
     const path = ctx?.__getPath();
 
     expect(path).toMatchSnapshot();
@@ -71,7 +68,7 @@ describe('Testing Canvas Class', () => {
     await expect(canvasClass.drawStroke(stroke, 1)).resolves.toBeUndefined();
   });
 
-  it('Should clear the canvas', () => {
+  it('Should clear the canvas', async () => {
     expect.assertions(1);
     expect(canvasClass.clear()).toBeInstanceOf(Canvas);
   });

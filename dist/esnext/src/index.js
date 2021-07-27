@@ -6,16 +6,16 @@ const instances = {};
 /**
  * Initialize new sketchpad or return an already initialized.
  *
- * @param element - HTML image element
- * @param options - Image sketchpad options
+ * @param element  - HTML image element.
+ * @param options  - Image sketchpad options.
  */
 const init = (element, options) => {
-    if (element?.dataset?.sketchpad && instances[element.dataset.sketchpad]) {
-        return instances[element.dataset.sketchpad];
+    if (element?.dataset['sketchpad'] && instances[element?.dataset['sketchpad']]) {
+        return instances[element?.dataset['sketchpad']];
     }
     const newInstance = new ImageSketchpad(element, options);
-    if (element?.dataset?.sketchpad) {
-        instances[element.dataset.sketchpad] = newInstance;
+    if (element?.dataset['sketchpad']) {
+        instances[element.dataset['sketchpad']] = newInstance;
     }
     return newInstance;
 };

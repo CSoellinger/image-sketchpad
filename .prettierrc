@@ -4,17 +4,6 @@
     "bracketSpacing": true,
     "overrides": [
         {
-            "files": [
-                "*.js",
-                "*.ts"
-            ],
-            "options": {
-                "plugins": [
-                    "@homer0/prettier-plugin-jsdoc"
-                ]
-            }
-        },
-        {
             "files": "*.ts",
             "options": {
                 "parser": "babel-ts",

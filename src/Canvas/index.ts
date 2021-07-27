@@ -29,6 +29,7 @@ export class Canvas {
    */
   insert(refElement: HTMLElement): void {
     this.element.style.position = 'absolute';
+    this.element.style.touchAction = 'none';
 
     this.adjustFromElement(refElement);
 

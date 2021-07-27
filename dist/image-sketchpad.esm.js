@@ -146,9 +146,9 @@ var runtime = (function (exports) {
   // This is a polyfill for %IteratorPrototype% for environments that
   // don't natively support it.
   var IteratorPrototype = {};
-  IteratorPrototype[iteratorSymbol] = function () {
+  define(IteratorPrototype, iteratorSymbol, function () {
     return this;
-  };
+  });
 
   var getProto = Object.getPrototypeOf;
   var NativeIteratorPrototype = getProto && getProto(getProto(values([])));
@@ -162,8 +162,9 @@ var runtime = (function (exports) {
 
   var Gp = GeneratorFunctionPrototype.prototype =
     Generator.prototype = Object.create(IteratorPrototype);
-  GeneratorFunction.prototype = Gp.constructor = GeneratorFunctionPrototype;
-  GeneratorFunctionPrototype.constructor = GeneratorFunction;
+  GeneratorFunction.prototype = GeneratorFunctionPrototype;
+  define(Gp, "constructor", GeneratorFunctionPrototype);
+  define(GeneratorFunctionPrototype, "constructor", GeneratorFunction);
   GeneratorFunction.displayName = define(
     GeneratorFunctionPrototype,
     toStringTagSymbol,
@@ -277,9 +278,9 @@ var runtime = (function (exports) {
   }
 
   defineIteratorMethods(AsyncIterator.prototype);
-  AsyncIterator.prototype[asyncIteratorSymbol] = function () {
+  define(AsyncIterator.prototype, asyncIteratorSymbol, function () {
     return this;
-  };
+  });
   exports.AsyncIterator = AsyncIterator;
 
   // Note that simple async functions are implemented on top of
@@ -472,13 +473,13 @@ var runtime = (function (exports) {
   // iterator prototype chain incorrectly implement this, causing the Generator
   // object to not be returned from this call. This ensures that doesn't happen.
   // See https://github.com/facebook/regenerator/issues/274 for more details.
-  Gp[iteratorSymbol] = function() {
+  define(Gp, iteratorSymbol, function() {
     return this;
-  };
+  });
 
-  Gp.toString = function() {
+  define(Gp, "toString", function() {
     return "[object Generator]";
-  };
+  });
 
   function pushTryEntry(locs) {
     var entry = { tryLoc: locs[0] };
@@ -797,14 +798,19 @@ try {
 } catch (accidentalStrictMode) {
   // This module should not be running in strict mode, so the above
   // assignment should always work unless something is misconfigured. Just
-  // in case runtime.js accidentally runs in strict mode, we can escape
+  // in case runtime.js accidentally runs in strict mode, in modern engines
+  // we can explicitly access globalThis. In older engines we can escape
   // strict mode using a global Function call. This could conceivably fail
   // if a Content Security Policy forbids using Function, but in that case
   // the proper solution is to fix the accidental strict mode problem. If
   // you've misconfigured your bundler to force strict mode and applied a
   // CSP to forbid Function, and you're not willing to fix either of those
   // problems, please detail your unique predicament in a GitHub issue.
-  Function("r", "regeneratorRuntime = r")(runtime);
+  if (typeof globalThis === "object") {
+    globalThis.regeneratorRuntime = runtime;
+  } else {
+    Function("r", "regeneratorRuntime = r")(runtime);
+  }
 }
 }(runtime));
 
@@ -912,7 +918,7 @@ var Canvas = /*#__PURE__*/function () {
   /**
    * Inserts canvas html element right after the reference element.
    *
-   * @param refElement - Reference {@link HTMLElement|element} where we want position the canvas.
+   * @param refElement  - Reference {@link HTMLElement|element} where we want position the canvas.
    */
 
 
@@ -922,16 +928,17 @@ var Canvas = /*#__PURE__*/function () {
       var _refElement$parentNod;
 
       this.element.style.position = 'absolute';
+      this.element.style.touchAction = 'none';
       this.adjustFromElement(refElement);
       (_refElement$parentNod = refElement.parentNode) === null || _refElement$parentNod === void 0 ? void 0 : _refElement$parentNod.insertBefore(this.element, refElement.nextSibling);
     }
     /**
-     * Adjusts canvas size and position
+     * Adjusts canvas size and position.
      *
-     * @param width   - New width for canvas
-     * @param height  - New height for canvas
-     * @param top     - New top position for canvas
-     * @param left    - New left position for canvas
+     * @param width   - New width for canvas.
+     * @param height  - New height for canvas.
+     * @param top     - New top position for canvas.
+     * @param left    - New left position for canvas.
      */
 
   }, {
@@ -945,9 +952,9 @@ var Canvas = /*#__PURE__*/function () {
       this.element.style.left = "".concat(left, "px");
     }
     /**
-     * Adjust canvas size and position from existing element
+     * Adjust canvas size and position from existing element.
      *
-     * @param element - Existing {@link HTMLElement|element} as reference
+     * @param element  - Existing {@link HTMLElement|element} as reference.
      */
 
   }, {
@@ -966,10 +973,10 @@ var Canvas = /*#__PURE__*/function () {
       return this;
     }
     /**
-     * Draw stroke as a path on canvas area
+     * Draw stroke as a path on canvas area.
      *
-     * @param stroke  - {@link Stroke|Stroke} object with meta data
-     * @param ratio   - Image/canvas ratio
+     * @param stroke  - {@link Stroke|Stroke} object with meta data.
+     * @param ratio   - Image/canvas ratio.
      */
 
   }, {
@@ -1044,7 +1051,9 @@ var DefaultOptions = {
   lineColor: '#000',
   lineCap: 'round',
   lineJoin: 'round',
-  lineMiterLimit: 10
+  lineMiterLimit: 10,
+  enabled: true,
+  writeJsonToHtmlAttribute: false
 };
 /**
  * Image sketchpad user options with all properties as not required
@@ -1055,11 +1064,11 @@ function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol 
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 /**
  * Image sketchpad main class. It handles creation of canvas element, drawing on
  * it, and merge it with the image and handle the data as json out- or input.
  */
-
 var ImageSketchpad = /*#__PURE__*/function () {
   /**
    * Canvas helper class
@@ -1078,10 +1087,6 @@ var ImageSketchpad = /*#__PURE__*/function () {
    */
 
   /**
-   * Enable/disable sketchpad
-   */
-
-  /**
    * Helper variable for "redo" method
    */
 
@@ -1096,10 +1101,11 @@ var ImageSketchpad = /*#__PURE__*/function () {
   /**
    * Creates an instance of image sketchpad.
    *
-   * @param image   - Image html element
-   * @param options - Sketchpad options as javascript object.
+   * @param image    - Image html element.
+   * @param options  - Sketchpad options as javascript object.
+   * @example
    *
-   * @example Run image sketchpad
+   * Run image sketchpad
    *
    * # VanillaJS
    *
@@ -1107,6 +1113,7 @@ var ImageSketchpad = /*#__PURE__*/function () {
    * const imageEl = document.getElementById('Image');
    * const sketchPad = new ImageSketchpad(imageEl, { lineWidth: 5, lineMaxWidth: 10, lineColor: '#ff0000' });
    * ```
+   *
    */
   function ImageSketchpad(image, options) {
     var _this = this;
@@ -1117,10 +1124,9 @@ var ImageSketchpad = /*#__PURE__*/function () {
     this.image = void 0;
     this.options = DefaultOptions;
     this.strokes = [];
-    this.enabled = true;
     this.undoneStrokes = [];
     this.sketching = false;
-    this.activeStroke = void 0;
+    this.activeStroke = [];
     this.resizeHandler = void 0;
 
     // Check if element is defined and has a "src" attribute (simple check for image element)
@@ -1143,7 +1149,7 @@ var ImageSketchpad = /*#__PURE__*/function () {
     var instanceId = Math.random().toString(36).slice(2, 11);
     this.image.classList.add('sketchpad-loaded');
     this.image.classList.add("sketchpad-".concat(instanceId));
-    this.image.dataset.sketchpad = instanceId;
+    this.image.dataset['sketchpad'] = instanceId;
 
     this.resizeHandler = function () {
       if (_this.image.width !== _this.canvas.element.width) {
@@ -1157,14 +1163,14 @@ var ImageSketchpad = /*#__PURE__*/function () {
 
     this.listen().catch(this.throwError); // If we have a "data-sketchpad-json" attribute we will try to load the sketch
 
-    if (this.image.dataset.sketchpadJson) {
-      this.loadJson(this.image.dataset.sketchpadJson).catch(this.throwError);
+    if (this.image.dataset['sketchpadJson']) {
+      this.loadJson(this.image.dataset['sketchpadJson']).catch(this.throwError);
     }
   }
   /**
-   * Set sketchpad options
+   * Set sketchpad options.
    *
-   * @param options - Sketchpad options
+   * @param options  - Sketchpad options.
    */
 
 
@@ -1181,7 +1187,7 @@ var ImageSketchpad = /*#__PURE__*/function () {
   }, {
     key: "enable",
     value: function enable() {
-      this.enabled = true;
+      this.options.enabled = true;
       return this;
     }
     /**
@@ -1191,7 +1197,7 @@ var ImageSketchpad = /*#__PURE__*/function () {
   }, {
     key: "disable",
     value: function disable() {
-      this.enabled = false;
+      this.options.enabled = false;
       return this;
     }
     /**
@@ -1231,9 +1237,9 @@ var ImageSketchpad = /*#__PURE__*/function () {
       return toJsonAsync;
     }()
     /**
-     * Load a sketch from a json string
+     * Load a sketch from a json string.
      *
-     * @param json - JSON string to parse
+     * @param json  - JSON string to parse.
      */
 
   }, {
@@ -1256,9 +1262,9 @@ var ImageSketchpad = /*#__PURE__*/function () {
                 throw new Error(String(_context2.t0));
 
               case 7:
-                this.image.dataset.sketchpadJson = json;
+                this.image.dataset['sketchpadJson'] = json;
                 this.strokes = object.strokes || [];
-                this.setOptions(object.options).redrawAsync();
+                this.setOptions(object.options).redrawAsync().catch(this.throwError);
                 return _context2.abrupt("return", this);
 
               case 11:
@@ -1391,6 +1397,7 @@ var ImageSketchpad = /*#__PURE__*/function () {
       this.undoneStrokes = [];
       this.strokes = [];
       this.options = DefaultOptions;
+      this.canvas.element.onpointerdown = null;
       this.canvas.element.remove();
     }
     /**
@@ -1400,14 +1407,13 @@ var ImageSketchpad = /*#__PURE__*/function () {
   }, {
     key: "listen",
     value: function () {
-      var _listen = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee5() {
+      var _listen = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee8() {
         var _this2 = this;
 
-        var imgEventLoad, canvasEvents, _loop, _i, _canvasEvents;
-
-        return regenerator.wrap(function _callee5$(_context5) {
+        var imgEventLoad;
+        return regenerator.wrap(function _callee8$(_context8) {
           while (1) {
-            switch (_context5.prev = _context5.next) {
+            switch (_context8.prev = _context8.next) {
               case 0:
                 // If the image is not completely loaded we will add an event listener to
                 // re-adjust the canvas
@@ -1423,72 +1429,93 @@ var ImageSketchpad = /*#__PURE__*/function () {
 
                 window.addEventListener('resize', this.resizeHandler, {
                   passive: true
-                }); // For drawings we need to start, draw and end a stroke
+                });
 
-                canvasEvents = [// On mousedown, touchstart we start drawing
-                {
-                  events: ['mousedown', 'touchstart'],
-                  caller: function caller(event) {
-                    _this2.startStrokeHandler(event);
-                  }
-                }, // Draw during mousemove, touchmove
-                {
-                  events: ['mousemove', 'touchmove'],
-                  caller: function caller(event) {
-                    _this2.drawStrokeHandler(event);
-                  }
-                }, // And finish the stroke after mouseup, mouseleave, touchend
-                {
-                  events: ['mouseup', 'mouseleave', 'touchend'],
-                  caller: function caller(event) {
-                    _this2.endStrokeHandler(event);
-                  }
-                }]; // Register the events
+                this.canvas.element.onpointerdown = /*#__PURE__*/function () {
+                  var _ref = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee7(event) {
+                    return regenerator.wrap(function _callee7$(_context7) {
+                      while (1) {
+                        switch (_context7.prev = _context7.next) {
+                          case 0:
+                            if (!(_this2.options.enabled === false)) {
+                              _context7.next = 2;
+                              break;
+                            }
 
-                _loop = function _loop() {
-                  var object = _canvasEvents[_i];
+                            return _context7.abrupt("return");
 
-                  var _iterator = _createForOfIteratorHelper(object.events),
-                      _step;
+                          case 2:
+                            _this2.canvas.element.setPointerCapture(event.pointerId);
 
-                  try {
-                    for (_iterator.s(); !(_step = _iterator.n()).done;) {
-                      var name = _step.value;
-                      var options = {};
+                            _context7.next = 5;
+                            return _this2.startStrokeHandler(event);
 
-                      if (name === 'touchstart' || name === 'touchmove') {
-                        options = {
-                          passive: true
-                        };
-                      }
+                          case 5:
+                            _this2.canvas.element.onpointermove = /*#__PURE__*/function () {
+                              var _ref2 = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee5(event) {
+                                return regenerator.wrap(function _callee5$(_context5) {
+                                  while (1) {
+                                    switch (_context5.prev = _context5.next) {
+                                      case 0:
+                                        void _this2.drawStrokeHandler(event);
 
-                      _this2.canvas.element.addEventListener(name, function (event) {
-                        if (_this2.enabled === false) {
-                          return;
+                                      case 1:
+                                      case "end":
+                                        return _context5.stop();
+                                    }
+                                  }
+                                }, _callee5);
+                              }));
+
+                              return function (_x3) {
+                                return _ref2.apply(this, arguments);
+                              };
+                            }();
+
+                            _this2.canvas.element.onpointerup = /*#__PURE__*/function () {
+                              var _ref3 = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee6(event) {
+                                return regenerator.wrap(function _callee6$(_context6) {
+                                  while (1) {
+                                    switch (_context6.prev = _context6.next) {
+                                      case 0:
+                                        void _this2.endStrokeHandler(event);
+                                        _this2.canvas.element.onpointermove = null;
+                                        _this2.canvas.element.onpointerup = null;
+
+                                      case 3:
+                                      case "end":
+                                        return _context6.stop();
+                                    }
+                                  }
+                                }, _callee6);
+                              }));
+
+                              return function (_x4) {
+                                return _ref3.apply(this, arguments);
+                              };
+                            }();
+
+                          case 7:
+                          case "end":
+                            return _context7.stop();
                         }
+                      }
+                    }, _callee7);
+                  }));
 
-                        object.caller(event);
-                      }, options);
-                    }
-                  } catch (err) {
-                    _iterator.e(err);
-                  } finally {
-                    _iterator.f();
-                  }
-                };
+                  return function (_x2) {
+                    return _ref.apply(this, arguments);
+                  };
+                }();
 
-                for (_i = 0, _canvasEvents = canvasEvents; _i < _canvasEvents.length; _i++) {
-                  _loop();
-                }
+                return _context8.abrupt("return", this);
 
-                return _context5.abrupt("return", this);
-
-              case 6:
+              case 4:
               case "end":
-                return _context5.stop();
+                return _context8.stop();
             }
           }
-        }, _callee5, this);
+        }, _callee8, this);
       }));
 
       function listen() {
@@ -1498,70 +1525,131 @@ var ImageSketchpad = /*#__PURE__*/function () {
       return listen;
     }()
     /**
-     * Starts stroke handler
+     * Starts stroke handler.
      *
-     * @param event - mousedown, touchstart event
+     * @param event  - {@link PointerEvent | Pointer event} is an extended mouse event which will handle touches too.
      */
 
   }, {
     key: "startStrokeHandler",
-    value: function startStrokeHandler(event) {
-      event.preventDefault();
-      this.sketching = true;
-      var point = this.getPointFromCursor(event);
-      var stroke = this.createStroke([point]);
-      this.activeStroke = stroke;
-      this.strokes.push(stroke);
-      this.redraw();
-      return this;
-    }
+    value: function () {
+      var _startStrokeHandler = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee9(event) {
+        var point, stroke;
+        return regenerator.wrap(function _callee9$(_context9) {
+          while (1) {
+            switch (_context9.prev = _context9.next) {
+              case 0:
+                this.sketching = true;
+                point = this.getPointFromCursor(event);
+                stroke = this.createStroke([point]);
+                this.activeStroke[event.pointerId] = stroke;
+                this.strokes.push(stroke);
+                this.redraw();
+                return _context9.abrupt("return", this);
+
+              case 7:
+              case "end":
+                return _context9.stop();
+            }
+          }
+        }, _callee9, this);
+      }));
+
+      function startStrokeHandler(_x5) {
+        return _startStrokeHandler.apply(this, arguments);
+      }
+
+      return startStrokeHandler;
+    }()
     /**
-     * Draws stroke handler
+     * Draws stroke handler.
      *
-     * @param event - mousemove, touchmove event
+     * @param event  - {@link PointerEvent | Pointer event} is an extended mouse event which will handle touches too.
      */
 
   }, {
     key: "drawStrokeHandler",
-    value: function drawStrokeHandler(event) {
-      event.preventDefault(); // Drawing was not started by startStrokeHandler
+    value: function () {
+      var _drawStrokeHandler = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee10(event) {
+        var point;
+        return regenerator.wrap(function _callee10$(_context10) {
+          while (1) {
+            switch (_context10.prev = _context10.next) {
+              case 0:
+                if (!(this.sketching === false)) {
+                  _context10.next = 2;
+                  break;
+                }
 
-      if (this.sketching === false) {
-        return this;
+                return _context10.abrupt("return", this);
+
+              case 2:
+                point = this.getPointFromCursor(event);
+                this.pushPoint(point, this.activeStroke[event.pointerId]).redrawAsync().catch(this.throwError);
+                return _context10.abrupt("return", this);
+
+              case 5:
+              case "end":
+                return _context10.stop();
+            }
+          }
+        }, _callee10, this);
+      }));
+
+      function drawStrokeHandler(_x6) {
+        return _drawStrokeHandler.apply(this, arguments);
       }
 
-      var point = this.getPointFromCursor(event);
-      this.pushPoint(point, this.activeStroke).redrawAsync().catch(this.throwError);
-      return this;
-    }
+      return drawStrokeHandler;
+    }()
     /**
-     * Ends stroke handler
+     * Ends stroke handler.
      *
-     * @param event - mouseup, mouseleave, touchend event
+     * @param event  - {@link PointerEvent | Pointer event} is an extended mouse event which will handle touches too.
      */
 
   }, {
     key: "endStrokeHandler",
-    value: function endStrokeHandler(event) {
-      event.preventDefault(); // Drawing was not started by startStrokeHandler
+    value: function () {
+      var _endStrokeHandler = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee11(event) {
+        var point;
+        return regenerator.wrap(function _callee11$(_context11) {
+          while (1) {
+            switch (_context11.prev = _context11.next) {
+              case 0:
+                if (!(this.sketching === false)) {
+                  _context11.next = 2;
+                  break;
+                }
 
-      if (this.sketching === false) {
-        return this;
+                return _context11.abrupt("return", this);
+
+              case 2:
+                point = this.getPointFromCursor(event);
+                this.pushPoint(point, this.activeStroke[event.pointerId]).redraw();
+
+                if (this.options.writeJsonToHtmlAttribute === true) {
+                  this.image.dataset['sketchpadJson'] = this.toJson();
+                }
+
+                this.sketching = false;
+                this.activeStroke[event.pointerId] = undefined;
+                return _context11.abrupt("return", this);
+
+              case 8:
+              case "end":
+                return _context11.stop();
+            }
+          }
+        }, _callee11, this);
+      }));
+
+      function endStrokeHandler(_x7) {
+        return _endStrokeHandler.apply(this, arguments);
       }
 
-      this.image.dataset.sketchpadJson = this.toJson();
-      this.sketching = false; // Touchend events do not have a position
-
-      if (this.isTouchEvent(event)) {
-        this.activeStroke = undefined;
-        return this;
-      }
-
-      var point = this.getPointFromCursor(event);
-      this.pushPoint(point, this.activeStroke).redrawAsync().catch(this.throwError);
-      this.activeStroke = undefined;
-      return this;
-    }
+      return endStrokeHandler;
+    }()
     /**
      * Get the image ratio
      */
@@ -1574,37 +1662,22 @@ var ImageSketchpad = /*#__PURE__*/function () {
     /**
      * Get a {@link Point | Point} from the cursor(mouse) or finger(touch)
      *
-     * @param event - mousedown, touchstart, mousemove, touchmove, mouseup, mouseleave, touchend event
+     * @param event  - {@link PointerEvent | Pointer event} triggered from pointerdown, pointermove or pointerup.
      */
 
   }, {
     key: "getPointFromCursor",
     value: function getPointFromCursor(event) {
-      var coord = {
-        x: 0,
-        y: 0
-      };
-
-      if (this.isTouchEvent(event)) {
-        var touchEvent = event;
-        coord.x = touchEvent.touches[0].pageX - this.canvas.element.offsetLeft;
-        coord.y = touchEvent.touches[0].pageY - this.canvas.element.offsetTop;
-      } else {
-        var mouseEvent = event;
-        var rect = this.canvas.element.getBoundingClientRect();
-        coord.x = mouseEvent.clientX - rect.left;
-        coord.y = mouseEvent.clientY - rect.top;
-      }
-
+      var rect = this.canvas.element.getBoundingClientRect();
       return {
-        x: coord.x * this.getImageRatio(),
-        y: coord.y * this.getImageRatio()
+        x: (event.clientX - rect.left) * this.getImageRatio(),
+        y: (event.clientY - rect.top) * this.getImageRatio()
       };
     }
     /**
      * Create stroke from an array of {@link Point | Points}
      *
-     * @param points - Array of {@link Point | Points}
+     * @param points  - Array of {@link Point | Points}
      */
 
   }, {
@@ -1623,17 +1696,17 @@ var ImageSketchpad = /*#__PURE__*/function () {
     /**
      * Push {@link Point | Point} to {@link Stroke | Stroke}
      *
-     * @param point   - {@link Point | Point} to push
-     * @param stroke  - {@link Stroke | Stroke} to push into
+     * @param point   - {@link Point | Point} to push.
+     * @param stroke  - {@link Stroke | Stroke} to push into.
      */
 
   }, {
     key: "pushPoint",
     value: function pushPoint(point, stroke) {
-      var _stroke, _stroke$points;
+      var _stroke, _stroke2, _stroke2$points;
 
       stroke = (_stroke = stroke) !== null && _stroke !== void 0 ? _stroke : this.strokes[this.strokes.length - 1];
-      (_stroke$points = stroke.points) === null || _stroke$points === void 0 ? void 0 : _stroke$points.push(point);
+      (_stroke2 = stroke) === null || _stroke2 === void 0 ? void 0 : (_stroke2$points = _stroke2.points) === null || _stroke2$points === void 0 ? void 0 : _stroke2$points.push(point);
       return this;
     }
     /**
@@ -1646,38 +1719,54 @@ var ImageSketchpad = /*#__PURE__*/function () {
     value: function redraw() {
       this.canvas.clear();
 
-      var _iterator2 = _createForOfIteratorHelper(this.strokes),
-          _step2;
+      var _iterator = _createForOfIteratorHelper(this.strokes),
+          _step;
 
       try {
-        for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-          var stroke = _step2.value;
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var stroke = _step.value;
           this.canvas.drawStroke(stroke, this.getImageRatio()).catch(this.throwError);
         }
       } catch (err) {
-        _iterator2.e(err);
+        _iterator.e(err);
       } finally {
-        _iterator2.f();
+        _iterator.f();
       }
 
       return this;
     }
+    /**
+     * Throws an error.
+     *
+     * @param this   - Self.
+     * @param error  - Error message.
+     */
+
+  }, {
+    key: "throwError",
+    value: function throwError(error) {
+      throw new Error(String(error));
+    }
+    /**
+     * Async method of {@link ImageSketchpad.redraw | ImageSketchpad.redraw()}
+     */
+
   }, {
     key: "redrawAsync",
     value: function () {
-      var _redrawAsync = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee6() {
-        return regenerator.wrap(function _callee6$(_context6) {
+      var _redrawAsync = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee12() {
+        return regenerator.wrap(function _callee12$(_context12) {
           while (1) {
-            switch (_context6.prev = _context6.next) {
+            switch (_context12.prev = _context12.next) {
               case 0:
-                return _context6.abrupt("return", this.redraw());
+                return _context12.abrupt("return", this.redraw());
 
               case 1:
               case "end":
-                return _context6.stop();
+                return _context12.stop();
             }
           }
-        }, _callee6, this);
+        }, _callee12, this);
       }));
 
       function redrawAsync() {
@@ -1686,28 +1775,6 @@ var ImageSketchpad = /*#__PURE__*/function () {
 
       return redrawAsync;
     }()
-    /**
-     * Check if given event is a touch event
-     *
-     * @param event - Event to check
-     */
-
-  }, {
-    key: "isTouchEvent",
-    value: function isTouchEvent(event) {
-      return event.type.startsWith('touch');
-    }
-    /**
-     * Throws an error
-     *
-     * @param error - Error message
-     */
-
-  }, {
-    key: "throwError",
-    value: function throwError(error) {
-      throw new Error(String(error));
-    }
   }]);
 
   return ImageSketchpad;
@@ -1716,26 +1783,23 @@ var ImageSketchpad = /*#__PURE__*/function () {
 /**
  * Save sketchpad instances to this object
  */
-
 var instances = {};
 /**
  * Initialize new sketchpad or return an already initialized.
  *
- * @param element - HTML image element
- * @param options - Image sketchpad options
+ * @param element  - HTML image element.
+ * @param options  - Image sketchpad options.
  */
 
 var init = function init(element, options) {
-  var _element$dataset, _element$dataset2;
-
-  if (element !== null && element !== void 0 && (_element$dataset = element.dataset) !== null && _element$dataset !== void 0 && _element$dataset.sketchpad && instances[element.dataset.sketchpad]) {
-    return instances[element.dataset.sketchpad];
+  if (element !== null && element !== void 0 && element.dataset['sketchpad'] && instances[element === null || element === void 0 ? void 0 : element.dataset['sketchpad']]) {
+    return instances[element === null || element === void 0 ? void 0 : element.dataset['sketchpad']];
   }
 
   var newInstance = new ImageSketchpad(element, options);
 
-  if (element !== null && element !== void 0 && (_element$dataset2 = element.dataset) !== null && _element$dataset2 !== void 0 && _element$dataset2.sketchpad) {
-    instances[element.dataset.sketchpad] = newInstance;
+  if (element !== null && element !== void 0 && element.dataset['sketchpad']) {
+    instances[element.dataset['sketchpad']] = newInstance;
   }
 
   return newInstance;

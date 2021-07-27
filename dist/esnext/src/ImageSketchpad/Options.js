@@ -8,4 +8,6 @@ export const DefaultOptions = {
     lineCap: 'round',
     lineJoin: 'round',
     lineMiterLimit: 10,
+    enabled: true,
+    writeJsonToHtmlAttribute: false,
 };

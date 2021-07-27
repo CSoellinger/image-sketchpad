@@ -1,4 +1,5 @@
-import { ImageSketchpad, UserOptions } from './ImageSketchpad';
+import { ImageSketchpad } from './ImageSketchpad';
+import type { UserOptions } from './ImageSketchpad';
 
 /**
  * Save sketchpad instances to this object
