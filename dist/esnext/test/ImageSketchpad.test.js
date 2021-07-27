@@ -46,6 +46,7 @@ if (!global.PointerEvent) {
             this.isPrimary = params.isPrimary;
         }
     }
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-explicit-any
     global.PointerEvent = PointerEvent;
 }
 describe('Testing ImageSketchpad Class', () => {
@@ -230,7 +231,6 @@ describe('Testing ImageSketchpad Class', () => {
         // eslint-disable-next-line radar/no-identical-functions
         const jsonString = await imageSketchpad.toJsonAsync();
         expect(jsonString).toMatchSnapshot();
-        return jsonString;
     });
     it('Should load data sketchpad options json attribute', async () => {
         defaultObj.options.lineWidth = 7;
@@ -239,7 +239,6 @@ describe('Testing ImageSketchpad Class', () => {
         // eslint-disable-next-line radar/no-identical-functions
         const jsonString = await imageSketchpad.toJsonAsync();
         expect(jsonString).toMatchSnapshot();
-        return jsonString;
     });
     it('Should merge the sketch with the image', async () => {
         imageSketchpad = new ImageSketchpad(image);

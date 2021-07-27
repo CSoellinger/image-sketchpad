@@ -53,6 +53,7 @@ if (!global.PointerEvent) {
       this.isPrimary = params.isPrimary;
     }
   }
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-explicit-any
   global.PointerEvent = PointerEvent as any;
 }
 
@@ -130,15 +131,19 @@ describe('Testing ImageSketchpad Class', () => {
 
   it('Should disable and enable sketchpad', () => {
     imageSketchpad = new ImageSketchpad(image, { enabled: false });
+
     expect(imageSketchpad['options']['enabled']).toBeFalsy();
 
     imageSketchpad.enable();
+
     expect(imageSketchpad['options']['enabled']).toBeTruthy();
 
     imageSketchpad.disable();
+
     expect(imageSketchpad['options']['enabled']).toBeFalsy();
 
     imageSketchpad.enable();
+
     expect(imageSketchpad['options']['enabled']).toBeTruthy();
   });
 
@@ -297,9 +302,8 @@ describe('Testing ImageSketchpad Class', () => {
 
     // eslint-disable-next-line radar/no-identical-functions
     const jsonString = await imageSketchpad.toJsonAsync();
-    expect(jsonString).toMatchSnapshot();
 
-    return jsonString;
+    expect(jsonString).toMatchSnapshot();
   });
 
   it('Should load data sketchpad options json attribute', async () => {
@@ -312,8 +316,6 @@ describe('Testing ImageSketchpad Class', () => {
     const jsonString = await imageSketchpad.toJsonAsync();
 
     expect(jsonString).toMatchSnapshot();
-
-    return jsonString;
   });
 
   it('Should merge the sketch with the image', async () => {
