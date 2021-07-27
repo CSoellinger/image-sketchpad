@@ -9,5 +9,5 @@ export const DefaultOptions = {
     lineJoin: 'round',
     lineMiterLimit: 10,
     enabled: true,
-    writeJsonToHtmlAttribute: false,
+    writeJsonToHtmlAttribute: true,
 };

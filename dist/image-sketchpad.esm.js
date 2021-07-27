@@ -1053,7 +1053,7 @@ var DefaultOptions = {
   lineJoin: 'round',
   lineMiterLimit: 10,
   enabled: true,
-  writeJsonToHtmlAttribute: false
+  writeJsonToHtmlAttribute: true
 };
 /**
  * Image sketchpad user options with all properties as not required
