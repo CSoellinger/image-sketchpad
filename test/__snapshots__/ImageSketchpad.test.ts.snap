@@ -12,3 +12,5 @@ exports[`Testing ImageSketchpad Class Should load data sketchpad json attribute 
 exports[`Testing ImageSketchpad Class Should load data sketchpad options json attribute 1`] = `"{\\"strokes\\":[],\\"options\\":{\\"lineWidth\\":7,\\"lineMaxWidth\\":-1,\\"lineColor\\":\\"#000\\",\\"lineCap\\":\\"round\\",\\"lineJoin\\":\\"round\\",\\"lineMiterLimit\\":10,\\"enabled\\":true,\\"writeJsonToHtmlAttribute\\":false}}"`;
 
 exports[`Testing ImageSketchpad Class Should return sketchpad default data as json 1`] = `"{\\"strokes\\":[],\\"options\\":{\\"lineWidth\\":5,\\"lineMaxWidth\\":-1,\\"lineColor\\":\\"#000\\",\\"lineCap\\":\\"round\\",\\"lineJoin\\":\\"round\\",\\"lineMiterLimit\\":10,\\"enabled\\":true,\\"writeJsonToHtmlAttribute\\":false}}"`;
+
+exports[`Testing ImageSketchpad Class Start, draw, stop stroke 1`] = `undefined`;

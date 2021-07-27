@@ -262,34 +262,27 @@ describe('Testing ImageSketchpad Class', () => {
         expect(imageB64).toBe(base64String);
         return imageB64;
     });
-    // it('Start, draw, stop stroke by mouse event', () => {
-    //   imageSketchpad = new ImageSketchpad(image);
-    //   imageSketchpad['startStrokeHandler'](new MouseEvent('mousedown', { clientX: 0, clientY: 0 }));
-    //   expect(imageSketchpad['sketching']).toBeTruthy();
-    //   expect(imageSketchpad['activeStroke']).toBe(imageSketchpad['strokes'][0]);
-    //   expect(imageSketchpad['strokes']).toHaveLength(1);
-    //   expect((imageSketchpad['strokes'][0] as Stroke)['points']).toHaveLength(1);
-    //   imageSketchpad['drawStrokeHandler'](new MouseEvent('mousemove', { clientX: 0, clientY: 0 }));
-    //   expect((imageSketchpad['strokes'][0] as Stroke)['points']).toHaveLength(2);
-    //   imageSketchpad['endStrokeHandler'](new MouseEvent('mouseup', { clientX: 0, clientY: 0 }));
-    //   expect((imageSketchpad['strokes'][0] as Stroke)['points']).toHaveLength(3);
-    //   expect(image.dataset['sketchpadJson']).toMatchSnapshot();
-    //   imageSketchpad['drawStrokeHandler'](new MouseEvent('mousemove', { clientX: 0, clientY: 0 }));
-    //   imageSketchpad['endStrokeHandler'](new MouseEvent('mouseup', { clientX: 0, clientY: 0 }));
-    //   expect((imageSketchpad['strokes'][0] as Stroke)['points']).toHaveLength(3);
-    // });
-    // it('Start, draw, stop stroke by touch event', () => {
-    //   imageSketchpad = new ImageSketchpad(image);
-    //   const touch = <Touch>{ identifier: 1, target: new EventTarget(), pageX: 0, pageY: 0 };
-    //   const touchDown = new TouchEvent('touchstart', { touches: [touch] });
-    //   const touchMove = new TouchEvent('touchmove', { touches: [touch] });
-    //   const touchEnd = new TouchEvent('touchend', { touches: [touch] });
-    //   imageSketchpad['startStrokeHandler'](touchDown);
-    //   imageSketchpad['drawStrokeHandler'](touchMove);
-    //   imageSketchpad['endStrokeHandler'](touchEnd);
-    //   expect((imageSketchpad['strokes'][0] as Stroke)['points']).toHaveLength(2);
-    //   expect(image.dataset['sketchpadJson']).toMatchSnapshot();
-    // });
+    it('Start, draw, stop stroke', async () => {
+        imageSketchpad = new ImageSketchpad(image);
+        let pointerEvent = new PointerEvent('pointerdown', { pointerId: 1, clientX: 0, clientY: 0 });
+        await imageSketchpad['startStrokeHandler'](pointerEvent);
+        expect(imageSketchpad['sketching']).toBeTruthy();
+        expect(imageSketchpad['activeStroke'][pointerEvent.pointerId]).toBe(imageSketchpad['strokes'][0]);
+        expect(imageSketchpad['strokes']).toHaveLength(1);
+        expect(imageSketchpad['strokes'][0]['points']).toHaveLength(1);
+        pointerEvent = new PointerEvent('pointermove', { pointerId: 1, clientX: 0, clientY: 0 });
+        await imageSketchpad['drawStrokeHandler'](pointerEvent);
+        expect(imageSketchpad['strokes'][0]['points']).toHaveLength(2);
+        pointerEvent = new PointerEvent('pointerup', { pointerId: 1, clientX: 0, clientY: 0 });
+        await imageSketchpad['endStrokeHandler'](pointerEvent);
+        expect(imageSketchpad['strokes'][0]['points']).toHaveLength(3);
+        expect(image.dataset['sketchpadJson']).toMatchSnapshot();
+        pointerEvent = new PointerEvent('pointermove', { pointerId: 1, clientX: 0, clientY: 0 });
+        await imageSketchpad['drawStrokeHandler'](pointerEvent);
+        pointerEvent = new PointerEvent('pointerup', { pointerId: 1, clientX: 0, clientY: 0 });
+        await imageSketchpad['endStrokeHandler'](pointerEvent);
+        expect(imageSketchpad['strokes'][0]['points']).toHaveLength(3);
+    });
     it('Should throw an error if we try loading a bad JSON string', async () => {
         imageSketchpad = new ImageSketchpad(image, {});
         await expect(imageSketchpad.loadJson('BAD_JSON')).rejects.toThrow(Error);
