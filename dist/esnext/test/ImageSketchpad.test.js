@@ -1,6 +1,9 @@
 import mergeImages from 'merge-images';
 import { Canvas } from '../src/Canvas';
 import { DefaultOptions, ImageSketchpad } from '../src/ImageSketchpad';
+/**
+ * Doing some mockup stuff
+ */
 const base64String = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==';
 const mockCanvasAdjustFromElement = jest.fn();
 jest.mock('merge-images');
@@ -49,6 +52,12 @@ if (!global.PointerEvent) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-explicit-any
     global.PointerEvent = PointerEvent;
 }
+if (typeof HTMLElement.prototype.setPointerCapture !== 'function') {
+    HTMLElement.prototype.setPointerCapture = function (pointerId) {
+        return pointerId;
+    };
+}
+/*****************************************************************************/
 describe('Testing ImageSketchpad Class', () => {
     let defaultObj;
     let image;
@@ -162,66 +171,28 @@ describe('Testing ImageSketchpad Class', () => {
         const pointerEvent = new PointerEvent('pointerdown', { clientX: 0, clientY: 0 });
         expect(imageSketchpad['getPointFromCursor'](pointerEvent)).toMatchSnapshot();
     });
-    // it('Should run listeners', () => {
-    //   const mouseDown = new MouseEvent('mousedown', { clientX: 0, clientY: 0 });
-    //   const mouseMove = new MouseEvent('mousemove', { clientX: 0, clientY: 0 });
-    //   const mouseUp = new MouseEvent('mouseup', { clientX: 0, clientY: 0 });
-    //   // const touch = <Touch>{ pageX: 0, pageY: 0 };
-    //   // const e = document.createEvent('TouchEvent');
-    //   // e.touches = [{pageX: pageX, pageY: pageY}];
-    //   // const touchList = new TouchList();
-    //   // touchList[0] = touch;
-    //   // touchList['length = 1;
-    //   // const touchDown = new TouchEvent('touchstart', { touches: [touch] });
-    //   // const touchMove = new TouchEvent('touchmove', { touches: [touch] });
-    //   // const touchEnd = new TouchEvent('touchend', { touches: [touch] });
-    //   // touchDown.touches = [];
-    //   const touch = new Touch({
-    //     identifier: 1,
-    //     target: new EventTarget(),
-    //     pageX: 0,
-    //     pageY: 0,
-    //   });
-    //   // const touchDown = new TouchEvent('touchstart', {
-    //   //   touches: [
-    //   //     {
-    //   //       identifier: 1,
-    //   //       target: new EventTarget(),
-    //   //       pageX: 0,
-    //   //       pageY: 0,
-    //   //       altitudeAngle: 0,
-    //   //       azimuthAngle: 0,
-    //   //       clientX: 0,
-    //   //       clientY: 0,
-    //   //       screenX: 0,
-    //   //       screenY: 0,
-    //   //       force: 0,
-    //   //       radiusX: 0,
-    //   //       radiusY: 0,
-    //   //       rotationAngle: 0,
-    //   //       touchType: 'direct',
-    //   //     },
-    //   //   ],
-    //   //   view: window,
-    //   //   cancelable: true,
-    //   //   bubbles: true,
-    //   // });
-    //   console.log(touch);
-    //   // console.log(touchDown.touches.item(0));
-    //   imageSketchpad = new ImageSketchpad(image);
-    //   imageSketchpad.canvas.element.dispatchEvent(mouseDown);
-    //   imageSketchpad.canvas.element.dispatchEvent(mouseMove);
-    //   imageSketchpad.canvas.element.dispatchEvent(mouseUp);
-    //   // imageSketchpad.canvas.element.dispatchEvent(touchDown);
-    //   // imageSketchpad.canvas.element.dispatchEvent(touchMove);
-    //   // imageSketchpad.canvas.element.dispatchEvent(touchEnd);
-    //   expect(imageSketchpad['strokes']).toHaveLength(2);
-    //   imageSketchpad.disable();
-    //   imageSketchpad.canvas.element.dispatchEvent(mouseDown);
-    //   imageSketchpad.canvas.element.dispatchEvent(mouseMove);
-    //   imageSketchpad.canvas.element.dispatchEvent(mouseUp);
-    //   expect(imageSketchpad['strokes']).toHaveLength(2);
-    // });
+    it('Should run listeners', async () => {
+        const eventOptions = { pointerId: 1, clientX: 0, clientY: 0, pointerType: 'mouse', button: 0, buttons: 1 };
+        const pointerDown = new PointerEvent('pointerdown', eventOptions);
+        const pointerMove = new PointerEvent('pointermove', eventOptions);
+        const pointerUp = new PointerEvent('pointerup', eventOptions);
+        imageSketchpad = new ImageSketchpad(image);
+        imageSketchpad.canvas.element.onpointerdown && (await imageSketchpad.canvas.element.onpointerdown(pointerDown));
+        imageSketchpad.canvas.element.onpointermove && (await imageSketchpad.canvas.element.onpointermove(pointerMove));
+        imageSketchpad.canvas.element.onpointerup && (await imageSketchpad.canvas.element.onpointerup(pointerUp));
+        expect(imageSketchpad['strokes']).toHaveLength(1);
+        let stroke = imageSketchpad['strokes'][0];
+        expect(stroke && stroke['points']).toHaveLength(3);
+        imageSketchpad.disable();
+        imageSketchpad.canvas.element.onpointerdown && (await imageSketchpad.canvas.element.onpointerdown(pointerDown));
+        imageSketchpad.canvas.element.onpointermove && (await imageSketchpad.canvas.element.onpointermove(pointerMove));
+        imageSketchpad.canvas.element.onpointerup && (await imageSketchpad.canvas.element.onpointerup(pointerUp));
+        expect(imageSketchpad['strokes']).toHaveLength(1);
+        stroke = imageSketchpad['strokes'][0];
+        expect(stroke && stroke['points']).toHaveLength(3);
+        imageSketchpad.enable();
+        expect(image.dataset['sketchpadJson']).toEqual(imageSketchpad.toJson());
+    });
     it('Should load data sketchpad json attribute', async () => {
         defaultObj.options.lineWidth = 7;
         defaultObj.strokes = undefined;
@@ -282,6 +253,18 @@ describe('Testing ImageSketchpad Class', () => {
         pointerEvent = new PointerEvent('pointerup', { pointerId: 1, clientX: 0, clientY: 0 });
         await imageSketchpad['endStrokeHandler'](pointerEvent);
         expect(imageSketchpad['strokes'][0]['points']).toHaveLength(3);
+    });
+    it('Should not write json to html data attribute', async () => {
+        image.dataset['sketchpadJson'] = '';
+        const eventOptions = { pointerId: 1, clientX: 0, clientY: 0, pointerType: 'mouse', button: 0, buttons: 1 };
+        const pointerDown = new PointerEvent('pointerdown', eventOptions);
+        const pointerMove = new PointerEvent('pointermove', eventOptions);
+        const pointerUp = new PointerEvent('pointerup', eventOptions);
+        imageSketchpad = new ImageSketchpad(image, { writeJsonToHtmlAttribute: false });
+        imageSketchpad.canvas.element.onpointerdown && (await imageSketchpad.canvas.element.onpointerdown(pointerDown));
+        imageSketchpad.canvas.element.onpointermove && (await imageSketchpad.canvas.element.onpointermove(pointerMove));
+        imageSketchpad.canvas.element.onpointerup && (await imageSketchpad.canvas.element.onpointerup(pointerUp));
+        expect(image.dataset['sketchpadJson']).toEqual('');
     });
     it('Should throw an error if we try loading a bad JSON string', async () => {
         imageSketchpad = new ImageSketchpad(image, {});
