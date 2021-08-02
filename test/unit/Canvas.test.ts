@@ -2,9 +2,9 @@
 // mock in other than the triple slash method...
 
 // eslint-disable-next-line @typescript-eslint/triple-slash-reference
-/// <reference path="./../node_modules/jest-canvas-mock/types/index.d.ts" />
+/// <reference path="./../../node_modules/jest-canvas-mock/types/index.d.ts" />
 
-import { Canvas, Point, Stroke } from '../src/Canvas';
+import { Canvas, Point, Stroke } from '../../src/Canvas';
 
 describe('Testing Canvas Class', () => {
   let canvasClass: Canvas;

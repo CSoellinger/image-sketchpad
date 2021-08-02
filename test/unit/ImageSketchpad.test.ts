@@ -1,18 +1,14 @@
-import mergeImages from 'merge-images';
-
-import { Canvas, Stroke } from '../src/Canvas';
-import { Options, DefaultOptions, ImageSketchpad } from '../src/ImageSketchpad';
+import { Canvas, Stroke } from '../../src/Canvas';
+import { Options, DefaultOptions, ImageSketchpad } from '../../src/ImageSketchpad';
 
 /**
  * Doing some mockup stuff
  */
 const base64String = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==';
-const mockCanvasAdjustFromElement = jest.fn();
 
-jest.mock('merge-images');
-(<jest.Mock>mergeImages).mockResolvedValue(base64String);
+jest.mock('merge-images', () => jest.fn().mockImplementation(async () => base64String));
 
-jest.mock('../src/Canvas', () => {
+jest.mock('../../src/Canvas', () => {
   return {
     Canvas: jest.fn().mockImplementation(() => {
       const element = global.document.createElement('canvas');
@@ -22,50 +18,13 @@ jest.mock('../src/Canvas', () => {
         element,
         context,
         insert: jest.fn().mockReturnValue(Promise.resolve()),
-        adjustFromElement: mockCanvasAdjustFromElement,
+        adjustFromElement: jest.fn(),
         drawStroke: jest.fn().mockReturnValue(Promise.resolve()),
         clear: jest.fn().mockReturnThis(),
       };
     }),
   };
 });
-
-if (!global.PointerEvent) {
-  class PointerEvent extends MouseEvent {
-    public height?: number;
-    public isPrimary?: boolean;
-    public pointerId?: number;
-    public pointerType?: string;
-    public pressure?: number;
-    public tangentialPressure?: number;
-    public tiltX?: number;
-    public tiltY?: number;
-    public twist?: number;
-    public width?: number;
-
-    constructor(type: string, params: PointerEventInit = {}) {
-      super(type, params);
-
-      this.pointerId = params.pointerId;
-      this.width = params.width;
-      this.height = params.height;
-      this.pressure = params.pressure;
-      this.tangentialPressure = params.tangentialPressure;
-      this.tiltX = params.tiltX;
-      this.tiltY = params.tiltY;
-      this.pointerType = params.pointerType;
-      this.isPrimary = params.isPrimary;
-    }
-  }
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-explicit-any
-  global.PointerEvent = PointerEvent as any;
-}
-
-if (typeof HTMLElement.prototype.setPointerCapture !== 'function') {
-  HTMLElement.prototype.setPointerCapture = function (pointerId) {
-    return pointerId;
-  };
-}
 /*****************************************************************************/
 
 describe('Testing ImageSketchpad Class', () => {
@@ -162,16 +121,16 @@ describe('Testing ImageSketchpad Class', () => {
     imageSketchpad = new ImageSketchpad(image);
     window.dispatchEvent(new Event('resize'));
 
-    expect(mockCanvasAdjustFromElement).toHaveBeenCalledTimes(1);
+    expect((<jest.Mock>Canvas).mock.results[0]?.value.adjustFromElement.mock.calls).toHaveLength(1);
 
     window.dispatchEvent(new Event('resize'));
 
-    expect(mockCanvasAdjustFromElement).toHaveBeenCalledTimes(2);
+    expect((<jest.Mock>Canvas).mock.results[0]?.value.adjustFromElement.mock.calls).toHaveLength(2);
 
     imageSketchpad.canvas.element.width = 800;
     window.dispatchEvent(new Event('resize'));
 
-    expect(mockCanvasAdjustFromElement).toHaveBeenCalledTimes(2);
+    expect((<jest.Mock>Canvas).mock.results[0]?.value.adjustFromElement.mock.calls).toHaveLength(2);
   });
 
   it('Should add and clear a stroke', () => {
