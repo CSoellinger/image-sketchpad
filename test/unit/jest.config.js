@@ -1,4 +1,3 @@
-// eslint-disable-next-line jsdoc/valid-types
 /**
  * @type {import('ts-jest/dist/types').InitialOptionsTsJest}
  */
@@ -23,7 +22,7 @@ module.exports = {
     [
       'jest-html-reporter',
       {
-        pageTitle: 'ImageSketchpad E2E Test Report',
+        pageTitle: 'ImageSketchpad Unit Test Report',
         outputPath: 'build/test-report/unit/index.html',
         includeFailureMsg: true,
         includeSuiteFailure: true,

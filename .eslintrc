@@ -35,6 +35,11 @@
     "rules": {
         "jsdoc/tag-lines": "off"
     },
+    "settings": {
+        "jsdoc": {
+            "mode": "typescript"
+        }
+    },
     "overrides": [
         // Jest Config
         {
