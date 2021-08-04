@@ -21,14 +21,6 @@
             }
         },
         {
-            "files": "tsconfig.json",
-            "options": {
-                "plugins": [
-                    "@tsjson/prettier-plugin-tsjson"
-                ]
-            }
-        },
-        {
             "files": "*.md",
             "options": {
                 "plugins": [
