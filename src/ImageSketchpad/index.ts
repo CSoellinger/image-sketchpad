@@ -1,6 +1,6 @@
 // import { default as copyCanvas } from 'copy-canvas';
 import drawToCanvas from 'draw-to-canvas';
-import FileDownload from 'file-save-browser';
+import download from 'downloadjs';
 import mergeImages from 'merge-images';
 import { default as Pica, Pica as PicaClass } from 'pica';
 import { Canvas } from '../Canvas';
@@ -297,11 +297,11 @@ export class ImageSketchpad {
 
     fileName += '.sketch.png';
 
-    return this
-      .mergeImageWithSketch(originalSize)
-      .then((b64: string) =>
-        FileDownload(b64.replace('data:image/png;base64,', ''), 'image/png', fileName).then(() => b64)
-      );
+    return this.mergeImageWithSketch(originalSize).then((b64: string) => {
+      download(b64, fileName, 'image/png');
+
+      return b64;
+    });
   }
 
   /**
