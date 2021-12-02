@@ -212,3 +212,4 @@ For the very interested: [DOCUMENTATION](https://csoellinger.github.io/image-ske
 - Test with some kind like electron
 - Write e2e tests
 - Do not force PNG as image output format
+- Better documentation/readme
