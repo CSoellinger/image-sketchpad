@@ -91,3 +91,4 @@ export class Canvas {
         this.context.stroke();
     }
 }
+export {} from './Draw';

@@ -1,4 +1,8 @@
+// import { default as copyCanvas } from 'copy-canvas';
+import drawToCanvas from 'draw-to-canvas';
+import FileDownload from 'file-save-browser';
 import mergeImages from 'merge-images';
+import { default as Pica } from 'pica';
 import { Canvas } from '../Canvas';
 import { DefaultOptions } from './Options';
 /**
@@ -10,6 +14,10 @@ export class ImageSketchpad {
      * Canvas helper class
      */
     canvas = new Canvas();
+    /**
+     * Pica for image resizing. Used for saving in browser resized images.
+     */
+    pica = new Pica({ features: ['js', 'wasm'] });
     /**
      * Image element where we draw on it.
      */
@@ -34,12 +42,15 @@ export class ImageSketchpad {
      * Helper variable to get the save the active stroke during sketching is true
      */
     activeStroke = [];
+    /**
+     * Register image adjustment on resize.
+     */
     resizeHandler;
     /**
      * Creates an instance of image sketchpad.
      *
-     * @param image    - Image html element.
-     * @param options  - Sketchpad options as javascript object.
+     * @param image   - Image html element.
+     * @param options - Sketchpad options as javascript object.
      * @example
      *
      * Run image sketchpad
@@ -88,7 +99,7 @@ export class ImageSketchpad {
     /**
      * Set sketchpad options.
      *
-     * @param options  - Sketchpad options.
+     * @param options - Sketchpad options.
      */
     setOptions(options) {
         this.options = Object.assign(this.options, options);
@@ -123,7 +134,7 @@ export class ImageSketchpad {
     /**
      * Load a sketch from a json string.
      *
-     * @param json  - JSON string to parse.
+     * @param json - JSON string to parse.
      */
     async loadJson(json) {
         let object;
@@ -171,28 +182,63 @@ export class ImageSketchpad {
         return this;
     }
     /**
-     * Merges image with sketch and returns a base64 string as promise
+     * Merges image with sketch and returns a base64 string as promise.
+     *
+     * @todo Find a better way to merge sketch with original sized image.
+     *
+     * @param originalSize - Download image with original size.
      */
-    async mergeImageWithSketch() {
-        return mergeImages([this.image.src, this.canvas.element.toDataURL()]);
+    async mergeImageWithSketch(originalSize = true) {
+        let tmpCanvas;
+        let imageSource = this.image.src;
+        if (originalSize === true) {
+            // Clone the canvas and redraw with image natural width and height to get an
+            // original sized sketch before merging. For sure there is a better way to do that
+            const naturalSize = { width: this.image.naturalWidth, height: this.image.naturalHeight };
+            tmpCanvas = this.canvas.element.cloneNode();
+            drawToCanvas(this.canvas.element, tmpCanvas);
+            this.canvas.adjust(naturalSize.width, naturalSize.height, 0, -(naturalSize.width * 2));
+            this.canvas.element.parentNode?.insertBefore(tmpCanvas, this.canvas.element);
+            this.redraw(1);
+        }
+        else {
+            // Create a canvas with the resized image set by client width and height
+            tmpCanvas = document.createElement('canvas');
+            tmpCanvas.width = this.image.clientWidth;
+            tmpCanvas.height = this.image.clientHeight;
+            tmpCanvas.style.position = 'absolute';
+            tmpCanvas.style.top = '0';
+            tmpCanvas.style.left = `-${this.image.clientWidth}px`;
+            tmpCanvas = await this.pica.resize(this.image, tmpCanvas, { alpha: true });
+            imageSource = tmpCanvas.toDataURL();
+        }
+        return mergeImages([imageSource, this.canvas.element.toDataURL()]).then((b64Image) => {
+            tmpCanvas.remove();
+            if (originalSize === true) {
+                this.canvas.adjustFromElement(this.image);
+                this.redraw();
+            }
+            return b64Image;
+        });
     }
     /**
      * Download merged image with sketch as png file
+     *
+     * @param originalSize - Download image with original size
      */
-    async download() {
+    async download(originalSize = true) {
         let fileName = this.image.src;
         fileName = fileName.toLowerCase().startsWith('data:')
             ? String(Date.now())
             : String(String(fileName.split('\\').pop()).split('/').pop());
         fileName += '.sketch.png';
-        return this.mergeImageWithSketch().then((b64) => {
-            const downloadLink = document.createElement('a');
-            downloadLink.href = b64;
-            downloadLink.download = fileName;
-            downloadLink.click();
-            return b64;
-        });
+        return this
+            .mergeImageWithSketch(originalSize)
+            .then((b64) => FileDownload(b64.replace('data:image/png;base64,', ''), 'image/png', fileName).then(() => b64));
     }
+    /**
+     * Destroy the instance and remove the canvas.
+     */
     destroy() {
         window.removeEventListener('resize', this.resizeHandler, false);
         this.undoneStrokes = [];
@@ -235,7 +281,7 @@ export class ImageSketchpad {
     /**
      * Starts stroke handler.
      *
-     * @param event  - {@link PointerEvent | Pointer event} is an extended mouse event which will handle touches too.
+     * @param event - {@link PointerEvent | Pointer event} is an extended mouse event which will handle touches too.
      */
     async startStrokeHandler(event) {
         this.sketching = true;
@@ -249,7 +295,7 @@ export class ImageSketchpad {
     /**
      * Draws stroke handler.
      *
-     * @param event  - {@link PointerEvent | Pointer event} is an extended mouse event which will handle touches too.
+     * @param event - {@link PointerEvent | Pointer event} is an extended mouse event which will handle touches too.
      */
     async drawStrokeHandler(event) {
         // Drawing was not started by startStrokeHandler
@@ -263,7 +309,7 @@ export class ImageSketchpad {
     /**
      * Ends stroke handler.
      *
-     * @param event  - {@link PointerEvent | Pointer event} is an extended mouse event which will handle touches too.
+     * @param event - {@link PointerEvent | Pointer event} is an extended mouse event which will handle touches too.
      */
     async endStrokeHandler(event) {
         // Drawing was not started by startStrokeHandler
@@ -288,7 +334,7 @@ export class ImageSketchpad {
     /**
      * Get a {@link Point | Point} from the cursor(mouse) or finger(touch)
      *
-     * @param event  - {@link PointerEvent | Pointer event} triggered from pointerdown, pointermove or pointerup.
+     * @param event - {@link PointerEvent | Pointer event} triggered from pointerdown, pointermove or pointerup.
      */
     getPointFromCursor(event) {
         const rect = this.canvas.element.getBoundingClientRect();
@@ -300,7 +346,7 @@ export class ImageSketchpad {
     /**
      * Create stroke from an array of {@link Point | Points}
      *
-     * @param points  - Array of {@link Point | Points}
+     * @param points - Array of {@link Point | Points}
      */
     createStroke(points) {
         return {
@@ -316,8 +362,8 @@ export class ImageSketchpad {
     /**
      * Push {@link Point | Point} to {@link Stroke | Stroke}
      *
-     * @param point   - {@link Point | Point} to push.
-     * @param stroke  - {@link Stroke | Stroke} to push into.
+     * @param point  - {@link Point | Point} to push.
+     * @param stroke - {@link Stroke | Stroke} to push into.
      */
     pushPoint(point, stroke) {
         stroke = stroke ?? this.strokes[this.strokes.length - 1];
@@ -327,19 +373,23 @@ export class ImageSketchpad {
     /**
      * Redraw the sketch on the canvas. Mean it clears first and draw all
      * strokes again
+     *
+     * @param imageRatio - Redraw with a specified image ratio (for example if
+     *                     you want draw the canvas in original size)
      */
-    redraw() {
+    redraw(imageRatio) {
+        imageRatio = imageRatio ?? this.getImageRatio();
         this.canvas.clear();
         for (const stroke of this.strokes) {
-            this.canvas.drawStroke(stroke, this.getImageRatio()).catch(this.throwError);
+            this.canvas.drawStroke(stroke, imageRatio).catch(this.throwError);
         }
         return this;
     }
     /**
      * Throws an error.
      *
-     * @param this   - Self.
-     * @param error  - Error message.
+     * @param this  - Self.
+     * @param error - Error message.
      */
     throwError(error) {
         throw new Error(String(error));

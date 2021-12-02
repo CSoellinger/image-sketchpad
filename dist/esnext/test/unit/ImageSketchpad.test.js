@@ -90,11 +90,14 @@ describe('Testing ImageSketchpad Class', () => {
     it('Should trigger canvas adjust from element on window resize', () => {
         imageSketchpad = new ImageSketchpad(image);
         window.dispatchEvent(new Event('resize'));
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         expect(Canvas.mock.results[0]?.value.adjustFromElement.mock.calls).toHaveLength(1);
         window.dispatchEvent(new Event('resize'));
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         expect(Canvas.mock.results[0]?.value.adjustFromElement.mock.calls).toHaveLength(2);
         imageSketchpad.canvas.element.width = 800;
         window.dispatchEvent(new Event('resize'));
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         expect(Canvas.mock.results[0]?.value.adjustFromElement.mock.calls).toHaveLength(2);
     });
     it('Should add and clear a stroke', () => {
@@ -228,7 +231,7 @@ describe('Testing ImageSketchpad Class', () => {
         imageSketchpad.canvas.element.onpointerdown && (await imageSketchpad.canvas.element.onpointerdown(pointerDown));
         imageSketchpad.canvas.element.onpointermove && (await imageSketchpad.canvas.element.onpointermove(pointerMove));
         imageSketchpad.canvas.element.onpointerup && (await imageSketchpad.canvas.element.onpointerup(pointerUp));
-        expect(image.dataset['sketchpadJson']).toEqual('');
+        expect(image.dataset['sketchpadJson']).toBe('');
     });
     it('Should throw an error if we try loading a bad JSON string', async () => {
         imageSketchpad = new ImageSketchpad(image, {});
