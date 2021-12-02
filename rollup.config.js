@@ -58,7 +58,7 @@ const config = {
       exports: 'default',
     },
     {
-      file: pkg.browser.replace('.js', '.min.js'),
+      file: pkg.browser,
       format: 'iife',
       name,
       exports: 'default',
