@@ -213,3 +213,4 @@ For the very interested: [DOCUMENTATION](https://csoellinger.github.io/image-ske
 - Write e2e tests
 - Do not force PNG as image output format
 - Better documentation/readme
+- Add DEMO to github pages/typedoc https://csoellinger.github.io/image-sketchpad/#demo
