@@ -89,5 +89,22 @@
         "exclude": [
             "jest"
         ]
+    },
+    "typedocOptions": {
+        "entryPoints": [
+            "src"
+        ],
+        "externalPattern": [
+            "**/node_modules/**"
+        ],
+        "excludeExternals": true,
+        "excludeInternal": true,
+        "excludePrivate": true,
+        "media": "media",
+        "out": "docs",
+        "readme": "README.md",
+        "name": "image-sketchpad",
+        "includeVersion": true,
+        "gitRevision": "main"
     }
 }
