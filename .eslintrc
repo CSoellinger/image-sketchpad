@@ -50,7 +50,6 @@
         // Jest Config
         {
             "files": [
-                "jest-playwright.config.js",
                 "jest.config.js"
             ],
             "env": {
@@ -106,6 +105,13 @@
             "files": [
                 "test/**/*.ts"
             ],
+            "parserOptions": {
+                "tsconfigRootDir": "./",
+                "project": [
+                    "./tsconfig.json",
+                    "./test/tsconfig.json"
+                ]
+            },
             "plugins": [
                 "jest",
                 "jest-formatting"

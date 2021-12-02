@@ -1,3 +1,5 @@
+const path = require('path');
+
 /**
  * @type {import('ts-jest/dist/types').InitialOptionsTsJest}
  */
@@ -5,7 +7,7 @@ module.exports = {
   rootDir: '../..',
   roots: ['./test/unit', './src'],
   testMatch: ['**/test/**/?(*.)+(spec|test).[tj]s?(x)'],
-  testPathIgnorePatterns: ['/dist/', '/example/', '/node_modules/'],
+  testPathIgnorePatterns: ['/build/', '/dist/', '/docs/', '/example/', '/node_modules/'],
   testEnvironment: 'jsdom',
   testEnvironmentOptions: {
     resources: 'usable',
@@ -13,7 +15,7 @@ module.exports = {
   testLocationInResults: true,
   clearMocks: true,
   collectCoverage: true,
-  coveragePathIgnorePatterns: ['/dist/', '/docs/', '/example/', '/node_modules/', '/test/'],
+  coveragePathIgnorePatterns: ['/build/', '/dist/', '/docs/', '/example/', '/node_modules/', '/test/'],
   coverageReporters: ['lcov', 'text-summary'],
   coverageDirectory: 'build/test-report/unit',
   setupFiles: ['jest-canvas-mock', './test/unit/setupPointerEvent.ts'],
@@ -29,5 +31,10 @@ module.exports = {
       },
     ],
   ],
+  globals: {
+    'ts-jest': {
+      tsConfig: path.resolve(__dirname, '..', 'tsconfig.ts'),
+    },
+  },
   verbose: true,
 };
