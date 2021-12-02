@@ -1,12 +1,13 @@
-import pkg from './package.json';
-import babel from '@rollup/plugin-babel';
 import commonjs from '@rollup/plugin-commonjs';
-import html from '@rollup/plugin-html';
 import resolve from '@rollup/plugin-node-resolve';
+import babel from '@rollup/plugin-babel';
+import strip from '@rollup/plugin-strip';
 import replace from '@rollup/plugin-replace';
+import html2 from 'rollup-plugin-html2';
 import fs from 'fs';
 import path from 'path';
-import { terser } from 'rollup-plugin-terser';
+// import { terser } from 'rollup-plugin-terser';
+import pkg from './package.json';
 
 /**
  * Extensions for node_modules resolution
@@ -25,12 +26,6 @@ const config = {
   input: './src/index.ts',
 
   plugins: [
-    // Replace strings in files
-    replace({
-      __buildVersion__: pkg.version,
-      preventAssignment: false,
-    }),
-
     // Allows node_modules resolution
     resolve({ extensions }),
 
@@ -43,43 +38,32 @@ const config = {
       babelHelpers: 'runtime',
       include: ['src/**/*'],
     }),
+
+    strip(),
+
+    // Replace strings in files
+    replace({
+      '%%date%%': () => new Date().toString(),
+      '%%version%%': pkg.version,
+      preventAssignment: true,
+    }),
   ],
 
   output: [
     // Output one common js package
-    { file: pkg.main, format: 'cjs', exports: 'named' },
+    { file: pkg.main, format: 'cjs', exports: 'default' },
     // Output one es module package
-    { file: pkg.module, format: 'es', exports: 'named' },
-    // Output one normal and one minified browser bundled package
+    { file: pkg.module, format: 'es' },
+    // Output one browser package
     {
       file: pkg.browser,
-      format: 'iife',
+      format: 'umd',
       name,
-      exports: 'default',
-    },
-    {
-      file: pkg.browser,
-      format: 'iife',
-      name,
-      exports: 'default',
       plugins: [
-        html({
+        html2({
           fileName: 'index.html',
-          template: ({ files }) => {
-            let html = fs.readFileSync(path.resolve('example', 'index.html')).toString();
-
-            for (let jsFile of files.js) {
-              if (!jsFile.isEntry) {
-                continue;
-              }
-
-              html = html.replace('</body>', `<script src="${jsFile.fileName}"></script></body>`);
-            }
-
-            return html;
-          },
+          template: fs.readFileSync(path.resolve('example', 'index.html')).toString(),
         }),
-        terser(),
       ],
     },
   ],
