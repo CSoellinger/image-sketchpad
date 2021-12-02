@@ -4,6 +4,7 @@
     "ignorePatterns": [
         ".eslintrc.js",
         "node_modules",
+        "build",
         "dist",
         "example",
         "media",
