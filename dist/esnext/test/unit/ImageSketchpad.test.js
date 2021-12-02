@@ -14,6 +14,7 @@ jest.mock('../../src/Canvas', () => {
                 element,
                 context,
                 insert: jest.fn().mockReturnValue(Promise.resolve()),
+                adjust: jest.fn(),
                 adjustFromElement: jest.fn(),
                 drawStroke: jest.fn().mockReturnValue(Promise.resolve()),
                 clear: jest.fn().mockReturnThis(),
@@ -23,6 +24,7 @@ jest.mock('../../src/Canvas', () => {
 });
 /*****************************************************************************/
 describe('Testing ImageSketchpad Class', () => {
+    global.URL.createObjectURL = jest.fn();
     let defaultObj;
     let image;
     let imageSketchpad = null;
@@ -186,6 +188,8 @@ describe('Testing ImageSketchpad Class', () => {
         });
     });
     it('Should download the sketch with the image', async () => {
+        // global.URL.createObjectURL = jest.fn(() => 'details');
+        // window.navigator['msSaveOrOpenBlob'] = jest.fn(() => 'details');
         imageSketchpad = new ImageSketchpad(image);
         // eslint-disable-next-line radar/no-identical-functions
         const imageB64 = await imageSketchpad.download();
