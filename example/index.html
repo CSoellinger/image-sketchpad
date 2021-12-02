@@ -20,6 +20,7 @@
             <button id="On">On</button>
             <button id="Off">Off</button>
             <button id="Download">Download</button>
+            <button id="DownloadOriginal">Download Original Size</button>
             <input type="color" id="StrokeColor" value="#ff0000">
             <select id="StrokeWidth">
                 <option value="1">1</option>
@@ -68,7 +69,8 @@
                 document.getElementById('Clear').addEventListener('click', function () { sketchPad.clear(); document.getElementById('JsonOutput').innerHTML = sketchPad.toJson(); });
                 document.getElementById('On').addEventListener('click', function () { sketchPad.enable(); });
                 document.getElementById('Off').addEventListener('click', function () { sketchPad.disable(); });
-                document.getElementById('Download').addEventListener('click', function () { sketchPad.download(); });
+                document.getElementById('Download').addEventListener('click', function () { sketchPad.download(false); });
+                document.getElementById('DownloadOriginal').addEventListener('click', function () { sketchPad.download(); });
                 document.getElementById('StrokeColor').addEventListener('input', function (e) { sketchPad.setOptions({ lineColor: e.currentTarget.value }); });
                 document.getElementById('StrokeWidth').addEventListener('change', function (e) { sketchPad.setOptions({ lineWidth: e.currentTarget.value }); });
 
