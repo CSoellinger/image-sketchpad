@@ -26,6 +26,16 @@ export declare type Options = {
      * Line miter limit
      */
     lineMiterLimit: number;
+    /**
+     * Enable or disable sketchpad on init
+     */
+    enabled: boolean;
+    /**
+     * Setting this to true(default) will set a json string to the canvas
+     * html attribute. You get the same string by calling
+     * {@link ImageSketchpad.toJson | ImageSketchpad.toJson()}
+     */
+    writeJsonToHtmlAttribute: boolean;
 };
 /**
  * Image sketchpad default options
