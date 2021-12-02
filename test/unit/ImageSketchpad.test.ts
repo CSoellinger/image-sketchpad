@@ -18,6 +18,7 @@ jest.mock('../../src/Canvas', () => {
         element,
         context,
         insert: jest.fn().mockReturnValue(Promise.resolve()),
+        adjust: jest.fn(),
         adjustFromElement: jest.fn(),
         drawStroke: jest.fn().mockReturnValue(Promise.resolve()),
         clear: jest.fn().mockReturnThis(),
