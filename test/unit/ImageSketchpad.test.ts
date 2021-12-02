@@ -29,6 +29,8 @@ jest.mock('../../src/Canvas', () => {
 /*****************************************************************************/
 
 describe('Testing ImageSketchpad Class', () => {
+  global.URL.createObjectURL = jest.fn();
+
   let defaultObj: { strokes: Stroke[] | undefined; options: Options };
   let image: HTMLImageElement;
   let imageSketchpad: ImageSketchpad | null = null;
@@ -264,6 +266,9 @@ describe('Testing ImageSketchpad Class', () => {
   });
 
   it('Should download the sketch with the image', async () => {
+    // global.URL.createObjectURL = jest.fn(() => 'details');
+    // window.navigator['msSaveOrOpenBlob'] = jest.fn(() => 'details');
+
     imageSketchpad = new ImageSketchpad(image);
 
     // eslint-disable-next-line radar/no-identical-functions
