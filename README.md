@@ -1,4 +1,4 @@
-# Image Sketchpad
+# Image Sketchpad (responsive)
 
 ![preview](./media/preview.gif)
 
@@ -12,15 +12,16 @@ Draw on any image inside your desktop or mobile browser.
   - For example you can load the same sketches on a bigger version of the image, only ratio has to be the same
   - Load by method or `data-sketchpad-json` attribute
 - Set stroke options like line width or color
-
+- It works responsive, try it: draw on the image and resize the browser so the image will be smaller, so your sketch will be too.
 ---
 
-1. [Demo](#demo)
-2. [Install](#install)
-3. [Usage](#usage)
+1. [- It works responsive, try it: draw on the image and resize the browser so the image will be smaller, so your sketch will be too.](#--it-works-responsive-try-it-draw-on-the-image-and-resize-the-browser-so-the-image-will-be-smaller-so-your-sketch-will-be-too)
+2. [Demo](#demo)
+3. [Install](#install)
+4. [Usage](#usage)
    1. [Browser: VanillaJS](#browser-vanillajs)
-4. [Options](#options)
-5. [Methods](#methods)
+5. [Options](#options)
+6. [Methods](#methods)
    1. [setOptions( options )](#setoptions-options-)
    2. [enable()](#enable)
    3. [disable()](#disable)
@@ -32,8 +33,8 @@ Draw on any image inside your desktop or mobile browser.
    9. [mergeImageWithSketch(originalSize = true)](#mergeimagewithsketchoriginalsize--true)
    10. [download(originalSize = true)](#downloadoriginalsize--true)
    11. [version()](#version)
-6. [Documentation](#documentation)
-7. [ToDo](#todo)
+7. [Documentation](#documentation)
+8. [ToDo](#todo)
 
 ---
 
