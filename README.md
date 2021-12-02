@@ -10,7 +10,7 @@ Draw on any image inside your desktop or mobile browser.
   - With it you can (re)load sketches, without saving a second image
   - No matter at which image size the data was generated
   - For example you can load the same sketches on a bigger version of the image, only ratio has to be the same
-  - Load by method or by `data-sketchpad-json` attribute
+  - Load by method or `data-sketchpad-json` attribute
 - Set stroke options like line width or color
 
 ---
@@ -29,8 +29,8 @@ Draw on any image inside your desktop or mobile browser.
    6. [clear()](#clear)
    7. [undo()](#undo)
    8. [redo()](#redo)
-   9. [mergeImageWithSketch()](#mergeimagewithsketch)
-   10. [download()](#download)
+   9. [mergeImageWithSketch(originalSize = true)](#mergeimagewithsketchoriginalsize--true)
+   10. [download(originalSize = true)](#downloadoriginalsize--true)
    11. [version()](#version)
 6. [Documentation](#documentation)
 7. [ToDo](#todo)
@@ -171,17 +171,25 @@ Redo undone sketch.
 
 ---
 
-### mergeImageWithSketch()
+### mergeImageWithSketch(originalSize = true)
 
 Merge the sketchpad canvas with the image and return a promise with a base64 string.
+
+| Param    |   Type   | Default | Description                |
+| -------- | :------: | ------- | -------------------------- |
+| **originalSize** | _boolean_ | true | If set to false it will merge the image exactly to the size like you see the image in the browser |
 
 **Return:** \_Promise\<string\>\_\_
 
 ---
 
-### download()
+### download(originalSize = true)
 
 Download the image you'll get with [ImageSketchpad.mergeImageWithSketch()](#mergeimagewithsketch) directly.
+
+| Param    |   Type   | Default | Description                |
+| -------- | :------: | ------- | -------------------------- |
+| **originalSize** | _boolean_ | true | If set to false it will download the image exactly with the size like you see the image in the browser |
 
 **Return:** _ImageSketchpad_
 
@@ -201,6 +209,6 @@ For the very interested: [DOCUMENTATION](https://csoellinger.github.io/image-ske
 
 ## ToDo
 
-- Test with electronJS
-- Write tests
+- Test with some kind like electron
+- Write e2e tests
 - Do not force PNG as image output format
