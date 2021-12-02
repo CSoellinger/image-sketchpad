@@ -64,8 +64,8 @@
         "watch:type-check": "npm run type-check -- --watch"
     },
     "dependencies": {
+        "downloadjs": "^1.4.7",
         "draw-to-canvas": "^1.0.0",
-        "file-save-browser": "^1.0.1",
         "merge-images": "^2.0.0",
         "pica": "^8.0.0"
     },
@@ -81,6 +81,7 @@
         "@rollup/plugin-html": "^0.2.4",
         "@rollup/plugin-node-resolve": "^13.0.6",
         "@rollup/plugin-replace": "^3.0.0",
+        "@types/downloadjs": "^1.4.2",
         "@types/jest": "^27.0.3",
         "@types/jest-image-snapshot": "^4.3.1",
         "@types/merge-images": "^1.2.1",
