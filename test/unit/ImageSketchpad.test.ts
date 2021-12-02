@@ -121,15 +121,18 @@ describe('Testing ImageSketchpad Class', () => {
     imageSketchpad = new ImageSketchpad(image);
     window.dispatchEvent(new Event('resize'));
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     expect((<jest.Mock>Canvas).mock.results[0]?.value.adjustFromElement.mock.calls).toHaveLength(1);
 
     window.dispatchEvent(new Event('resize'));
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     expect((<jest.Mock>Canvas).mock.results[0]?.value.adjustFromElement.mock.calls).toHaveLength(2);
 
     imageSketchpad.canvas.element.width = 800;
     window.dispatchEvent(new Event('resize'));
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     expect((<jest.Mock>Canvas).mock.results[0]?.value.adjustFromElement.mock.calls).toHaveLength(2);
   });
 
@@ -326,7 +329,7 @@ describe('Testing ImageSketchpad Class', () => {
     imageSketchpad.canvas.element.onpointermove && (await imageSketchpad.canvas.element.onpointermove(pointerMove));
     imageSketchpad.canvas.element.onpointerup && (await imageSketchpad.canvas.element.onpointerup(pointerUp));
 
-    expect(image.dataset['sketchpadJson']).toEqual('');
+    expect(image.dataset['sketchpadJson']).toBe('');
   });
 
   it('Should throw an error if we try loading a bad JSON string', async () => {
