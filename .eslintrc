@@ -5,6 +5,7 @@
         ".eslintrc.js",
         "node_modules",
         "build",
+        "docs",
         "dist",
         "example",
         "media",
