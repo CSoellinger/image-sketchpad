@@ -20,19 +20,19 @@
         // "tsBuildInfoFile": "./",               /* Specify file to store incremental compilation information */
         // "removeComments": true,                /* Do not emit comments to output. */
         // "noEmit": true,                        /* Do not emit outputs. */
-        "importHelpers": true,                 /* Import emit helpers from 'tslib'. */
-        "downlevelIteration": true,            /* Provide full support for iterables in 'for-of', spread, and destructuring when targeting 'ES5' or 'ES3'. */
+        "importHelpers": true, /* Import emit helpers from 'tslib'. */
+        "downlevelIteration": true, /* Provide full support for iterables in 'for-of', spread, and destructuring when targeting 'ES5' or 'ES3'. */
         // "isolatedModules": true,               /* Transpile each file as a separate module (similar to 'ts.transpileModule'). */
         /* Strict Type-Checking Options */
         "strict": true, /* Enable all strict type-checking options. */
         "noImplicitAny": true, /* Raise error on expressions and declarations with an implied 'any' type. */
         "noImplicitOverride": true,
-        "noImplicitThis": true,                /* Raise error on 'this' expressions with an implied 'any' type. */
-        "strictNullChecks": true,              /* Enable strict null checks. */
-        "strictFunctionTypes": true,           /* Enable strict checking of function types. */
-        "strictBindCallApply": true,           /* Enable strict 'bind', 'call', and 'apply' methods on functions. */
-        "strictPropertyInitialization": true,  /* Enable strict checking of property initialization in classes. */
-        "alwaysStrict": true,                  /* Parse in strict mode and emit "use strict" for each source file. */
+        "noImplicitThis": true, /* Raise error on 'this' expressions with an implied 'any' type. */
+        "strictNullChecks": true, /* Enable strict null checks. */
+        "strictFunctionTypes": true, /* Enable strict checking of function types. */
+        "strictBindCallApply": true, /* Enable strict 'bind', 'call', and 'apply' methods on functions. */
+        "strictPropertyInitialization": true, /* Enable strict checking of property initialization in classes. */
+        "alwaysStrict": true, /* Parse in strict mode and emit "use strict" for each source file. */
         /* Additional Checks */
         "noUnusedLocals": true, /* Report errors on unused locals. */
         "noUnusedParameters": true, /* Report errors on unused parameters. */
@@ -48,7 +48,7 @@
         // "paths": {},                           /* A series of entries which re-map imports to lookup locations relative to the 'baseUrl'. */
         "rootDirs": [
             "./src"
-        ],                        /* List of root folders whose combined content represents the structure of the project at runtime. */
+        ], /* List of root folders whose combined content represents the structure of the project at runtime. */
         // "typeRoots": [],                       /* List of folders to include type definitions from. */
         // "types": [],                           /* Type declaration files to be included in compilation. */
         "allowSyntheticDefaultImports": true, /* Allow default imports from modules with no default export. This does not affect code emit, just typechecking. */
@@ -98,6 +98,14 @@
         "externalPattern": [
             "**/node_modules/**"
         ],
+        "excludeTags": [
+            "todo"
+        ],
+        "plugin": [
+            "typedoc-plugin-missing-exports",
+            "typedoc-plugin-rename-defaults"
+        ],
+        "cleanOutputDir": false,
         "excludeExternals": true,
         "excludeInternal": true,
         "excludePrivate": true,
