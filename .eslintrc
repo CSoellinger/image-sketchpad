@@ -18,9 +18,9 @@
     "plugins": [
         "editorconfig",
         "array-func",
-        "promise",
+        // "promise",
         "regexp",
-        "radar",
+        // "radar",
         "jsdoc"
     ],
     "extends": [
@@ -29,9 +29,9 @@
         "plugin:prettier/recommended",
         "plugin:editorconfig/all",
         "plugin:array-func/all",
-        "plugin:promise/recommended",
+        // "plugin:promise/recommended",
         "plugin:regexp/recommended",
-        "plugin:radar/recommended",
+        // "plugin:radar/recommended",
         "plugin:jsdoc/recommended"
     ],
     "rules": {
