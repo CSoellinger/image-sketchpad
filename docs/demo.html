@@ -1,0 +1,144 @@
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Image Sketchpad Example</title>
+    </head>
+
+    <body>
+        <h1>Image-Sketchpad Example</h1>
+
+        <img src="media/fish.png" id="Image" style="max-width: 100%;">
+
+        <div>
+            <button id="Json">JSON</button>
+            <button id="Undo">Undo</button>
+            <button id="Redo">Redo</button>
+            <button id="Clear">Clear</button>
+            <button id="On">On</button>
+            <button id="Off">Off</button>
+            <button id="Download">Download</button>
+            <button id="DownloadOriginal">Download Original Size</button>
+            <input type="color" id="StrokeColor" value="#ff0000">
+            <select id="StrokeWidth">
+                <option value="1">1</option>
+                <option value="3">3</option>
+                <option value="5" selected>5</option>
+                <option value="7">7</option>
+                <option value="9">9</option>
+            </select>
+        </div>
+
+        <div style="padding-top: 25px;">
+            <textarea id="JsonOutput"></textarea>
+        </div>
+
+        <script>
+            function ready(fn) {
+                if (document.readyState != 'loading') {
+                    fn();
+                } else {
+                    document.addEventListener('DOMContentLoaded', fn);
+                }
+            }
+
+            ready(function () {
+                const imageEl = document.getElementById('Image');
+                const sketchPad = ImageSketchpad(imageEl, { lineWidth: 5, lineMaxWidth: 10, lineColor: '#ff0000' });
+
+                sketchPad.canvas.element.addEventListener('click', function (e) {
+                    document.getElementById('JsonOutput').innerHTML = sketchPad.toJson();
+                });
+
+                sketchPad.canvas.element.addEventListener('touchend', function (e) {
+                    document.getElementById('JsonOutput').innerHTML = sketchPad.toJson();
+                });
+
+                document.getElementById('Json').addEventListener('click', function () {
+                    document.getElementById('JsonOutput').innerHTML = sketchPad.toJson();
+                });
+
+                document.getElementById('Undo').addEventListener('click', function () { sketchPad.undo(); document.getElementById('JsonOutput').innerHTML = sketchPad.toJson(); });
+                document.getElementById('Redo').addEventListener('click', function () { sketchPad.redo(); document.getElementById('JsonOutput').innerHTML = sketchPad.toJson(); });
+                document.getElementById('Clear').addEventListener('click', function () { sketchPad.clear(); document.getElementById('JsonOutput').innerHTML = sketchPad.toJson(); });
+                document.getElementById('On').addEventListener('click', function () { sketchPad.enable(); });
+                document.getElementById('Off').addEventListener('click', function () { sketchPad.disable(); });
+                document.getElementById('Download').addEventListener('click', function () { sketchPad.download(false); });
+                document.getElementById('DownloadOriginal').addEventListener('click', function () { sketchPad.download(); });
+                document.getElementById('StrokeColor').addEventListener('input', function (e) { sketchPad.setOptions({ lineColor: e.currentTarget.value }); });
+                document.getElementById('StrokeWidth').addEventListener('change', function (e) { sketchPad.setOptions({ lineWidth: e.currentTarget.value }); });
+
+                // sketchPad.loadJson('{"strokes":[{"points":[{"x":527,"y":236},{"x":527,"y":236},{"x":513,"y":226},{"x":489,"y":211},{"x":467,"y":200},{"x":461,"y":197},{"x":460,"y":197},{"x":457,"y":197},{"x":449,"y":197},{"x":437,"y":197},{"x":420,"y":199},{"x":402,"y":203},{"x":397,"y":205},{"x":392,"y":207},{"x":387,"y":209},{"x":379,"y":213},{"x":368,"y":226},{"x":361,"y":235},{"x":356,"y":242},{"x":353,"y":250},{"x":350,"y":260},{"x":349,"y":271},{"x":348,"y":279},{"x":350,"y":283},{"x":354,"y":286},{"x":365,"y":288},{"x":395,"y":288},{"x":446,"y":288},{"x":497,"y":288},{"x":513,"y":290},{"x":519,"y":291},{"x":522,"y":292},{"x":523,"y":293},{"x":527,"y":295},{"x":530,"y":299},{"x":533,"y":302},{"x":537,"y":307},{"x":538,"y":310},{"x":539,"y":314},{"x":540,"y":321},{"x":540,"y":324},{"x":540,"y":326},{"x":540,"y":326},{"x":540,"y":326},{"x":540,"y":326}],"width":5,"maxWidth":10,"color":"#ff0000","cap":"round","join":"round","miterLimit":10},{"points":[{"x":568,"y":293},{"x":568,"y":293},{"x":568,"y":292},{"x":567,"y":291},{"x":566,"y":290},{"x":565,"y":289},{"x":563,"y":288},{"x":558,"y":284},{"x":554,"y":282},{"x":550,"y":280},{"x":549,"y":279},{"x":549,"y":278},{"x":549,"y":277},{"x":548,"y":276},{"x":548,"y":271},{"x":550,"y":265},{"x":554,"y":261},{"x":562,"y":255},{"x":577,"y":249},{"x":586,"y":245},{"x":589,"y":243},{"x":592,"y":242},{"x":594,"y":239},{"x":595,"y":238},{"x":595,"y":235},{"x":595,"y":230},{"x":589,"y":221},{"x":581,"y":212},{"x":573,"y":206},{"x":567,"y":202},{"x":560,"y":200},{"x":553,"y":197},{"x":544,"y":194},{"x":534,"y":192},{"x":529,"y":191},{"x":525,"y":191},{"x":522,"y":191},{"x":521,"y":191},{"x":520,"y":191},{"x":520,"y":191}],"width":5,"maxWidth":10,"color":"#ff0000","cap":"round","join":"round","miterLimit":10},{"points":[{"x":617,"y":228},{"x":617,"y":228},{"x":617,"y":228},{"x":619,"y":227},{"x":621,"y":227},{"x":627,"y":227},{"x":638,"y":227},{"x":649,"y":228},{"x":660,"y":230},{"x":661,"y":230},{"x":662,"y":231},{"x":663,"y":232},{"x":665,"y":235},{"x":667,"y":237},{"x":671,"y":242},{"x":674,"y":249},{"x":674,"y":252},{"x":674,"y":255},{"x":674,"y":265},{"x":674,"y":273},{"x":674,"y":274},{"x":673,"y":277},{"x":672,"y":279},{"x":670,"y":282},{"x":667,"y":285},{"x":664,"y":287},{"x":661,"y":287},{"x":650,"y":287},{"x":643,"y":286},{"x":640,"y":285},{"x":638,"y":283},{"x":636,"y":283},{"x":635,"y":282},{"x":632,"y":280},{"x":631,"y":279},{"x":631,"y":279}],"width":5,"maxWidth":10,"color":"#ff0000","cap":"round","join":"round","miterLimit":10},{"points":[{"x":402,"y":256},{"x":402,"y":256}],"width":5,"maxWidth":10,"color":"#ff0000","cap":"round","join":"round","miterLimit":10},{"points":[{"x":446,"y":259},{"x":446,"y":259}],"width":5,"maxWidth":10,"color":"#ff0000","cap":"round","join":"round","miterLimit":10},{"points":[{"x":496,"y":260},{"x":496,"y":260}],"width":5,"maxWidth":10,"color":"#ff0000","cap":"round","join":"round","miterLimit":10}],"options":{"lineWidth":5,"lineMaxWidth":10,"lineColor":"#ff0000","lineCap":"round","lineJoin":"round","lineMiterLimit":10},"imageRatio":1}');
+            });
+        </script>
+
+        <hr>
+
+        <h1>Image-Sketchpad Second Example</h1>
+
+        <img src="media/landscape.jpg" id="SecondImage" style="max-width: 100%;">
+
+        <div>
+            <button id="SecondJson">JSON</button>
+            <button id="SecondUndo">Undo</button>
+            <button id="SecondRedo">Redo</button>
+            <button id="SecondClear">Clear</button>
+            <button id="SecondOn">On</button>
+            <button id="SecondOff">Off</button>
+            <button id="SecondDownload">Download</button>
+            <button id="SecondDownloadOriginal">Download Original Size</button>
+            <input type="color" id="SecondStrokeColor" value="#ff0000">
+            <select id="SecondStrokeWidth">
+                <option value="1">1</option>
+                <option value="3">3</option>
+                <option value="5" selected>5</option>
+                <option value="7">7</option>
+                <option value="9">9</option>
+            </select>
+        </div>
+
+        <div style="padding-top: 25px;">
+            <textarea id="SecondJsonOutput"></textarea>
+        </div>
+
+        <script>
+            function ready(fn) {
+                if (document.readyState != 'loading') {
+                    fn();
+                } else {
+                    document.addEventListener('DOMContentLoaded', fn);
+                }
+            }
+
+            ready(function () {
+                const secondImageEl = document.getElementById('SecondImage');
+                const secondSketchPad = ImageSketchpad(secondImageEl, { lineWidth: 5, lineMaxWidth: 10, lineColor: '#ff0000' });
+
+                secondSketchPad.canvas.element.addEventListener('click', function (e) {
+                    document.getElementById('SecondJsonOutput').innerHTML = secondSketchPad.toJson();
+                });
+
+                secondSketchPad.canvas.element.addEventListener('touchend', function (e) {
+                    document.getElementById('SecondJsonOutput').innerHTML = secondSketchPad.toJson();
+                });
+
+                document.getElementById('SecondJson').addEventListener('click', function () {
+                    document.getElementById('SecondJsonOutput').innerHTML = secondSketchPad.toJson();
+                });
+
+                document.getElementById('SecondUndo').addEventListener('click', function () { secondSketchPad.undo(); document.getElementById('JsonOutput').innerHTML = secondSketchPad.toJson(); });
+                document.getElementById('SecondRedo').addEventListener('click', function () { secondSketchPad.redo(); document.getElementById('JsonOutput').innerHTML = secondSketchPad.toJson(); });
+                document.getElementById('SecondClear').addEventListener('click', function () { secondSketchPad.clear(); document.getElementById('JsonOutput').innerHTML = secondSketchPad.toJson(); });
+                document.getElementById('SecondOn').addEventListener('click', function () { secondSketchPad.enable(); });
+                document.getElementById('SecondOff').addEventListener('click', function () { secondSketchPad.disable(); });
+                document.getElementById('SecondDownload').addEventListener('click', function () { secondSketchPad.download(false); });
+                document.getElementById('SecondDownloadOriginal').addEventListener('click', function () { secondSketchPad.download(); });
+                document.getElementById('SecondStrokeColor').addEventListener('input', function (e) { secondSketchPad.setOptions({ lineColor: e.currentTarget.value }); });
+                document.getElementById('SecondStrokeWidth').addEventListener('change', function (e) { secondSketchPad.setOptions({ lineWidth: e.currentTarget.value }); });
+
+                // sketchPad.loadJson('{"strokes":[{"points":[{"x":527,"y":236},{"x":527,"y":236},{"x":513,"y":226},{"x":489,"y":211},{"x":467,"y":200},{"x":461,"y":197},{"x":460,"y":197},{"x":457,"y":197},{"x":449,"y":197},{"x":437,"y":197},{"x":420,"y":199},{"x":402,"y":203},{"x":397,"y":205},{"x":392,"y":207},{"x":387,"y":209},{"x":379,"y":213},{"x":368,"y":226},{"x":361,"y":235},{"x":356,"y":242},{"x":353,"y":250},{"x":350,"y":260},{"x":349,"y":271},{"x":348,"y":279},{"x":350,"y":283},{"x":354,"y":286},{"x":365,"y":288},{"x":395,"y":288},{"x":446,"y":288},{"x":497,"y":288},{"x":513,"y":290},{"x":519,"y":291},{"x":522,"y":292},{"x":523,"y":293},{"x":527,"y":295},{"x":530,"y":299},{"x":533,"y":302},{"x":537,"y":307},{"x":538,"y":310},{"x":539,"y":314},{"x":540,"y":321},{"x":540,"y":324},{"x":540,"y":326},{"x":540,"y":326},{"x":540,"y":326},{"x":540,"y":326}],"width":5,"maxWidth":10,"color":"#ff0000","cap":"round","join":"round","miterLimit":10},{"points":[{"x":568,"y":293},{"x":568,"y":293},{"x":568,"y":292},{"x":567,"y":291},{"x":566,"y":290},{"x":565,"y":289},{"x":563,"y":288},{"x":558,"y":284},{"x":554,"y":282},{"x":550,"y":280},{"x":549,"y":279},{"x":549,"y":278},{"x":549,"y":277},{"x":548,"y":276},{"x":548,"y":271},{"x":550,"y":265},{"x":554,"y":261},{"x":562,"y":255},{"x":577,"y":249},{"x":586,"y":245},{"x":589,"y":243},{"x":592,"y":242},{"x":594,"y":239},{"x":595,"y":238},{"x":595,"y":235},{"x":595,"y":230},{"x":589,"y":221},{"x":581,"y":212},{"x":573,"y":206},{"x":567,"y":202},{"x":560,"y":200},{"x":553,"y":197},{"x":544,"y":194},{"x":534,"y":192},{"x":529,"y":191},{"x":525,"y":191},{"x":522,"y":191},{"x":521,"y":191},{"x":520,"y":191},{"x":520,"y":191}],"width":5,"maxWidth":10,"color":"#ff0000","cap":"round","join":"round","miterLimit":10},{"points":[{"x":617,"y":228},{"x":617,"y":228},{"x":617,"y":228},{"x":619,"y":227},{"x":621,"y":227},{"x":627,"y":227},{"x":638,"y":227},{"x":649,"y":228},{"x":660,"y":230},{"x":661,"y":230},{"x":662,"y":231},{"x":663,"y":232},{"x":665,"y":235},{"x":667,"y":237},{"x":671,"y":242},{"x":674,"y":249},{"x":674,"y":252},{"x":674,"y":255},{"x":674,"y":265},{"x":674,"y":273},{"x":674,"y":274},{"x":673,"y":277},{"x":672,"y":279},{"x":670,"y":282},{"x":667,"y":285},{"x":664,"y":287},{"x":661,"y":287},{"x":650,"y":287},{"x":643,"y":286},{"x":640,"y":285},{"x":638,"y":283},{"x":636,"y":283},{"x":635,"y":282},{"x":632,"y":280},{"x":631,"y":279},{"x":631,"y":279}],"width":5,"maxWidth":10,"color":"#ff0000","cap":"round","join":"round","miterLimit":10},{"points":[{"x":402,"y":256},{"x":402,"y":256}],"width":5,"maxWidth":10,"color":"#ff0000","cap":"round","join":"round","miterLimit":10},{"points":[{"x":446,"y":259},{"x":446,"y":259}],"width":5,"maxWidth":10,"color":"#ff0000","cap":"round","join":"round","miterLimit":10},{"points":[{"x":496,"y":260},{"x":496,"y":260}],"width":5,"maxWidth":10,"color":"#ff0000","cap":"round","join":"round","miterLimit":10}],"options":{"lineWidth":5,"lineMaxWidth":10,"lineColor":"#ff0000","lineCap":"round","lineJoin":"round","lineMiterLimit":10},"imageRatio":1}');
+            });
+        </script>
+    <script src="assets/image-sketchpad.min.js"></script></body>
+
+</html>
