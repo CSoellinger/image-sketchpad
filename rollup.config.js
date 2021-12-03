@@ -72,7 +72,7 @@ const config = {
           },
         }),
         html({
-          fileName: 'demo.html',
+          fileName: 'index.html',
           template: ({ files }) => {
             let html = fs.readFileSync(path.resolve('example', 'index.html')).toString();
 
