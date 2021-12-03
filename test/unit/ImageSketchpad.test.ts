@@ -237,7 +237,6 @@ describe('Testing ImageSketchpad Class', () => {
 
     defaultObj.strokes = [];
 
-    // eslint-disable-next-line radar/no-identical-functions
     const jsonString = await imageSketchpad.toJsonAsync();
 
     expect(jsonString).toMatchSnapshot();
@@ -249,7 +248,6 @@ describe('Testing ImageSketchpad Class', () => {
     image.dataset['sketchpadJson'] = JSON.stringify(defaultObj);
     imageSketchpad = new ImageSketchpad(image);
 
-    // eslint-disable-next-line radar/no-identical-functions
     const jsonString = await imageSketchpad.toJsonAsync();
 
     expect(jsonString).toMatchSnapshot();
@@ -271,7 +269,6 @@ describe('Testing ImageSketchpad Class', () => {
 
     imageSketchpad = new ImageSketchpad(image);
 
-    // eslint-disable-next-line radar/no-identical-functions
     const imageB64 = await imageSketchpad.download();
 
     expect(imageB64).toBe(base64String);
@@ -284,7 +281,6 @@ describe('Testing ImageSketchpad Class', () => {
 
     imageSketchpad = new ImageSketchpad(image);
 
-    // eslint-disable-next-line radar/no-identical-functions
     const imageB64 = await imageSketchpad.download();
 
     expect(imageB64).toBe(base64String);

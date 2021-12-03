@@ -1,12 +1,11 @@
-// import { default as copyCanvas } from 'copy-canvas';
-import drawToCanvas from 'draw-to-canvas';
 import download from 'downloadjs';
+import drawToCanvas from 'draw-to-canvas';
 import mergeImages from 'merge-images';
-import { default as Pica, Pica as PicaClass } from 'pica';
-import { Canvas } from '../Canvas';
-import { DefaultOptions } from './Options';
+import Pica from 'pica';
 import type { Point, Stroke } from '../Canvas';
+import { Canvas } from '../Canvas';
 import type { Options, UserOptions } from './Options';
+import { DefaultOptions } from './Options';
 
 /**
  * Image sketchpad main class. It handles creation of canvas element, drawing on
@@ -21,7 +20,7 @@ export class ImageSketchpad {
   /**
    * Pica for image resizing. Used for saving in browser resized images.
    */
-  private readonly pica: PicaClass = new Pica({ features: ['js', 'wasm'] });
+  private readonly pica: Pica.Pica = new Pica({ features: ['js', 'wasm'] });
 
   /**
    * Image element where we draw on it.
