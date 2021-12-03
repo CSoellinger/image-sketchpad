@@ -843,92 +843,6 @@ try {
 
 var regenerator = runtime.exports;
 
-var drawToCanvas$1 = {exports: {}};
-
-var forceCanvasContext = {exports: {}};
-
-var isCanvasContext = {exports: {}};
-
-(function (module, exports) {
-
-Object.defineProperty(exports, '__esModule', {
-  value: true
-});
-exports['default'] = isContext;
-
-function isContext(ctx) {
-
-  function getFunctionName(obj) {
-    return obj.toString().split(' ')[1].replace(/[^a-z0-9_$]/ig, '');
-  }
-
-  var name = getFunctionName(ctx.constructor);
-
-  return ['CanvasRenderingContext2D', 'WebGLRenderingContext', 'CanvasRenderingContext2DConstructor', 'WebGLRenderingContextConstructor'].indexOf(name) > -1;
-}
-
-module.exports = exports['default'];
-}(isCanvasContext, isCanvasContext.exports));
-
-(function (module, exports) {
-
-Object.defineProperty(exports, '__esModule', {
-  value: true
-});
-exports['default'] = forceCanvasContext;
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _isCanvasContext = isCanvasContext.exports;
-
-var _isCanvasContext2 = _interopRequireDefault(_isCanvasContext);
-
-function forceCanvasContext(ctx) {
-  var type = arguments.length <= 1 || arguments[1] === undefined ? '2d' : arguments[1];
-
-  // convert canvas to ctx
-  if (ctx.tagName === 'CANVAS') {
-    ctx = ctx.getContext(type);
-  }
-
-  // error if not ctx
-  if (!(0, _isCanvasContext2['default'])(ctx)) throw Error('Could not force context');
-
-  return ctx;
-}
-
-module.exports = exports['default'];
-}(forceCanvasContext, forceCanvasContext.exports));
-
-(function (module, exports) {
-
-Object.defineProperty(exports, '__esModule', {
-  value: true
-});
-exports['default'] = drawToCanvas;
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } }
-
-var _forceCanvasContext = forceCanvasContext.exports;
-
-var _forceCanvasContext2 = _interopRequireDefault(_forceCanvasContext);
-
-function drawToCanvas(source, dest) {
-  var _forceContext;
-
-  var pos = arguments.length <= 2 || arguments[2] === undefined ? [0, 0] : arguments[2];
-
-  (_forceContext = (0, _forceCanvasContext2['default'])(dest)).drawImage.apply(_forceContext, [source].concat(_toConsumableArray(pos)));
-  return dest;
-}
-
-module.exports = exports['default'];
-}(drawToCanvas$1, drawToCanvas$1.exports));
-
-var drawToCanvas = /*@__PURE__*/getDefaultExportFromCjs(drawToCanvas$1.exports);
-
 var download = {exports: {}};
 
 (function (module, exports) {
@@ -1096,6 +1010,92 @@ var download = {exports: {}};
 }(download));
 
 var _download = download.exports;
+
+var drawToCanvas$1 = {exports: {}};
+
+var forceCanvasContext = {exports: {}};
+
+var isCanvasContext = {exports: {}};
+
+(function (module, exports) {
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+exports['default'] = isContext;
+
+function isContext(ctx) {
+
+  function getFunctionName(obj) {
+    return obj.toString().split(' ')[1].replace(/[^a-z0-9_$]/ig, '');
+  }
+
+  var name = getFunctionName(ctx.constructor);
+
+  return ['CanvasRenderingContext2D', 'WebGLRenderingContext', 'CanvasRenderingContext2DConstructor', 'WebGLRenderingContextConstructor'].indexOf(name) > -1;
+}
+
+module.exports = exports['default'];
+}(isCanvasContext, isCanvasContext.exports));
+
+(function (module, exports) {
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+exports['default'] = forceCanvasContext;
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _isCanvasContext = isCanvasContext.exports;
+
+var _isCanvasContext2 = _interopRequireDefault(_isCanvasContext);
+
+function forceCanvasContext(ctx) {
+  var type = arguments.length <= 1 || arguments[1] === undefined ? '2d' : arguments[1];
+
+  // convert canvas to ctx
+  if (ctx.tagName === 'CANVAS') {
+    ctx = ctx.getContext(type);
+  }
+
+  // error if not ctx
+  if (!(0, _isCanvasContext2['default'])(ctx)) throw Error('Could not force context');
+
+  return ctx;
+}
+
+module.exports = exports['default'];
+}(forceCanvasContext, forceCanvasContext.exports));
+
+(function (module, exports) {
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+exports['default'] = drawToCanvas;
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } }
+
+var _forceCanvasContext = forceCanvasContext.exports;
+
+var _forceCanvasContext2 = _interopRequireDefault(_forceCanvasContext);
+
+function drawToCanvas(source, dest) {
+  var _forceContext;
+
+  var pos = arguments.length <= 2 || arguments[2] === undefined ? [0, 0] : arguments[2];
+
+  (_forceContext = (0, _forceCanvasContext2['default'])(dest)).drawImage.apply(_forceContext, [source].concat(_toConsumableArray(pos)));
+  return dest;
+}
+
+module.exports = exports['default'];
+}(drawToCanvas$1, drawToCanvas$1.exports));
+
+var drawToCanvas = /*@__PURE__*/getDefaultExportFromCjs(drawToCanvas$1.exports);
 
 // Defaults
 var defaultOptions = {
@@ -3717,11 +3717,11 @@ function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol 
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
 /**
  * Image sketchpad main class. It handles creation of canvas element, drawing on
  * it, and merge it with the image and handle the data as json out- or input.
  */
+
 var ImageSketchpad = /*#__PURE__*/function () {
   /**
    * Canvas helper class

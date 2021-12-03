@@ -1,8 +1,7 @@
-// import { default as copyCanvas } from 'copy-canvas';
-import drawToCanvas from 'draw-to-canvas';
 import download from 'downloadjs';
+import drawToCanvas from 'draw-to-canvas';
 import mergeImages from 'merge-images';
-import { default as Pica } from 'pica';
+import Pica from 'pica';
 import { Canvas } from '../Canvas';
 import { DefaultOptions } from './Options';
 /**
