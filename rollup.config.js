@@ -3,10 +3,10 @@ import resolve from '@rollup/plugin-node-resolve';
 import babel from '@rollup/plugin-babel';
 import strip from '@rollup/plugin-strip';
 import replace from '@rollup/plugin-replace';
-import html2 from 'rollup-plugin-html2';
+import html from '@rollup/plugin-html';
+import { terser } from 'rollup-plugin-terser';
 import fs from 'fs';
 import path from 'path';
-// import { terser } from 'rollup-plugin-terser';
 import pkg from './package.json';
 
 /**
@@ -59,10 +59,33 @@ const config = {
       file: pkg.browser,
       format: 'umd',
       name,
+    },
+    // Output one browser minified package
+    {
+      file: pkg.browser.replace('.js', '.min.js'),
+      format: 'umd',
+      name,
       plugins: [
-        html2({
-          fileName: 'index.html',
-          template: fs.readFileSync(path.resolve('example', 'index.html')).toString(),
+        terser({
+          mangle: {
+            reserved: ['ImageSketchpad'],
+          },
+        }),
+        html({
+          fileName: 'demo.html',
+          template: ({ files }) => {
+            let html = fs.readFileSync(path.resolve('example', 'index.html')).toString();
+
+            for (let jsFile of files.js) {
+              if (!jsFile.isEntry) {
+                continue;
+              }
+
+              html = html.replace('</body>', `<script src="${jsFile.fileName}"></script></body>`);
+            }
+
+            return html;
+          },
         }),
       ],
     },
