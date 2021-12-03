@@ -53,7 +53,7 @@
         "build:docs": "concurrently --kill-others-on-fail 'npm:build:docs:html' 'npm:build:docs:md'",
         "build:docs:html": "typedoc && npm run build:docs:copy-demo",
         "build:docs:md": "typedoc --entryDocument 'index.md' --namedAnchors --entryPoints 'src/ImageSketchpad' --entryPoints 'src/Canvas' --plugin typedoc-plugin-rename-defaults --plugin typedoc-plugin-markdown",
-        "build:docs:copy-demo": "concurrently --kill-others-on-fail 'cpy ./dist/demo.html ./docs/.' 'cpy ./dist/image-sketchpad.min.js ./docs/assets/.'",
+        "build:docs:copy-demo": "concurrently --kill-others-on-fail 'cpy ./dist/index.html ./docs/. --rename=demo.html' 'cpy ./dist/image-sketchpad.min.js ./docs/assets/.'",
         "build:esnext": "tsc",
         "build:js": "rollup -c",
         "build:types": "tsc --emitDeclarationOnly",
