@@ -93,7 +93,9 @@
     },
     "typedocOptions": {
         "entryPoints": [
-            "src"
+            "src",
+            "src/Canvas",
+            "src/ImageSketchpad"
         ],
         "externalPattern": [
             "**/node_modules/**"
