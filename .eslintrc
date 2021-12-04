@@ -35,7 +35,16 @@
         "plugin:jsdoc/recommended"
     ],
     "rules": {
-        "jsdoc/tag-lines": "off"
+        "jsdoc/tag-lines": "off",
+        "jsdoc/check-tag-names": [
+            "warn",
+            {
+                "definedTags": [
+                    "defaultValue",
+                    "internal"
+                ]
+            }
+        ]
     },
     "settings": {
         "jsdoc": {
