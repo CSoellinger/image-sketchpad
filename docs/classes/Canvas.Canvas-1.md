@@ -1,4 +1,4 @@
-[image-sketchpad - v1.0.3](../index.md) / [Modules](../modules.md) / [Canvas](../modules/Canvas.md) / Canvas
+[image-sketchpad - v1.0.4](../index.md) / [Modules](../modules.md) / [Canvas](../modules/Canvas.md) / Canvas
 
 # Class: Canvas
 
@@ -101,7 +101,7 @@ ___
 
 ▸ **clear**(): [`Canvas`](Canvas.Canvas-1.md)
 
-Clear the canvas area
+Clear the canvas area.
 
 #### Returns
 

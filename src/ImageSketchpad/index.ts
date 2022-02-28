@@ -13,7 +13,7 @@ import { DefaultOptions } from './Options';
  */
 export class ImageSketchpad {
   /**
-   * Canvas helper class
+   * Canvas helper class.
    */
   readonly canvas: Canvas = new Canvas();
 
@@ -28,27 +28,27 @@ export class ImageSketchpad {
   private readonly image: HTMLImageElement;
 
   /**
-   * Sketchpad settings, initialized with default options
+   * Sketchpad settings, initialized with default options.
    */
   private options: Options = DefaultOptions;
 
   /**
-   * Array of strokes which represents your sketch
+   * Array of strokes which represents your sketch.
    */
   private strokes: Stroke[] = [];
 
   /**
-   * Helper variable for "redo" method
+   * Helper variable for "redo" method.
    */
   private undoneStrokes: Stroke[] = [];
 
   /**
-   * Helper variable if user started drawing a line
+   * Helper variable if user started drawing a line.
    */
   private sketching = false;
 
   /**
-   * Helper variable to get the save the active stroke during sketching is true
+   * Helper variable to get the save the active stroke during sketching is true.
    */
   private activeStroke: Stroke[] | undefined[] = [];
 
@@ -62,6 +62,7 @@ export class ImageSketchpad {
    *
    * @param image   - Image html element.
    * @param options - Sketchpad options as javascript object.
+   *
    * @example
    *
    * Run image sketchpad
@@ -70,7 +71,7 @@ export class ImageSketchpad {
    *
    * ```
    * const imageEl = document.getElementById('Image');
-   * const sketchPad = new ImageSketchpad(imageEl, { lineWidth: 5, lineMaxWidth: 10, lineColor: '#ff0000' });
+   * const sketchPad = ImageSketchpad(imageEl, { lineWidth: 5, lineMaxWidth: 10, lineColor: '#ff0000' });
    * ```
    *
    */
@@ -129,7 +130,7 @@ export class ImageSketchpad {
   }
 
   /**
-   * Enables image sketchpad
+   * Enables image sketchpad.
    */
   enable(): ImageSketchpad {
     this.options.enabled = true;
@@ -138,7 +139,7 @@ export class ImageSketchpad {
   }
 
   /**
-   * Disables image sketchpad
+   * Disables image sketchpad.
    */
   disable(): ImageSketchpad {
     this.options.enabled = false;
@@ -147,7 +148,7 @@ export class ImageSketchpad {
   }
 
   /**
-   * Get a json string which can be used to load a sketch again
+   * Get a json string which can be used to load a sketch again.
    */
   toJson(): string {
     return JSON.stringify(
@@ -194,7 +195,7 @@ export class ImageSketchpad {
   }
 
   /**
-   * Clears the image sketchpad
+   * Clears the image sketchpad.
    */
   clear(): ImageSketchpad {
     this.strokes = [];
@@ -204,7 +205,7 @@ export class ImageSketchpad {
   }
 
   /**
-   * UnDo the last drawing on your sketch
+   * UnDo the last drawing on your sketch.
    */
   undo(): ImageSketchpad {
     if (this.strokes.length === 0) {
@@ -220,7 +221,7 @@ export class ImageSketchpad {
   }
 
   /**
-   * ReDo the last UnDone drawing on your sketch
+   * ReDo the last UnDone drawing on your sketch.
    */
   redo(): ImageSketchpad {
     if (this.undoneStrokes.length === 0) {
@@ -237,8 +238,6 @@ export class ImageSketchpad {
 
   /**
    * Merges image with sketch and returns a base64 string as promise.
-   *
-   * @todo Find a better way to merge sketch with original sized image.
    *
    * @param originalSize - Download image with original size.
    */
@@ -283,9 +282,9 @@ export class ImageSketchpad {
   }
 
   /**
-   * Download merged image with sketch as png file
+   * Download merged image with sketch as png file.
    *
-   * @param originalSize - Download image with original size
+   * @param originalSize - Download image with original size.
    */
   async download(originalSize = true): Promise<string> {
     let fileName = this.image.src;
@@ -316,7 +315,7 @@ export class ImageSketchpad {
   }
 
   /**
-   * Register event listener for responsive adjustments and drawings
+   * Register event listener for responsive adjustments and drawings.
    */
   private async listen(): Promise<ImageSketchpad> {
     // If the image is not completely loaded we will add an event listener to
@@ -416,14 +415,14 @@ export class ImageSketchpad {
   }
 
   /**
-   * Get the image ratio
+   * Get the image ratio.
    */
   private getImageRatio(): number {
     return this.image.naturalWidth / this.image.width;
   }
 
   /**
-   * Get a {@link Point | Point} from the cursor(mouse) or finger(touch)
+   * Get a {@link Point | Point} from the cursor(mouse) or finger(touch).
    *
    * @param event - {@link PointerEvent | Pointer event} triggered from pointerdown, pointermove or pointerup.
    */
@@ -437,9 +436,9 @@ export class ImageSketchpad {
   }
 
   /**
-   * Create stroke from an array of {@link Point | Points}
+   * Create stroke from an array of {@link Point | Points}.
    *
-   * @param points - Array of {@link Point | Points}
+   * @param points - Array of {@link Point | Points}.
    */
   private createStroke(points: Point[]): Stroke {
     return <Stroke>{
@@ -454,7 +453,7 @@ export class ImageSketchpad {
   }
 
   /**
-   * Push {@link Point | Point} to {@link Stroke | Stroke}
+   * Push {@link Point | Point} to {@link Stroke | Stroke}.
    *
    * @param point  - {@link Point | Point} to push.
    * @param stroke - {@link Stroke | Stroke} to push into.
@@ -468,10 +467,10 @@ export class ImageSketchpad {
 
   /**
    * Redraw the sketch on the canvas. Mean it clears first and draw all
-   * strokes again
+   * strokes again.
    *
    * @param imageRatio - Redraw with a specified image ratio (for example if
-   *                     you want draw the canvas in original size)
+   *                     you want draw the canvas in original size).
    */
   private redraw(imageRatio?: number): ImageSketchpad {
     imageRatio = imageRatio ?? this.getImageRatio();

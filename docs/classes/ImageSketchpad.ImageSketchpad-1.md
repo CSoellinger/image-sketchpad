@@ -1,4 +1,4 @@
-[image-sketchpad - v1.0.3](../index.md) / [Modules](../modules.md) / [ImageSketchpad](../modules/ImageSketchpad.md) / ImageSketchpad
+[image-sketchpad - v1.0.4](../index.md) / [Modules](../modules.md) / [ImageSketchpad](../modules/ImageSketchpad.md) / ImageSketchpad
 
 # Class: ImageSketchpad
 
@@ -48,7 +48,7 @@ Run image sketchpad
 
 ```
 const imageEl = document.getElementById('Image');
-const sketchPad = new ImageSketchpad(imageEl, { lineWidth: 5, lineMaxWidth: 10, lineColor: '#ff0000' });
+const sketchPad = ImageSketchpad(imageEl, { lineWidth: 5, lineMaxWidth: 10, lineColor: '#ff0000' });
 ```
 
 #### Parameters
@@ -60,7 +60,7 @@ const sketchPad = new ImageSketchpad(imageEl, { lineWidth: 5, lineMaxWidth: 10, 
 
 #### Defined in
 
-[ImageSketchpad/index.ts:77](https://github.com/CSoellinger/image-sketchpad/blob/main/src/ImageSketchpad/index.ts#L77)
+[ImageSketchpad/index.ts:78](https://github.com/CSoellinger/image-sketchpad/blob/main/src/ImageSketchpad/index.ts#L78)
 
 ## Properties
 
@@ -68,7 +68,7 @@ const sketchPad = new ImageSketchpad(imageEl, { lineWidth: 5, lineMaxWidth: 10, 
 
 • `Readonly` **canvas**: [`Canvas`](Canvas.Canvas-1.md)
 
-Canvas helper class
+Canvas helper class.
 
 #### Defined in
 
@@ -80,7 +80,7 @@ Canvas helper class
 
 ▸ **clear**(): [`ImageSketchpad`](ImageSketchpad.ImageSketchpad-1.md)
 
-Clears the image sketchpad
+Clears the image sketchpad.
 
 #### Returns
 
@@ -88,7 +88,7 @@ Clears the image sketchpad
 
 #### Defined in
 
-[ImageSketchpad/index.ts:199](https://github.com/CSoellinger/image-sketchpad/blob/main/src/ImageSketchpad/index.ts#L199)
+[ImageSketchpad/index.ts:200](https://github.com/CSoellinger/image-sketchpad/blob/main/src/ImageSketchpad/index.ts#L200)
 
 ___
 
@@ -104,7 +104,7 @@ Destroy the instance and remove the canvas.
 
 #### Defined in
 
-[ImageSketchpad/index.ts:309](https://github.com/CSoellinger/image-sketchpad/blob/main/src/ImageSketchpad/index.ts#L309)
+[ImageSketchpad/index.ts:308](https://github.com/CSoellinger/image-sketchpad/blob/main/src/ImageSketchpad/index.ts#L308)
 
 ___
 
@@ -112,7 +112,7 @@ ___
 
 ▸ **disable**(): [`ImageSketchpad`](ImageSketchpad.ImageSketchpad-1.md)
 
-Disables image sketchpad
+Disables image sketchpad.
 
 #### Returns
 
@@ -120,7 +120,7 @@ Disables image sketchpad
 
 #### Defined in
 
-[ImageSketchpad/index.ts:143](https://github.com/CSoellinger/image-sketchpad/blob/main/src/ImageSketchpad/index.ts#L143)
+[ImageSketchpad/index.ts:144](https://github.com/CSoellinger/image-sketchpad/blob/main/src/ImageSketchpad/index.ts#L144)
 
 ___
 
@@ -128,13 +128,13 @@ ___
 
 ▸ **download**(`originalSize?`): `Promise`<`string`\>
 
-Download merged image with sketch as png file
+Download merged image with sketch as png file.
 
 #### Parameters
 
 | Name | Type | Default value | Description |
 | :------ | :------ | :------ | :------ |
-| `originalSize` | `boolean` | `true` | Download image with original size |
+| `originalSize` | `boolean` | `true` | Download image with original size. |
 
 #### Returns
 
@@ -142,7 +142,7 @@ Download merged image with sketch as png file
 
 #### Defined in
 
-[ImageSketchpad/index.ts:290](https://github.com/CSoellinger/image-sketchpad/blob/main/src/ImageSketchpad/index.ts#L290)
+[ImageSketchpad/index.ts:289](https://github.com/CSoellinger/image-sketchpad/blob/main/src/ImageSketchpad/index.ts#L289)
 
 ___
 
@@ -150,7 +150,7 @@ ___
 
 ▸ **enable**(): [`ImageSketchpad`](ImageSketchpad.ImageSketchpad-1.md)
 
-Enables image sketchpad
+Enables image sketchpad.
 
 #### Returns
 
@@ -158,7 +158,7 @@ Enables image sketchpad
 
 #### Defined in
 
-[ImageSketchpad/index.ts:134](https://github.com/CSoellinger/image-sketchpad/blob/main/src/ImageSketchpad/index.ts#L134)
+[ImageSketchpad/index.ts:135](https://github.com/CSoellinger/image-sketchpad/blob/main/src/ImageSketchpad/index.ts#L135)
 
 ___
 
@@ -180,7 +180,7 @@ Load a sketch from a json string.
 
 #### Defined in
 
-[ImageSketchpad/index.ts:173](https://github.com/CSoellinger/image-sketchpad/blob/main/src/ImageSketchpad/index.ts#L173)
+[ImageSketchpad/index.ts:174](https://github.com/CSoellinger/image-sketchpad/blob/main/src/ImageSketchpad/index.ts#L174)
 
 ___
 
@@ -202,7 +202,7 @@ Merges image with sketch and returns a base64 string as promise.
 
 #### Defined in
 
-[ImageSketchpad/index.ts:245](https://github.com/CSoellinger/image-sketchpad/blob/main/src/ImageSketchpad/index.ts#L245)
+[ImageSketchpad/index.ts:244](https://github.com/CSoellinger/image-sketchpad/blob/main/src/ImageSketchpad/index.ts#L244)
 
 ___
 
@@ -210,7 +210,7 @@ ___
 
 ▸ **redo**(): [`ImageSketchpad`](ImageSketchpad.ImageSketchpad-1.md)
 
-ReDo the last UnDone drawing on your sketch
+ReDo the last UnDone drawing on your sketch.
 
 #### Returns
 
@@ -218,7 +218,7 @@ ReDo the last UnDone drawing on your sketch
 
 #### Defined in
 
-[ImageSketchpad/index.ts:225](https://github.com/CSoellinger/image-sketchpad/blob/main/src/ImageSketchpad/index.ts#L225)
+[ImageSketchpad/index.ts:226](https://github.com/CSoellinger/image-sketchpad/blob/main/src/ImageSketchpad/index.ts#L226)
 
 ___
 
@@ -240,7 +240,7 @@ Set sketchpad options.
 
 #### Defined in
 
-[ImageSketchpad/index.ts:125](https://github.com/CSoellinger/image-sketchpad/blob/main/src/ImageSketchpad/index.ts#L125)
+[ImageSketchpad/index.ts:126](https://github.com/CSoellinger/image-sketchpad/blob/main/src/ImageSketchpad/index.ts#L126)
 
 ___
 
@@ -248,7 +248,7 @@ ___
 
 ▸ **toJson**(): `string`
 
-Get a json string which can be used to load a sketch again
+Get a json string which can be used to load a sketch again.
 
 #### Returns
 
@@ -256,7 +256,7 @@ Get a json string which can be used to load a sketch again
 
 #### Defined in
 
-[ImageSketchpad/index.ts:152](https://github.com/CSoellinger/image-sketchpad/blob/main/src/ImageSketchpad/index.ts#L152)
+[ImageSketchpad/index.ts:153](https://github.com/CSoellinger/image-sketchpad/blob/main/src/ImageSketchpad/index.ts#L153)
 
 ___
 
@@ -270,7 +270,7 @@ ___
 
 #### Defined in
 
-[ImageSketchpad/index.ts:164](https://github.com/CSoellinger/image-sketchpad/blob/main/src/ImageSketchpad/index.ts#L164)
+[ImageSketchpad/index.ts:165](https://github.com/CSoellinger/image-sketchpad/blob/main/src/ImageSketchpad/index.ts#L165)
 
 ___
 
@@ -278,7 +278,7 @@ ___
 
 ▸ **undo**(): [`ImageSketchpad`](ImageSketchpad.ImageSketchpad-1.md)
 
-UnDo the last drawing on your sketch
+UnDo the last drawing on your sketch.
 
 #### Returns
 
@@ -286,4 +286,4 @@ UnDo the last drawing on your sketch
 
 #### Defined in
 
-[ImageSketchpad/index.ts:209](https://github.com/CSoellinger/image-sketchpad/blob/main/src/ImageSketchpad/index.ts#L209)
+[ImageSketchpad/index.ts:210](https://github.com/CSoellinger/image-sketchpad/blob/main/src/ImageSketchpad/index.ts#L210)

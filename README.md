@@ -8,7 +8,7 @@ Draw on any image inside your desktop or mobile browser.
 - Get sketches as JSON data
   - Load the sketches by the JSON
   - Load by method or `data-sketchpad-json` attribute
-- Set [options](./docs/modules/ImageSketchpad.md#Options) like line width or color
+- Set [options](https://github.com/CSoellinger/image-sketchpad/blob/main/docs/modules/ImageSketchpad.md#Options) like line width or color
 - Responsive: draw on the image and resize the browser. If the image resizes your sketch will do too. Also JSON data considered the image ratio so you can draw on a tiny image version (css resized!) and load the JSON data on a bigger version of the image.
 
 ---
@@ -70,13 +70,11 @@ That's it!
 ## Documentation
 
 - [HTML Version](https://csoellinger.github.io/image-sketchpad/)
-- [Markdown Version](./docs/modules.md)
+- [Markdown Version](https://github.com/CSoellinger/image-sketchpad/blob/main/docs/modules.md)
 
 ### Sketchpad Options
 
-[Available Options](./docs/modules/ImageSketchpad.md#Options)
-
-[Default Options](https://github.com/CSoellinger/image-sketchpad/blob/main/src/ImageSketchpad/Options.ts#L51)
+[Available Options](https://github.com/CSoellinger/image-sketchpad/modules/ImageSketchpad#Options)
 
 ### Sketchpad Methods after init
 
@@ -87,4 +85,3 @@ That's it!
 - Test with some kind like electron
 - Write e2e tests
 - Do not force PNG as image output format
-- Better documentation/readme

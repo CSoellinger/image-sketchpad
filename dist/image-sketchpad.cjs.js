@@ -3571,7 +3571,7 @@ var Canvas = /*#__PURE__*/function () {
   /**
    * Inserts canvas html element right after the reference element.
    *
-   * @param refElement  - Reference {@link HTMLElement|element} where we want position the canvas.
+   * @param refElement - Reference {@link HTMLElement|element} where we want position the canvas.
    */
 
 
@@ -3588,10 +3588,10 @@ var Canvas = /*#__PURE__*/function () {
     /**
      * Adjusts canvas size and position.
      *
-     * @param width   - New width for canvas.
-     * @param height  - New height for canvas.
-     * @param top     - New top position for canvas.
-     * @param left    - New left position for canvas.
+     * @param width  - New width for canvas.
+     * @param height - New height for canvas.
+     * @param top    - New top position for canvas.
+     * @param left   - New left position for canvas.
      */
 
   }, {
@@ -3607,7 +3607,7 @@ var Canvas = /*#__PURE__*/function () {
     /**
      * Adjust canvas size and position from existing element.
      *
-     * @param element  - Existing {@link HTMLElement|element} as reference.
+     * @param element - Existing {@link HTMLElement|element} as reference.
      */
 
   }, {
@@ -3616,7 +3616,7 @@ var Canvas = /*#__PURE__*/function () {
       this.adjust(element.clientWidth, element.clientHeight, element.offsetTop, element.offsetLeft);
     }
     /**
-     * Clear the canvas area
+     * Clear the canvas area.
      */
 
   }, {
@@ -3628,8 +3628,8 @@ var Canvas = /*#__PURE__*/function () {
     /**
      * Draw stroke as a path on canvas area.
      *
-     * @param stroke  - {@link Stroke|Stroke} object with meta data.
-     * @param ratio   - Image/canvas ratio.
+     * @param stroke - {@link Stroke|Stroke} object with meta data.
+     * @param ratio  - Image/canvas ratio.
      */
 
   }, {
@@ -3692,11 +3692,15 @@ var Canvas = /*#__PURE__*/function () {
 }();
 
 /**
- * Image sketchpad options
+ * Image sketchpad options.
  */
 
 /**
- * Image sketchpad default options
+ * Image sketchpad user options setting all properties as not required (Partial).
+ */
+
+/**
+ * Image sketchpad default options.
  */
 var DefaultOptions = {
   lineWidth: 5,
@@ -3708,9 +3712,6 @@ var DefaultOptions = {
   enabled: true,
   writeJsonToHtmlAttribute: true
 };
-/**
- * Image sketchpad user options with all properties as not required
- */
 
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
 
@@ -3724,7 +3725,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
 var ImageSketchpad = /*#__PURE__*/function () {
   /**
-   * Canvas helper class
+   * Canvas helper class.
    */
 
   /**
@@ -3736,23 +3737,23 @@ var ImageSketchpad = /*#__PURE__*/function () {
    */
 
   /**
-   * Sketchpad settings, initialized with default options
+   * Sketchpad settings, initialized with default options.
    */
 
   /**
-   * Array of strokes which represents your sketch
+   * Array of strokes which represents your sketch.
    */
 
   /**
-   * Helper variable for "redo" method
+   * Helper variable for "redo" method.
    */
 
   /**
-   * Helper variable if user started drawing a line
+   * Helper variable if user started drawing a line.
    */
 
   /**
-   * Helper variable to get the save the active stroke during sketching is true
+   * Helper variable to get the save the active stroke during sketching is true.
    */
 
   /**
@@ -3764,6 +3765,7 @@ var ImageSketchpad = /*#__PURE__*/function () {
    *
    * @param image   - Image html element.
    * @param options - Sketchpad options as javascript object.
+   *
    * @example
    *
    * Run image sketchpad
@@ -3772,7 +3774,7 @@ var ImageSketchpad = /*#__PURE__*/function () {
    *
    * ```
    * const imageEl = document.getElementById('Image');
-   * const sketchPad = new ImageSketchpad(imageEl, { lineWidth: 5, lineMaxWidth: 10, lineColor: '#ff0000' });
+   * const sketchPad = ImageSketchpad(imageEl, { lineWidth: 5, lineMaxWidth: 10, lineColor: '#ff0000' });
    * ```
    *
    */
@@ -3853,7 +3855,7 @@ var ImageSketchpad = /*#__PURE__*/function () {
       return this;
     }
     /**
-     * Enables image sketchpad
+     * Enables image sketchpad.
      */
 
   }, {
@@ -3863,7 +3865,7 @@ var ImageSketchpad = /*#__PURE__*/function () {
       return this;
     }
     /**
-     * Disables image sketchpad
+     * Disables image sketchpad.
      */
 
   }, {
@@ -3873,7 +3875,7 @@ var ImageSketchpad = /*#__PURE__*/function () {
       return this;
     }
     /**
-     * Get a json string which can be used to load a sketch again
+     * Get a json string which can be used to load a sketch again.
      */
 
   }, {
@@ -3954,7 +3956,7 @@ var ImageSketchpad = /*#__PURE__*/function () {
       return loadJson;
     }()
     /**
-     * Clears the image sketchpad
+     * Clears the image sketchpad.
      */
 
   }, {
@@ -3965,7 +3967,7 @@ var ImageSketchpad = /*#__PURE__*/function () {
       return this;
     }
     /**
-     * UnDo the last drawing on your sketch
+     * UnDo the last drawing on your sketch.
      */
 
   }, {
@@ -3981,7 +3983,7 @@ var ImageSketchpad = /*#__PURE__*/function () {
       return this;
     }
     /**
-     * ReDo the last UnDone drawing on your sketch
+     * ReDo the last UnDone drawing on your sketch.
      */
 
   }, {
@@ -3998,8 +4000,6 @@ var ImageSketchpad = /*#__PURE__*/function () {
     }
     /**
      * Merges image with sketch and returns a base64 string as promise.
-     *
-     * @todo Find a better way to merge sketch with original sized image.
      *
      * @param originalSize - Download image with original size.
      */
@@ -4088,9 +4088,9 @@ var ImageSketchpad = /*#__PURE__*/function () {
       return mergeImageWithSketch;
     }()
     /**
-     * Download merged image with sketch as png file
+     * Download merged image with sketch as png file.
      *
-     * @param originalSize - Download image with original size
+     * @param originalSize - Download image with original size.
      */
 
   }, {
@@ -4143,7 +4143,7 @@ var ImageSketchpad = /*#__PURE__*/function () {
       this.canvas.element.remove();
     }
     /**
-     * Register event listener for responsive adjustments and drawings
+     * Register event listener for responsive adjustments and drawings.
      */
 
   }, {
@@ -4393,7 +4393,7 @@ var ImageSketchpad = /*#__PURE__*/function () {
       return endStrokeHandler;
     }()
     /**
-     * Get the image ratio
+     * Get the image ratio.
      */
 
   }, {
@@ -4402,7 +4402,7 @@ var ImageSketchpad = /*#__PURE__*/function () {
       return this.image.naturalWidth / this.image.width;
     }
     /**
-     * Get a {@link Point | Point} from the cursor(mouse) or finger(touch)
+     * Get a {@link Point | Point} from the cursor(mouse) or finger(touch).
      *
      * @param event - {@link PointerEvent | Pointer event} triggered from pointerdown, pointermove or pointerup.
      */
@@ -4417,9 +4417,9 @@ var ImageSketchpad = /*#__PURE__*/function () {
       };
     }
     /**
-     * Create stroke from an array of {@link Point | Points}
+     * Create stroke from an array of {@link Point | Points}.
      *
-     * @param points - Array of {@link Point | Points}
+     * @param points - Array of {@link Point | Points}.
      */
 
   }, {
@@ -4436,7 +4436,7 @@ var ImageSketchpad = /*#__PURE__*/function () {
       };
     }
     /**
-     * Push {@link Point | Point} to {@link Stroke | Stroke}
+     * Push {@link Point | Point} to {@link Stroke | Stroke}.
      *
      * @param point  - {@link Point | Point} to push.
      * @param stroke - {@link Stroke | Stroke} to push into.
@@ -4453,10 +4453,10 @@ var ImageSketchpad = /*#__PURE__*/function () {
     }
     /**
      * Redraw the sketch on the canvas. Mean it clears first and draw all
-     * strokes again
+     * strokes again.
      *
      * @param imageRatio - Redraw with a specified image ratio (for example if
-     *                     you want draw the canvas in original size)
+     *                     you want draw the canvas in original size).
      */
 
   }, {
@@ -4530,13 +4530,15 @@ var ImageSketchpad = /*#__PURE__*/function () {
 
 /**
  * Save sketchpad instances to this object
+ *
+ * @internal
  */
 var instances = {};
 /**
  * Initialize new sketchpad or return an already initialized.
  *
  * @param element  - HTML image element.
- * @param options  - Image sketchpad options.
+ * @param options  - Image sketchpad options. {@link ImageSketchpad.DefaultOptions | Default Options}
  */
 
 var init = function init(element, options) {

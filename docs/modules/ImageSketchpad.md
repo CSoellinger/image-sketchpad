@@ -1,4 +1,4 @@
-[image-sketchpad - v1.0.3](../index.md) / [Modules](../modules.md) / ImageSketchpad
+[image-sketchpad - v1.0.4](../index.md) / [Modules](../modules.md) / ImageSketchpad
 
 # Module: ImageSketchpad
 
@@ -23,20 +23,20 @@
 
 Ƭ **Options**: `Object`
 
-Image sketchpad options
+Image sketchpad options.
 
 #### Type declaration
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `enabled` | `boolean` | Enable or disable sketchpad on init |
-| `lineCap` | `CanvasLineCap` | Line cap |
-| `lineColor` | `string` | Line color |
-| `lineJoin` | `CanvasLineJoin` | Line join |
-| `lineMaxWidth` | `number` | Line max width |
-| `lineMiterLimit` | `number` | Line miter limit |
-| `lineWidth` | `number` | Line width |
-| `writeJsonToHtmlAttribute` | `boolean` | Setting this to true(default) will set a json string to the canvas html attribute. You get the same string by calling [ImageSketchpad.toJson()](../classes/ImageSketchpad.ImageSketchpad-1.md#tojson) |
+| `enabled` | `boolean` | Enable or disable sketchpad on init.  **`defaultvalue`** `true` |
+| `lineCap` | `CanvasLineCap` | Line cap.  **`defaultvalue`** `round` |
+| `lineColor` | `string` | Line color.  **`defaultvalue`** `#000` |
+| `lineJoin` | `CanvasLineJoin` | Line join.  **`defaultvalue`** `round` |
+| `lineMaxWidth` | `number` | Line max width.  **`defaultvalue`** `-1` |
+| `lineMiterLimit` | `number` | Line miter limit.  **`defaultvalue`** `10` |
+| `lineWidth` | `number` | Line width.  **`defaultvalue`** `5` |
+| `writeJsonToHtmlAttribute` | `boolean` | Setting this to true(default) will add a data attribute with the sketchpad json data. This is the same string like you would get with [ImageSketchpad.toJson()](../classes/ImageSketchpad.ImageSketchpad-1.md#tojson).  **`defaultvalue`** `true` |
 
 #### Defined in
 
@@ -48,11 +48,11 @@ ___
 
 Ƭ **UserOptions**: `Partial`<[`Options`](ImageSketchpad.md#options)\>
 
-Image sketchpad user options with all properties as not required
+Image sketchpad user options setting all properties as not required (Partial).
 
 #### Defined in
 
-[ImageSketchpad/Options.ts:65](https://github.com/CSoellinger/image-sketchpad/blob/main/src/ImageSketchpad/Options.ts#L65)
+[ImageSketchpad/Options.ts:66](https://github.com/CSoellinger/image-sketchpad/blob/main/src/ImageSketchpad/Options.ts#L66)
 
 ## Variables
 
@@ -60,8 +60,8 @@ Image sketchpad user options with all properties as not required
 
 • **DefaultOptions**: `Readonly`<[`Options`](ImageSketchpad.md#options)\>
 
-Image sketchpad default options
+Image sketchpad default options.
 
 #### Defined in
 
-[ImageSketchpad/Options.ts:51](https://github.com/CSoellinger/image-sketchpad/blob/main/src/ImageSketchpad/Options.ts#L51)
+[ImageSketchpad/Options.ts:71](https://github.com/CSoellinger/image-sketchpad/blob/main/src/ImageSketchpad/Options.ts#L71)

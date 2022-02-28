@@ -1,5 +1,5 @@
 /**
- * Image sketchpad default options
+ * Image sketchpad default options.
  */
 export const DefaultOptions = {
     lineWidth: 5,

@@ -3,11 +3,11 @@
  */
 export declare type Point = {
     /**
-     * X coordinate of point
+     * X coordinate of point.
      */
     readonly x: number;
     /**
-     * Y coordinate of point
+     * Y coordinate of point.
      */
     readonly y: number;
 };
@@ -16,31 +16,31 @@ export declare type Point = {
  */
 export declare type Stroke = {
     /**
-     * {@link Point|Points} of stroke
+     * {@link Point|Points} of stroke.
      */
     readonly points: Point[];
     /**
-     * Width of the stroke
+     * Width of the stroke.
      */
     readonly width: number;
     /**
-     * Max width of the stroke
+     * Max width of the stroke.
      */
     readonly maxWidth: number;
     /**
-     * Color of the stroke
+     * Color of the stroke.
      */
     readonly color: string;
     /**
-     * {@link CanvasLineCap|Canvas line cap} of the stroke: "butt" | "round" | "square"
+     * {@link CanvasLineCap|Canvas line cap} of the stroke: "butt" | "round" | "square".
      */
     readonly cap: CanvasLineCap;
     /**
-     * {@link CanvasLineJoin|Canvas line join} of the stroke: "bevel" | "miter" | "round"
+     * {@link CanvasLineJoin|Canvas line join} of the stroke: "bevel" | "miter" | "round".
      */
     readonly join: CanvasLineJoin;
     /**
-     * Miter limit of the stroke
+     * Miter limit of the stroke.
      */
     readonly miterLimit: number;
 };

@@ -1,6 +1,6 @@
 {
     "name": "image-sketchpad",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "description": "Draw on images within desktop and mobile browsers.",
     "keywords": [
         "image",
@@ -52,7 +52,7 @@
         "build:all": "concurrently --kill-others-on-fail 'npm:build' 'npm:build:docs'",
         "build:docs": "concurrently --kill-others-on-fail 'npm:build:docs:html' 'npm:build:docs:md'",
         "build:docs:html": "typedoc && npm run build:docs:copy-demo",
-        "build:docs:md": "typedoc --entryDocument 'index.md' --namedAnchors --entryPoints 'src/ImageSketchpad' --entryPoints 'src/Canvas' --plugin typedoc-plugin-rename-defaults --plugin typedoc-plugin-markdown",
+        "build:docs:md": "typedoc --entryDocument 'index.md' --namedAnchors --plugin typedoc-plugin-missing-exports --plugin typedoc-plugin-rename-defaults --plugin typedoc-plugin-markdown",
         "build:docs:copy-demo": "concurrently --kill-others-on-fail 'cpy ./dist/index.html ./docs/. --rename=demo.html' 'cpy ./dist/image-sketchpad.min.js ./docs/assets/.'",
         "build:esnext": "tsc",
         "build:js": "rollup -c",
@@ -99,11 +99,12 @@
         "@types/pica": "^5.1.3",
         "@typescript-eslint/eslint-plugin": "^5.5.0",
         "@typescript-eslint/parser": "^5.5.0",
+
         "canvas": "^2.8.0",
         "concurrently": "^6.4.0",
         "cpy-cli": "^3.1.1",
         "eliminate": "^1.1.2",
-        "eslint": "^8.3.0",
+        "eslint": "^8.4.0",
         "eslint-config-prettier": "8.3.0",
         "eslint-plugin-array-func": "^3.1.7",
         "eslint-plugin-editorconfig": "^3.2.0",
