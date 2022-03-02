@@ -26,7 +26,7 @@ Canvas helper class. Inserts {@link HTMLCanvasElement|element} and handles posit
 
 ## Constructors
 
-### constructor
+### <a id="constructor" name="constructor"></a> constructor
 
 • **new Canvas**()
 
@@ -38,7 +38,7 @@ Creates an instance of the canvas helper class.
 
 ## Properties
 
-### element
+### <a id="element" name="element"></a> element
 
 • `Readonly` **element**: `HTMLCanvasElement`
 
@@ -50,7 +50,7 @@ Reference to the HTML canvas {@link HTMLCanvasElement|element}.
 
 ## Methods
 
-### adjust
+### <a id="adjust" name="adjust"></a> adjust
 
 ▸ **adjust**(`width`, `height`, `top`, `left`): `void`
 
@@ -75,7 +75,7 @@ Adjusts canvas size and position.
 
 ___
 
-### adjustFromElement
+### <a id="adjustfromelement" name="adjustfromelement"></a> adjustFromElement
 
 ▸ **adjustFromElement**(`element`): `void`
 
@@ -97,7 +97,7 @@ Adjust canvas size and position from existing element.
 
 ___
 
-### clear
+### <a id="clear" name="clear"></a> clear
 
 ▸ **clear**(): [`Canvas`](Canvas.Canvas-1.md)
 
@@ -113,7 +113,7 @@ Clear the canvas area.
 
 ___
 
-### drawStroke
+### <a id="drawstroke" name="drawstroke"></a> drawStroke
 
 ▸ **drawStroke**(`stroke`, `ratio`): `Promise`<`void`\>
 
@@ -136,7 +136,7 @@ Draw stroke as a path on canvas area.
 
 ___
 
-### insert
+### <a id="insert" name="insert"></a> insert
 
 ▸ **insert**(`refElement`): `void`
 

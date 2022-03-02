@@ -34,7 +34,7 @@ it, and merge it with the image and handle the data as json out- or input.
 
 ## Constructors
 
-### constructor
+### <a id="constructor" name="constructor"></a> constructor
 
 • **new ImageSketchpad**(`image`, `options?`)
 
@@ -64,7 +64,7 @@ const sketchPad = ImageSketchpad(imageEl, { lineWidth: 5, lineMaxWidth: 10, line
 
 ## Properties
 
-### canvas
+### <a id="canvas" name="canvas"></a> canvas
 
 • `Readonly` **canvas**: [`Canvas`](Canvas.Canvas-1.md)
 
@@ -76,7 +76,7 @@ Canvas helper class.
 
 ## Methods
 
-### clear
+### <a id="clear" name="clear"></a> clear
 
 ▸ **clear**(): [`ImageSketchpad`](ImageSketchpad.ImageSketchpad-1.md)
 
@@ -92,7 +92,7 @@ Clears the image sketchpad.
 
 ___
 
-### destroy
+### <a id="destroy" name="destroy"></a> destroy
 
 ▸ **destroy**(): `void`
 
@@ -104,11 +104,11 @@ Destroy the instance and remove the canvas.
 
 #### Defined in
 
-[ImageSketchpad/index.ts:308](https://github.com/CSoellinger/image-sketchpad/blob/main/src/ImageSketchpad/index.ts#L308)
+[ImageSketchpad/index.ts:311](https://github.com/CSoellinger/image-sketchpad/blob/main/src/ImageSketchpad/index.ts#L311)
 
 ___
 
-### disable
+### <a id="disable" name="disable"></a> disable
 
 ▸ **disable**(): [`ImageSketchpad`](ImageSketchpad.ImageSketchpad-1.md)
 
@@ -124,7 +124,7 @@ Disables image sketchpad.
 
 ___
 
-### download
+### <a id="download" name="download"></a> download
 
 ▸ **download**(`originalSize?`): `Promise`<`string`\>
 
@@ -146,7 +146,7 @@ Download merged image with sketch as png file.
 
 ___
 
-### enable
+### <a id="enable" name="enable"></a> enable
 
 ▸ **enable**(): [`ImageSketchpad`](ImageSketchpad.ImageSketchpad-1.md)
 
@@ -162,7 +162,7 @@ Enables image sketchpad.
 
 ___
 
-### loadJson
+### <a id="loadjson" name="loadjson"></a> loadJson
 
 ▸ **loadJson**(`json`): `Promise`<[`ImageSketchpad`](ImageSketchpad.ImageSketchpad-1.md)\>
 
@@ -184,7 +184,7 @@ Load a sketch from a json string.
 
 ___
 
-### mergeImageWithSketch
+### <a id="mergeimagewithsketch" name="mergeimagewithsketch"></a> mergeImageWithSketch
 
 ▸ **mergeImageWithSketch**(`originalSize?`): `Promise`<`string`\>
 
@@ -206,7 +206,7 @@ Merges image with sketch and returns a base64 string as promise.
 
 ___
 
-### redo
+### <a id="redo" name="redo"></a> redo
 
 ▸ **redo**(): [`ImageSketchpad`](ImageSketchpad.ImageSketchpad-1.md)
 
@@ -222,7 +222,7 @@ ReDo the last UnDone drawing on your sketch.
 
 ___
 
-### setOptions
+### <a id="setoptions" name="setoptions"></a> setOptions
 
 ▸ **setOptions**(`options`): [`ImageSketchpad`](ImageSketchpad.ImageSketchpad-1.md)
 
@@ -244,7 +244,7 @@ Set sketchpad options.
 
 ___
 
-### toJson
+### <a id="tojson" name="tojson"></a> toJson
 
 ▸ **toJson**(): `string`
 
@@ -260,7 +260,7 @@ Get a json string which can be used to load a sketch again.
 
 ___
 
-### toJsonAsync
+### <a id="tojsonasync" name="tojsonasync"></a> toJsonAsync
 
 ▸ **toJsonAsync**(): `Promise`<`string`\>
 
@@ -274,7 +274,7 @@ ___
 
 ___
 
-### undo
+### <a id="undo" name="undo"></a> undo
 
 ▸ **undo**(): [`ImageSketchpad`](ImageSketchpad.ImageSketchpad-1.md)
 

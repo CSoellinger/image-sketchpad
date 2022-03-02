@@ -10,9 +10,9 @@
 
 ## Functions
 
-### init
+### <a id="init" name="init"></a> init
 
-▸ `Const` **init**(`element`, `options?`): [`ImageSketchpad`](../classes/ImageSketchpad.ImageSketchpad-1.md)
+▸ **init**(`element`, `options?`): [`ImageSketchpad`](../classes/ImageSketchpad.ImageSketchpad-1.md)
 
 Initialize new sketchpad or return an already initialized.
 

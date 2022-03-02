@@ -19,7 +19,7 @@
 
 ## Type aliases
 
-### Options
+### <a id="options" name="options"></a> Options
 
 Ƭ **Options**: `Object`
 
@@ -44,7 +44,7 @@ Image sketchpad options.
 
 ___
 
-### UserOptions
+### <a id="useroptions" name="useroptions"></a> UserOptions
 
 Ƭ **UserOptions**: `Partial`<[`Options`](ImageSketchpad.md#options)\>
 
@@ -56,9 +56,9 @@ Image sketchpad user options setting all properties as not required (Partial).
 
 ## Variables
 
-### DefaultOptions
+### <a id="defaultoptions" name="defaultoptions"></a> DefaultOptions
 
-• **DefaultOptions**: `Readonly`<[`Options`](ImageSketchpad.md#options)\>
+• `Const` **DefaultOptions**: `Readonly`<[`Options`](ImageSketchpad.md#options)\>
 
 Image sketchpad default options.
 
