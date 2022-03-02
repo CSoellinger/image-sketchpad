@@ -84,3 +84,7 @@ That's it!
 
 - Test with some kind like electron
 - Write e2e tests
+
+## Inspired by
+
+[responsive-sketchpad](https://www.npmjs.com/package/responsive-sketchpad) - I made a complete rewrite but got the inspiration from this nice npm package.
