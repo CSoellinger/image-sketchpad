@@ -1,4 +1,4 @@
-import download from 'downloadjs';
+import downloadFile from 'downloadjs';
 import drawToCanvas from 'draw-to-canvas';
 import mergeImages from 'merge-images';
 import Pica from 'pica';
@@ -207,7 +207,7 @@ export class ImageSketchpad {
             tmpCanvas.style.position = 'absolute';
             tmpCanvas.style.top = '0';
             tmpCanvas.style.left = `-${this.image.clientWidth}px`;
-            tmpCanvas = await this.pica.resize(this.image, tmpCanvas, { alpha: true });
+            tmpCanvas = await this.pica.resize(this.image, tmpCanvas);
             imageSource = tmpCanvas.toDataURL();
         }
         return mergeImages([imageSource, this.canvas.element.toDataURL()]).then((b64Image) => {
@@ -229,9 +229,11 @@ export class ImageSketchpad {
         fileName = fileName.toLowerCase().startsWith('data:')
             ? String(Date.now())
             : String(String(fileName.split('\\').pop()).split('/').pop());
-        fileName += '.sketch.png';
+        const fileExtensionMatch = fileName.match(/\.(png|jpg|jpeg)$/);
+        const fileExtension = fileExtensionMatch ? fileExtensionMatch[1] : 'png';
+        fileName = fileName.replace(String(fileExtension), `sketch.${String(fileExtension)}`);
         return this.mergeImageWithSketch(originalSize).then((b64) => {
-            download(b64, fileName, 'image/png');
+            downloadFile(b64, fileName, `image/${String(fileExtension)}`);
             return b64;
         });
     }
