@@ -84,4 +84,3 @@ That's it!
 
 - Test with some kind like electron
 - Write e2e tests
-- Do not force PNG as image output format
