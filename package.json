@@ -76,7 +76,7 @@
     },
     "lint-staged": {
         "package.json": "npx sort-package-json",
-        "*.{js,jsx,ts,tsx}": "npm run lint:js:fix"
+        "*.{ts,tsx}": "npm run lint:js:fix"
     },
     "dependencies": {
         "downloadjs": "^1.4.7",
